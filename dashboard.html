@@ -192,15 +192,17 @@ function renderTable() {
       ? `<a href="${transfer.from.screenshot}" target="_blank"><img class="screenshot-img" src="${transfer.from.screenshot}" alt="screenshot" onerror="this.src='https://placehold.co/48x48?text=Error'"></a>` 
       : '<span style="opacity:0.5;">—</span>';
     row.innerHTML=`
-      <td style="font-weight:500;">${escapeHtml(fromText)}</td>
-      <td style="font-weight:500;">${escapeHtml(toText)}</td>
-      <td>${parseFloat(amount).toFixed(2)} EGP</td>
-      <td>${parseFloat(profit).toFixed(2)} EGP</td>
-      <td><strong>${parseFloat(totalAmount).toFixed(2)} EGP</strong></td>
-      <td style="font-size:0.75rem;">${dateStr}</td>
-      <td>${screenshotHtml}</td>
-      <td><button class="delete-btn" onclick="deleteTransfer('${transfer.id}')"><i class="fas fa-trash-alt"></i> ${currentLang==='ar'?'حذف':'Delete'}</button></td>
-    `;
+  <td style="font-weight:500;">${escapeHtml(fromText)}</td>
+  <td style="font-weight:500;">${escapeHtml(toText)}</td>
+  <td>${escapeHtml(transfer.from.name)}</td>
+  <td>${escapeHtml(transfer.to.name)}</td>
+  <td>${parseFloat(amount).toFixed(2)} EGP</td>
+  <td>${parseFloat(profit).toFixed(2)} EGP</td>
+  <td><strong>${parseFloat(totalAmount).toFixed(2)} EGP</strong></td>
+  <td style="font-size:0.75rem;">${dateStr}</td>
+  <td>${screenshotHtml}</td>
+  <td><button class="delete-btn" onclick="deleteTransfer('${transfer.id}')"><i class="fas fa-trash-alt"></i> ${currentLang==='ar'?'حذف':'Delete'}</button></td>
+`;
     tbody.appendChild(row);
   });
 }
