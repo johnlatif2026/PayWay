@@ -126,6 +126,10 @@ async function submitTransfer(){
     alert("اسم المستلم مطلوب");
     return;
   }
+  if(!amount){
+    alert("اخمن انا المبلغ يعني؟");
+    return;
+  }
   if(!screenshotFile){
     alert("صورة التحويل مطلوبة");
     return;
