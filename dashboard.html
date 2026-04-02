@@ -178,7 +178,7 @@ function renderTable() {
     const fromText=`${transfer.from.type} (${transfer.from.number})`;
     const toText=`${transfer.to.type} (${transfer.to.number})`;
     const amount=transfer.amount||0;
-    const profit=transfer.profit||(amount*0.01);
+    const profit=transfer.profit||(amount*0.02);
     const totalAmount=transfer.totalAmount||(amount+parseFloat(profit));
     const dateObj=transfer.date?.toDate ? transfer.date.toDate() : new Date(transfer.date||Date.now());
     const dateStr=dateObj.toLocaleString(currentLang==='ar'?'ar-EG':'en-US');
@@ -201,7 +201,7 @@ function renderTable() {
 
 function updateStats() {
   const totalTransfers = transfersData.length;
-  const totalProfit = transfersData.reduce((sum,t)=>sum+(t.profit||(t.amount*0.01)),0);
+  const totalProfit = transfersData.reduce((sum,t)=>sum+(t.profit||(t.amount*0.02)),0);
   const totalAmountSum = transfersData.reduce((sum,t)=>sum+(t.amount||0),0);
   const avgTransfer = totalTransfers>0?totalAmountSum/totalTransfers:0;
   document.getElementById('totalProfit').innerText = totalProfit.toFixed(2);
@@ -218,7 +218,7 @@ async function loadDashboard() {
     if(res.status!==200){ alert(translations[currentLang].errorAuth); window.location.href='/login'; return; }
     const data=await res.json();
     transfersData=data.transfers||[];
-    transfersData=transfersData.map(t=>({ ...t, profit:t.profit||(t.amount*0.01), totalAmount:t.totalAmount||(t.amount+(t.profit||(t.amount*0.01))) }));
+    transfersData=transfersData.map(t=>({ ...t, profit:t.profit||(t.amount*0.02), totalAmount:t.totalAmount||(t.amount+(t.profit||(t.amount*0.02))) }));
     updateStats();
     renderTable();
   }catch(err){ console.error(err); alert(translations[currentLang].errorLoad); }
