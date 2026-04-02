@@ -94,6 +94,8 @@
           <tr>
             <th id="thFrom">من</th>
             <th id="thTo">إلى</th>
+            <th id="thFromName">اسم المحول</th>
+            <th id="thToName">اسم المستلم</th>
             <th id="thAmount">المبلغ</th>
             <th id="thProfit">العمولة</th>
             <th id="thTotal">الإجمالي</th>
@@ -117,7 +119,7 @@ const translations = {
   ar: {
     brand: "PayWay Dashboard", logout: "تسجيل الخروج", totalProfitTitle: "إجمالي الأرباح", profitSub: "من جميع التحويلات",
     totalTransfersTitle: "إجمالي التحويلات", transfersSub: "عملية مكتملة", avgTitle: "متوسط التحويل", avgSub: "شامل العمولة",
-    transfersListTitle: "التحويلات الأخيرة", lastUpdate: "آخر تحديث: الآن", thFrom: "من", thTo: "إلى", thAmount: "المبلغ",
+    transfersListTitle: "التحويلات الأخيرة", lastUpdate: "آخر تحديث: الآن", thFrom: "من", thTo: "إلى", thFromName: "اسم المحول" , thToName: "اسم المستلم" ,thAmount: "المبلغ",
     thProfit: "العمولة", thTotal: "الإجمالي", thDate: "التاريخ", thScreenshot: "الصورة", thActions: "إجراءات",
     emptyMessage: "لا توجد تحويلات حتى الآن", deleteConfirm: "هل أنت متأكد من حذف هذا التحويل؟",
     deleteSuccess: "تم حذف التحويل بنجاح", errorLoad: "حدث خطأ في تحميل البيانات", errorAuth: "جلسة غير صالحة، جاري التوجيه لتسجيل الدخول"
@@ -125,7 +127,7 @@ const translations = {
   en: {
     brand: "PayWay Dashboard", logout: "Logout", totalProfitTitle: "Total Profit", profitSub: "From all transfers",
     totalTransfersTitle: "Total Transfers", transfersSub: "Completed operations", avgTitle: "Average Transfer", avgSub: "Including fees",
-    transfersListTitle: "Recent Transfers", lastUpdate: "Last update: now", thFrom: "From", thTo: "To" , thAmount: "Amount",
+    transfersListTitle: "Recent Transfers", lastUpdate: "Last update: now", thFrom: "From", thTo: "To" , thFromName: "Converter name" , thToName: "Recipient's name" , thAmount: "Amount",
     thProfit: "Fee", thTotal: "Total", thDate: "Date", thScreenshot: "Screenshot", thActions: "Actions",
     emptyMessage: "No transfers yet", deleteConfirm: "Are you sure you want to delete this transfer?",
     deleteSuccess: "Transfer deleted successfully", errorLoad: "Error loading data", errorAuth: "Invalid session, redirecting to login"
@@ -150,6 +152,8 @@ function updateUILanguage() {
   document.getElementById('lastUpdateText').innerHTML = `<i class="fas fa-clock"></i> ${t.lastUpdate}`;
   document.getElementById('thFrom').innerText = t.thFrom;
   document.getElementById('thTo').innerText = t.thTo;
+  document.getElementById('thFromName').innerText = t.thFromName;
+  document.getElementById('thToName').innerText = t.thToName;
   document.getElementById('thAmount').innerText = t.thAmount;
   document.getElementById('thProfit').innerText = t.thProfit;
   document.getElementById('thTotal').innerText = t.thTotal;
@@ -175,8 +179,8 @@ function renderTable() {
   tbody.innerHTML = '';
   transfersData.forEach(transfer=>{
     const row=document.createElement('tr');
-    const fromText=`${transfer.from.type} (${transfer.from.number})`;
-    const toText=`${transfer.to.type} (${transfer.to.number})`;
+    const fromText=`${transfer.from.type} (${transfer.from.name}) (${transfer.from.number})`;
+    const toText=`${transfer.to.type} (${transfer.to.name}) (${transfer.to.number})`;
     const amount=transfer.amount||0;
     const profit=transfer.profit||(amount*0.02);
     const totalAmount=transfer.totalAmount||(amount+parseFloat(profit));
@@ -190,7 +194,9 @@ function renderTable() {
     row.innerHTML=`
   <td style="font-weight:500;">${escapeHtml(fromText)}</td>
   <td style="font-weight:500;">${escapeHtml(toText)}</td>
-  <td>${parseFloat(amount).toFixed(2)} EGP</td>
+  <td style="font-weight:500;">${escapeHtml(transfer.from.name || '—')}</td>
+ <td style="font-weight:500;">${escapeHtml(transfer.to.name || '—')}</td>
+ <td>${parseFloat(amount).toFixed(2)} EGP</td>
   <td>${parseFloat(profit).toFixed(2)} EGP</td>
   <td><strong>${parseFloat(totalAmount).toFixed(2)} EGP</strong></td>
   <td style="font-size:0.75rem;">${dateStr}</td>
@@ -263,7 +269,10 @@ document.getElementById('btnEn').addEventListener('click',()=>{
 });
 
 updateUILanguage();
-loadDashboard();
+ 
+setInterval(() => {
+  loadDashboard();
+}, 5000);
 </script>
 </body>
 </html>
