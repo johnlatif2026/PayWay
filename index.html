@@ -367,7 +367,7 @@
 
   <div class="form-sections">
     <form id="transferForm" enctype="multipart/form-data">
-      <!-- SECTION 1 -->
+      <!-- SECTION 1: تحويل من -->
       <div class="section">
         <div class="section-header">
           <div class="section-number">1</div>
@@ -411,44 +411,42 @@
         </div>
       </div>
 
-      <!-- SECTION 2 -->
-<div class="section">
-  <div class="section-header">
-    <div class="section-number">2</div>
-    <h2 id="section2Title">Transfer To</h2>
-  </div>
-  <div class="section-body">
-    <div class="method-grid" id="toServiceGrid">
-      <div data-service="InstaPay" class="method-chip active"><i class="fas fa-bolt"></i> <span class="chip-text">InstaPay</span></div>
-      <div data-service="Wallet" class="method-chip"><i class="fas fa-wallet"></i> <span class="chip-text">Wallet</span></div>
-      <div data-service="Fawry" class="method-chip"><i class="fas fa-receipt"></i> <span class="chip-text">Fawry</span></div>
-      <div data-service="Telda" class="method-chip"><i class="fas fa-credit-card"></i> <span class="chip-text">Telda</span></div>
-    </div>
-
-    <div id="toWalletOptions">
-      <div class="method-grid" id="toWalletSubGrid">
-        <div data-sub="VodafoneCash" class="method-chip active"><i class="fas fa-mobile-alt"></i> <span class="chip-text">Vodafone Cash</span></div>
-        <div data-sub="OrangeCash" class="method-chip"><i class="fas fa-sim-card"></i> <span class="chip-text">Orange Cash</span></div>
-        <div data-sub="EtisalatCash" class="method-chip"><i class="fas fa-signal"></i> <span class="chip-text">Etisalat Cash</span></div>
-        <div data-sub="WePay" class="method-chip"><i class="fas fa-building-columns"></i> <span class="chip-text">WE Pay</span></div>
+      <!-- SECTION 2: تحويل إلى (معدل بالكامل) -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-number">2</div>
+          <h2 id="section2Title">Transfer To</h2>
+        </div>
+        <div class="section-body">
+          <div class="method-grid" id="toServiceGrid">
+            <div data-service="InstaPay" class="method-chip active"><i class="fas fa-bolt"></i> <span class="chip-text">InstaPay</span></div>
+            <div data-service="Wallet" class="method-chip"><i class="fas fa-wallet"></i> <span class="chip-text">Wallet</span></div>
+            <div data-service="Fawry" class="method-chip"><i class="fas fa-receipt"></i> <span class="chip-text">Fawry</span></div>
+            <div data-service="Telda" class="method-chip"><i class="fas fa-credit-card"></i> <span class="chip-text">Telda</span></div>
+          </div>
+          <div id="toWalletOptions">
+            <div class="method-grid" id="toWalletSubGrid">
+              <div data-sub="VodafoneCash" class="method-chip active"><i class="fas fa-mobile-alt"></i> <span class="chip-text">Vodafone Cash</span></div>
+              <div data-sub="OrangeCash" class="method-chip"><i class="fas fa-sim-card"></i> <span class="chip-text">Orange Cash</span></div>
+              <div data-sub="EtisalatCash" class="method-chip"><i class="fas fa-signal"></i> <span class="chip-text">Etisalat Cash</span></div>
+              <div data-sub="WePay" class="method-chip"><i class="fas fa-building-columns"></i> <span class="chip-text">WE Pay</span></div>
+            </div>
+          </div>
+          <input type="hidden" id="toServiceType" value="InstaPay">
+          <input type="hidden" id="toWalletSubtype" value="VodafoneCash">
+          
+          <div class="input-group">
+            <label id="toPhoneLabel"><i class="fas fa-user-check"></i> Recipient's Phone / Account Number</label>
+            <input type="tel" id="toNumber" placeholder="رقم المستلم أو الحساب">
+          </div>
+          <div class="input-group">
+            <label id="toNameLabel"><i class="fas fa-id-card"></i> Recipient Full Name</label>
+            <input type="text" id="toName" placeholder="اسم المستلم">
+          </div>
+        </div>
       </div>
-    </div>
 
-    <input type="hidden" id="toServiceType" value="InstaPay">
-    <input type="hidden" id="toWalletSubtype" value="VodafoneCash">
-
-    <div class="input-group">
-      <label id="toPhoneLabel"><i class="fas fa-user-check"></i> Recipient's Phone / Account Number</label>
-      <input type="tel" id="toNumber" placeholder="رقم المستلم أو الحساب">
-    </div>
-    <div class="input-group">
-      <label id="toNameLabel"><i class="fas fa-id-card"></i> Recipient Full Name</label>
-      <input type="text" id="toName" placeholder="اسم المستلم">
-    </div>
-  </div>
-</div>
-
-      <!-- SECTION 3 -->
+      <!-- SECTION 3: المبلغ -->
       <div class="section">
         <div class="section-header">
           <div class="section-number">3</div>
@@ -575,7 +573,7 @@
     document.getElementById('toName').placeholder = isAr ? "اسم المستلم" : "Recipient name";
     document.getElementById('amount').placeholder = isAr ? "أدخل المبلغ" : "Enter amount";
     
-    // Update chip texts (dynamic text inside service chips)
+    // Update chip texts
     const chipTranslations = {
       ar: {
         'InstaPay': 'إنستا باي',
@@ -610,17 +608,7 @@
       }
     });
     
-    // Also update the hidden service values display is just visual, but ensure consistent
-    // Fix for "Wallet" sub chips that are already covered by data-sub attribute
-    document.querySelectorAll('#fromWalletSubGrid .method-chip .chip-text, #toServiceGrid .method-chip .chip-text').forEach(span => {
-      const parent = span.closest('.method-chip');
-      if (parent) {
-        const key = parent.getAttribute('data-service') || parent.getAttribute('data-sub');
-        if (key && chipTranslations[lang][key]) span.innerText = chipTranslations[lang][key];
-      }
-    });
-    
-    // adjust direction for english (optional fine)
+    // Adjust direction
     if (lang === 'en') {
       document.body.style.direction = 'ltr';
       document.querySelector('.transfer-card').style.direction = 'ltr';
@@ -647,23 +635,18 @@
   // Initialize Arabic by default
   updateLanguage('ar');
 
-  // ---------- REST OF ORIGINAL FUNCTIONALITY (wallet chips, amount calc, file upload, submit) ----------
+  // ==================== FROM SECTION LOGIC ====================
   const fromServiceChips = document.querySelectorAll('#fromServiceGrid .method-chip');
   const fromWalletSubChips = document.querySelectorAll('#fromWalletSubGrid .method-chip');
-  const toServiceChips = document.querySelectorAll('#toServiceGrid .method-chip');
   const fromServiceHidden = document.getElementById('fromServiceType');
   const fromWalletHidden = document.getElementById('fromWalletSubtype');
-  const toServiceHidden = document.getElementById('toServiceType');
-  const walletOptionsDiv = document.getElementById('fromWalletOptions');
+  const fromWalletOptionsDiv = document.getElementById('fromWalletOptions');
 
   function updateFromWalletVisibility() {
     const mainService = fromServiceHidden.value;
-    walletOptionsDiv.style.display = (mainService === 'Wallet') ? 'block' : 'none';
+    fromWalletOptionsDiv.style.display = (mainService === 'Wallet') ? 'block' : 'none';
     if (mainService !== 'Wallet') {
-      if (mainService === 'InstaPay') fromWalletHidden.value = 'InstaPay';
-      else if (mainService === 'Fawry') fromWalletHidden.value = 'Fawry';
-      else if (mainService === 'Telda') fromWalletHidden.value = 'Telda';
-      else fromWalletHidden.value = mainService;
+      fromWalletHidden.value = mainService;
     }
   }
 
@@ -674,7 +657,7 @@
       const serviceVal = chip.getAttribute('data-service');
       fromServiceHidden.value = serviceVal;
       if (serviceVal !== 'Wallet') {
-        fromWalletHidden.value = (serviceVal === 'InstaPay' ? 'InstaPay' : (serviceVal === 'Fawry' ? 'Fawry' : 'Telda'));
+        fromWalletHidden.value = serviceVal;
         fromWalletSubChips.forEach(sub => sub.classList.remove('active'));
       } else {
         if (!document.querySelector('#fromWalletSubGrid .method-chip.active')) {
@@ -695,19 +678,61 @@
     });
   });
 
+  // ==================== TO SECTION LOGIC (مضاف بالكامل) ====================
+  const toServiceChips = document.querySelectorAll('#toServiceGrid .method-chip');
+  const toWalletSubChips = document.querySelectorAll('#toWalletSubGrid .method-chip');
+  const toServiceHidden = document.getElementById('toServiceType');
+  const toWalletHidden = document.getElementById('toWalletSubtype');
+  const toWalletOptionsDiv = document.getElementById('toWalletOptions');
+
+  function updateToWalletVisibility() {
+    const mainService = toServiceHidden.value;
+    toWalletOptionsDiv.style.display = (mainService === 'Wallet') ? 'block' : 'none';
+    if (mainService !== 'Wallet') {
+      toWalletHidden.value = mainService;
+    }
+  }
+
   toServiceChips.forEach(chip => {
     chip.addEventListener('click', () => {
       toServiceChips.forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
-      toServiceHidden.value = chip.getAttribute('data-service');
+      const serviceVal = chip.getAttribute('data-service');
+      toServiceHidden.value = serviceVal;
+      if (serviceVal !== 'Wallet') {
+        toWalletHidden.value = serviceVal;
+        toWalletSubChips.forEach(sub => sub.classList.remove('active'));
+      } else {
+        if (!document.querySelector('#toWalletSubGrid .method-chip.active')) {
+          toWalletSubChips[0]?.classList.add('active');
+          toWalletHidden.value = toWalletSubChips[0]?.getAttribute('data-sub') || 'VodafoneCash';
+        }
+      }
+      updateToWalletVisibility();
     });
   });
 
+  toWalletSubChips.forEach(sub => {
+    sub.addEventListener('click', () => {
+      if (toServiceHidden.value !== 'Wallet') return;
+      toWalletSubChips.forEach(s => s.classList.remove('active'));
+      sub.classList.add('active');
+      toWalletHidden.value = sub.getAttribute('data-sub');
+    });
+  });
+
+  // Initialize visibility
   updateFromWalletVisibility();
+  updateToWalletVisibility();
+  
+  // Set default values
   if (!fromWalletSubChips[0].classList.contains('active')) fromWalletSubChips[0].classList.add('active');
   fromWalletHidden.value = 'VodafoneCash';
+  if (!toWalletSubChips[0].classList.contains('active')) toWalletSubChips[0].classList.add('active');
+  toWalletHidden.value = 'VodafoneCash';
   toServiceHidden.value = 'InstaPay';
 
+  // ==================== AMOUNT CALCULATION ====================
   const amountInput = document.getElementById('amount');
   const displayAmountSpan = document.getElementById('displayAmount');
   const totalSpan = document.getElementById('totalAmountDisplay');
@@ -728,6 +753,7 @@
   amountInput.addEventListener('input', updateAmountUI);
   updateAmountUI();
 
+  // ==================== FILE UPLOAD ====================
   const screenshotArea = document.getElementById('screenshotArea');
   const fileInput = document.getElementById('fromScreenshot');
   const fileNameDisplay = document.getElementById('fileNameDisplay');
@@ -736,93 +762,110 @@
     fileNameDisplay.innerText = fileInput.files.length ? `📸 ${fileInput.files[0].name}` : '';
   });
 
+  // ==================== SUBMIT FUNCTION (معدلة) ====================
   window.submitTransfer = async function() {
-  window.submitTransfer = async function() {
-  if (!document.getElementById('agreeTerms').checked) {
-    alert(currentLang === 'ar' ? 'يجب الموافقة على الشروط والأحكام قبل إرسال التحويل' : 'You must agree to the terms before sending');
-    return;
-  }
-  const fromType = document.getElementById('fromServiceType').value.trim();
-  const toType = document.getElementById('toServiceType').value.trim();
-  const fromNumber = document.getElementById('fromNumber').value.trim();
-  const toNumber = document.getElementById('toNumber').value.trim();
-  const fromName = document.getElementById('fromName').value.trim();
-  const toName = document.getElementById('toName').value.trim();
-  const amount = parseFloat(amountInput.value);
-  const screenshotFile = fileInput.files[0];
-  const phoneRegex = /^(\d{10}|\d{11})$/;
-  if (!fromNumber.match(phoneRegex)) { alert(currentLang === 'ar' ? 'رقم الهاتف المحول منه يجب أن يكون 10 أو 11 أرقام' : 'Sender phone must be 10 or 11 digits'); return; }
-  if (!toNumber.match(phoneRegex)) { alert(currentLang === 'ar' ? 'رقم المستلم يجب أن يكون 10 أو 11 أرقام' : 'Recipient phone must be 10 or 11 digits'); return; }
-  if (amount < 5 || amount > 5000) { alert(currentLang === 'ar' ? 'المبلغ بين 5 و 5000 جنيه' : 'Amount must be between 5 and 5000 EGP'); return; }
-  if (!fromName) { alert(currentLang === 'ar' ? 'اسم صاحب الحساب مطلوب' : 'Account holder name required'); return; }
-  if (!toName) { alert(currentLang === 'ar' ? 'اسم المستلم مطلوب' : 'Recipient name required'); return; }
-  if (!screenshotFile) { alert(currentLang === 'ar' ? 'صورة التحويل مطلوبة' : 'Screenshot required'); return; }
-  if (!amount) { alert(currentLang === 'ar' ? 'المبلغ مطلوب' : 'amount required'); return; }
-  let fromMethod = fromServiceHidden.value === 'Wallet' ? fromWalletHidden.value : fromServiceHidden.value;
-  let toMethod = toServiceHidden.value === 'Wallet' ? toWalletHidden.value : toServiceHidden.value;
-  const formData = new FormData();
-  formData.append('fromType', fromType);
-  formData.append('fromMethod', fromMethod);
-  formData.append('toType', toType);
-  formData.append('toMethod', toMethod);
-  formData.append('fromNumber', fromNumber);
-  formData.append('fromName', fromName);
-  formData.append('toNumber', toNumber);
-  formData.append('toName', toName);
-  formData.append('amount', amount);
-  formData.append('screenshot', screenshotFile);
-  formData.append('fee', (amount * 0.01).toFixed(2));
-  try {
-    await fetch('/api/transfer', { method: 'POST', body: formData });
-    alert(currentLang === 'ar' ? '✅ تم إرسال طلب التحويل بنجاح' : '✅ Transfer request sent successfully');
-    document.getElementById('transferForm').reset(); fileNameDisplay.innerText = ''; fileInput.value = ''; amountInput.value = ''; updateAmountUI();
-    document.getElementById('agreeTerms').checked = false;
-    fromServiceHidden.value = 'InstaPay'; toServiceHidden.value = 'InstaPay'; fromWalletHidden.value = 'VodafoneCash'; toWalletHidden.value = 'VodafoneCash';
-    fromServiceChips.forEach(c => c.classList.remove('active')); fromServiceChips[0].classList.add('active');
-    toServiceChips.forEach(c => c.classList.remove('active')); toServiceChips[0].classList.add('active');
-    fromWalletSubChips.forEach(c => c.classList.remove('active')); fromWalletSubChips[0].classList.add('active');
-    toWalletSubChips.forEach(c => c.classList.remove('active')); toWalletSubChips[0].classList.add('active');
-    updateFromWalletVisibility(); updateToWalletVisibility();
-  } catch (err) { alert(currentLang === 'ar' ? 'خطأ في الإرسال' : 'Submission error'); }
-};
- const toWalletSubChips = document.querySelectorAll('#toWalletSubGrid .method-chip');
-const toWalletOptionsDiv = document.getElementById('toWalletOptions');
-
-function updateToWalletVisibility() {
-  const mainService = toServiceHidden.value;
-  toWalletOptionsDiv.style.display = (mainService === 'Wallet') ? 'block' : 'none';
-  if (mainService !== 'Wallet') {
-    toWalletSubChips.forEach(sub => sub.classList.remove('active'));
-    toWalletHidden.value = mainService;
-  } else {
-    if (!document.querySelector('#toWalletSubGrid .method-chip.active')) {
-      toWalletSubChips[0]?.classList.add('active');
-      toWalletHidden.value = toWalletSubChips[0]?.getAttribute('data-sub') || 'VodafoneCash';
+    if (!document.getElementById('agreeTerms').checked) {
+      alert(currentLang === 'ar' ? 'يجب الموافقة على الشروط والأحكام قبل إرسال التحويل' : 'You must agree to the terms before sending');
+      return;
     }
-  }
-}
-
-toServiceChips.forEach(chip => {
-  chip.addEventListener('click', () => {
-    toServiceChips.forEach(c => c.classList.remove('active'));
-    chip.classList.add('active');
-    toServiceHidden.value = chip.getAttribute('data-service');
-    updateToWalletVisibility();
-  });
-});
-
-toWalletSubChips.forEach(sub => {
-  sub.addEventListener('click', () => {
-    if (toServiceHidden.value !== 'Wallet') return;
-    toWalletSubChips.forEach(s => s.classList.remove('active'));
-    sub.classList.add('active');
-    toWalletHidden.value = sub.getAttribute('data-sub');
-  });
-});
-
-updateToWalletVisibility();
-toWalletSubChips[0].classList.add('active');
-toWalletHidden.value = 'VodafoneCash';
+    
+    // Get values
+    const fromNumber = document.getElementById('fromNumber').value.trim();
+    const toNumber = document.getElementById('toNumber').value.trim();
+    const fromName = document.getElementById('fromName').value.trim();
+    const toName = document.getElementById('toName').value.trim();
+    const amount = parseFloat(amountInput.value);
+    const screenshotFile = fileInput.files[0];
+    
+    // Get methods
+    let fromMethod = fromServiceHidden.value === 'Wallet' ? fromWalletHidden.value : fromServiceHidden.value;
+    let toMethod = toServiceHidden.value === 'Wallet' ? toWalletHidden.value : toServiceHidden.value;
+    
+    // Validation
+    const phoneRegex = /^(\d{10}|\d{11})$/;
+    if (!fromNumber.match(phoneRegex)) { 
+      alert(currentLang === 'ar' ? 'رقم الهاتف المحول منه يجب أن يكون 10 أو 11 أرقام' : 'Sender phone must be 10 or 11 digits'); 
+      return; 
+    }
+    if (!toNumber.match(phoneRegex)) { 
+      alert(currentLang === 'ar' ? 'رقم المستلم يجب أن يكون 10 أو 11 أرقام' : 'Recipient phone must be 10 or 11 digits'); 
+      return; 
+    }
+    if (amount < 5 || amount > 5000) { 
+      alert(currentLang === 'ar' ? 'المبلغ بين 5 و 5000 جنيه' : 'Amount must be between 5 and 5000 EGP'); 
+      return; 
+    }
+    if (!fromName) { 
+      alert(currentLang === 'ar' ? 'اسم صاحب الحساب مطلوب' : 'Account holder name required'); 
+      return; 
+    }
+    if (!toName) { 
+      alert(currentLang === 'ar' ? 'اسم المستلم مطلوب' : 'Recipient name required'); 
+      return; 
+    }
+    if (!screenshotFile) { 
+      alert(currentLang === 'ar' ? 'صورة التحويل مطلوبة' : 'Screenshot required'); 
+      return; 
+    }
+    
+    const fee = amount * 0.01;
+    const total = amount + fee;
+    
+    // Prepare FormData
+    const formData = new FormData();
+    formData.append('fromNumber', fromNumber);
+    formData.append('fromName', fromName);
+    formData.append('fromMethod', fromMethod);
+    formData.append('toNumber', toNumber);
+    formData.append('toName', toName);
+    formData.append('toMethod', toMethod);
+    formData.append('amount', amount);
+    formData.append('fee', fee.toFixed(2));
+    formData.append('total', total.toFixed(2));
+    formData.append('screenshot', screenshotFile);
+    
+    try {
+      // Replace with your actual API endpoint
+      const response = await fetch('/api/transfer', { 
+        method: 'POST', 
+        body: formData 
+      });
+      
+      if (response.ok) {
+        alert(currentLang === 'ar' ? '✅ تم إرسال طلب التحويل بنجاح' : '✅ Transfer request sent successfully');
+        // Reset form
+        document.getElementById('transferForm').reset();
+        fileNameDisplay.innerText = '';
+        fileInput.value = '';
+        amountInput.value = '';
+        updateAmountUI();
+        document.getElementById('agreeTerms').checked = false;
+        
+        // Reset selections
+        fromServiceHidden.value = 'InstaPay';
+        toServiceHidden.value = 'InstaPay';
+        fromWalletHidden.value = 'VodafoneCash';
+        toWalletHidden.value = 'VodafoneCash';
+        
+        fromServiceChips.forEach(c => c.classList.remove('active'));
+        fromServiceChips[0].classList.add('active');
+        toServiceChips.forEach(c => c.classList.remove('active'));
+        toServiceChips[0].classList.add('active');
+        fromWalletSubChips.forEach(c => c.classList.remove('active'));
+        fromWalletSubChips[0].classList.add('active');
+        toWalletSubChips.forEach(c => c.classList.remove('active'));
+        toWalletSubChips[0].classList.add('active');
+        
+        updateFromWalletVisibility();
+        updateToWalletVisibility();
+      } else {
+        throw new Error('Server error');
+      }
+    } catch (err) { 
+      console.error(err);
+      alert(currentLang === 'ar' ? '❌ حدث خطأ في الإرسال، يرجى المحاولة مرة أخرى' : '❌ Submission error, please try again'); 
+    }
+  };
 </script>
 </body>
 </html>
