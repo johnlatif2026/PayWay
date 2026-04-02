@@ -63,16 +63,17 @@ app.post('/api/transfer', upload.single('screenshot'), async (req, res) => {
       form.append('image', req.file.buffer.toString('base64'));
       form.append('key', process.env.IMGBB_API_KEY);
 
-      try {
-        const response = await axios.post('https://api.imgbb.com/1/upload', form, {
-          headers: form.getHeaders()
-        });
-        screenshotURL = response.data.data.display_url;
-      } catch (imgErr) {
-        console.error('ImgBB upload error:', imgErr.message);
-        // نكمل بدون صورة
-      }
+      const response = await axios.post('https://api.imgbb.com/1/upload', form, {
+        headers: form.getHeaders()
+      });
+
+      screenshotURL = response.data.data.display_url;
     }
+
+    // صياغة التاريخ بصيغة عربية واضحة
+    const now = new Date();
+    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    const dateStr = now.toLocaleString('ar-EG', options);
 
     // حفظ التحويل في Firestore
     const transfer = {
@@ -81,45 +82,36 @@ app.post('/api/transfer', upload.single('screenshot'), async (req, res) => {
       amount: parseFloat(amount),
       profit,
       totalAmount,
-      date: new Date()
+      date: dateStr // حفظ التاريخ ك string
     };
 
     const docRef = await db.collection('transfers').add(transfer);
 
-    // صياغة التاريخ بصيغة عربية + وقت
-    const now = new Date();
-    const dateStr = now.toLocaleString('ar-EG', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    // إعداد رسالة Telegram
+    const textMsg = `طلب تحويل جديد:
+من: ${fromType} (${fromNumber})
+إلى: ${toType} (${toNumber})
+المبلغ: ${amount}
+العمولة: ${profit}
+الإجمالي: ${totalAmount}
+التاريخ: ${dateStr}`;
 
-    // إعداد رسالة Telegram مع التاريخ
-    const textMsg = `طلب تحويل جديد:\nمن: ${fromType} (${fromNumber})\nإلى: ${toType} (${toNumber})\nالمبلغ: ${amount}\nالعمولة: ${profit}\nالإجمالي: ${totalAmount}\nالتاريخ: ${dateStr}`;
-
-    // محاولة إرسال الرسالة
-    try {
-      if (screenshotURL) {
-        await axios.post(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendPhoto`, {
-          chat_id: process.env.TELEGRAM_CHAT_ID,
-          photo: screenshotURL,
-          caption: textMsg
-        });
-      } else {
-        await axios.post(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`, {
-          chat_id: process.env.TELEGRAM_CHAT_ID,
-          text: textMsg
-        });
-      }
-    } catch (telegramErr) {
-      console.error('Telegram send error:', telegramErr.message);
+    if (screenshotURL) {
+      await axios.post(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendPhoto`, {
+        chat_id: process.env.TELEGRAM_CHAT_ID,
+        photo: screenshotURL,
+        caption: textMsg
+      });
+    } else {
+      await axios.post(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`, {
+        chat_id: process.env.TELEGRAM_CHAT_ID,
+        text: textMsg
+      });
     }
 
-    res.json({ message: 'تم تسجيل التحويل', totalAmount, id: docRef.id, date: transfer.date });
+    res.json({ message: 'تم تسجيل التحويل', totalAmount, id: docRef.id });
   } catch (err) {
-    console.error('Transfer API error:', err.message);
+    console.error(err);
     res.status(500).json({ message: 'حدث خطأ أثناء تسجيل التحويل' });
   }
 });
