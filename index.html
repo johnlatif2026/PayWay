@@ -4,22 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PayWay</title>
-<link rel="icon" href="https://i.postimg.cc/NfPBr7hs/Picsart-26-04-02-02-54-03-157.jpg" type="image/png">  
+<link rel="icon" href="https://i.postimg.cc/NfPBr7hs/Picsart-26-04-02-02-54-03-157.jpg" type="image/png">
 <style>
-body { font-family: Cairo, sans-serif; background: #f5f5f5; margin:0; padding:0; }
-.container { max-width: 500px; margin: 50px auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+body { font-family: Cairo, sans-serif; background:#f5f5f5; margin:0; padding:0;}
+.container { max-width:500px; margin:50px auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);}
 h2 { text-align:center; color:#1a3e8c; }
 input, select { width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:4px; }
 button { background:#1a3e8c; color:white; padding:12px; border:none; border-radius:4px; cursor:pointer; width:100%; }
 button:hover { background:#1550a0; }
-.logo { display:block; margin:0 auto 15px auto; width:120px; height:auto; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+.logo { display:block; margin:0 auto 15px auto; width:120px; height:auto; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.1);}
+.footer { text-align:center; margin-top:30px; font-size:14px; color:#555; }
+.footer a { color:#1a3e8c; text-decoration:none; }
 </style>
 </head>
 <body>
 <div class="container">
 <img src="https://i.postimg.cc/NfPBr7hs/Picsart-26-04-02-02-54-03-157.jpg" class="logo" alt="PayWay Logo">
 <h2>PayWay</h2>
-<p>حول على الرقم التالي: <strong>01274445091(محفظة)</strong></p>
+<p>حول على الرقم التالي: <strong>01012345678</strong></p>
+
 <form id="transferForm">
   <label>من:</label>
   <select id="fromType">
@@ -49,27 +52,78 @@ button:hover { background:#1550a0; }
   <input type="text" id="toName" placeholder="اسم المستلم">
 
   <input type="number" id="amount" placeholder="المبلغ">
+  <p>المبلغ الكلي مع العمولة: <strong id="totalAmountDisplay">0</strong> جنيه</p>
+
+  <div>
+    <input type="checkbox" id="agreeTerms">
+    <label for="agreeTerms">أوافق على الشروط والسياسات: <br>
+      - أي تحويل لرقم خاطئ أو أموال مسروقة غير مسؤولية PayWay.<br>
+      - يتحمل المستخدم كامل المسؤولية عن التحويلات.
+    </label>
+  </div>
+
   <button type="button" onclick="submitTransfer()">إرسال التحويل</button>
 </form>
+<div class="footer">
+  &copy; 2026 PayWay - <a href="https://wa.me/01012345678" target="_blank">للتواصل عبر واتساب</a>
+</div>
+
 <script>
-async function submitTransfer() {
+const amountInput = document.getElementById('amount');
+const totalAmountDisplay = document.getElementById('totalAmountDisplay');
+const profit = 15;
+
+amountInput.addEventListener('input', ()=>{
+  const amount = parseFloat(amountInput.value);
+  totalAmountDisplay.innerText = (!isNaN(amount)) ? amount + profit : 0;
+});
+
+async function submitTransfer(){
+  if(!document.getElementById('agreeTerms').checked){
+    alert('يجب الموافقة على الشروط قبل التحويل');
+    return;
+  }
+
   const from = document.getElementById('fromType').value;
   const to = document.getElementById('toType').value;
   const fromNumber = document.getElementById('fromNumber').value;
   const fromName = document.getElementById('fromName').value;
   const toNumber = document.getElementById('toNumber').value;
   const toName = document.getElementById('toName').value;
-  const amount = parseFloat(document.getElementById('amount').value);
-  if(!fromNumber || !fromName || !toNumber || !toName || !amount){ alert('الرجاء تعبئة كل الحقول'); return; }
+  const amount = parseFloat(amountInput.value);
+  if(!fromNumber || !fromName || !toNumber || !toName || !amount){
+    alert('الرجاء تعبئة كل الحقول');
+    return;
+  }
 
-  const res = await fetch('/api/transfer', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({from:{type:from,number:fromNumber,name:fromName}, to:{type:to,number:toNumber,name:toName}, amount})
-  });
-  const data = await res.json();
-  alert(`تم تسجيل التحويل - المبلغ الكلي: ${data.totalAmount} جنيه`);
-  document.getElementById('transferForm').reset();
+  const fromScreenshotFile = document.getElementById('fromScreenshot').files[0];
+  let screenshotData = null;
+  if(fromScreenshotFile){
+    const reader = new FileReader();
+    reader.onloadend = async function(){
+      screenshotData = reader.result;
+      await sendTransfer(screenshotData);
+    }
+    reader.readAsDataURL(fromScreenshotFile);
+  } else {
+    await sendTransfer(null);
+  }
+
+  async function sendTransfer(screenshot){
+    const res = await fetch('/api/transfer', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        from:{type:from,number:fromNumber,name:fromName,screenshot:screenshot},
+        to:{type:to,number:toNumber,name:toName},
+        amount
+      })
+    });
+    const data = await res.json();
+    alert(`تم تسجيل التحويل - المبلغ الكلي: ${data.totalAmount} جنيه`);
+    document.getElementById('transferForm').reset();
+    totalAmountDisplay.innerText = 0;
+  }
 }
 </script>
 </body>
