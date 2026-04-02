@@ -72,33 +72,55 @@ app.post('/api/transfer', upload.single('screenshot'), async (req, res) => {
       amount
     } = req.body;
 
+const FormData = require('form-data');
+
+app.post('/api/transfer', upload.single('screenshot'), async (req,res)=>{
+  try{
+    const {
+      fromServiceType,
+      toServiceType,
+      fromNumber,
+      fromName,
+      toNumber,
+      toName,
+      amount
+    } = req.body;
+
     const fromType = fromServiceType;
     const toType = toServiceType;
     const profit = 15;
     const totalAmount = parseFloat(amount) + profit;
 
-    let screenshotUrl = null;
-    if (req.file) {
-      screenshotUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    let screenshotURL = null;
+
+    if(req.file){
+      const form = new FormData();
+      form.append('image', req.file.buffer.toString('base64'));
+      form.append('key', process.env.IMGBB_API_KEY);
+
+      const response = await axios.post('https://api.imgbb.com/1/upload', form, {
+        headers: form.getHeaders()
+      });
+      screenshotURL = response.data.data.display_url;
     }
 
-    // حفظ البيانات في Firestore
-    const transferDoc = {
-      from: { type: fromType, number: fromNumber, name: fromName, screenshot: screenshotUrl },
-      to: { type: toType, number: toNumber, name: toName },
+    const transfer = {
+      from: {type:fromType, number:fromNumber, name:fromName, screenshot: screenshotURL},
+      to: {type:toType, number:toNumber, name:toName},
       amount: parseFloat(amount),
       profit,
       totalAmount,
       date: new Date()
     };
-    const docRef = await db.collection('transfers').add(transferDoc);
 
-    // إرسال على Telegram
+    transfers.push(transfer);
+
     let textMsg = `طلب تحويل جديد:\nمن: ${fromType} (${fromNumber})\nإلى: ${toType} (${toNumber})\nالمبلغ: ${amount}\nالعمولة: ${profit}\nالإجمالي: ${totalAmount}`;
-    if (screenshotUrl) {
+
+    if(screenshotURL){
       await axios.post(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendPhoto`, {
         chat_id: process.env.TELEGRAM_CHAT_ID,
-        photo: screenshotUrl,
+        photo: screenshotURL,
         caption: textMsg
       });
     } else {
@@ -108,10 +130,10 @@ app.post('/api/transfer', upload.single('screenshot'), async (req, res) => {
       });
     }
 
-    res.json({ message: 'تم تسجيل التحويل', totalAmount, id: docRef.id });
-  } catch (err) {
+    res.json({message:'تم تسجيل التحويل', totalAmount});
+  } catch(err) {
     console.error(err);
-    res.status(500).json({ message: 'حدث خطأ أثناء تسجيل التحويل' });
+    res.status(500).json({message:'حدث خطأ أثناء تسجيل التحويل'});
   }
 });
 
