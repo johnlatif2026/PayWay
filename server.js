@@ -27,12 +27,12 @@ function authenticateToken(req,res,next){
 }
 
 // Login
-app.post('/api/login', express.json(), (req,res)=>{
+app.post('/api/login',(req,res)=>{
   const {username,password} = req.body;
   if(username===process.env.ADMIN_USER && password===process.env.ADMIN_PASS){
-    const token = jwt.sign({username}, process.env.JWT_SECRET, {expiresIn:'8h'});
+    const token = jwt.sign({username},process.env.JWT_SECRET,{expiresIn:'8h'});
     res.json({token});
-  } else res.status(401).json({message:'بيانات الدخول خاطئة'});
+  }else res.status(401).json({message:'بيانات الدخول خاطئة'});
 });
 
 // Transfer
@@ -96,9 +96,9 @@ app.delete('/api/transfer/:index', authenticateToken,(req,res)=>{
 });
 
 // صفحات
-app.get('/', (req,res)=>res.sendFile(path.join(__dirname,'index.html')));
-app.get('/login', (req,res)=>res.sendFile(path.join(__dirname,'login.html')));
-app.get('/dashboard', (req,res)=>res.sendFile(path.join(__dirname,'dashboard.html')));
+app.get('/',(req,res)=>res.sendFile(path.join(__dirname,'index.html')));
+app.get('/login',(req,res)=>res.sendFile(path.join(__dirname,'login.html')));
+app.get('/dashboard',(req,res)=>res.sendFile(path.join(__dirname,'dashboard.html')));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT,()=>console.log(`Server running on port ${PORT}`));
