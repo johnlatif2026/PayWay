@@ -38,7 +38,7 @@ button:hover { background:#1550a0; }
     <option value="Fawry">فوري</option>
     <option value="Telda">تيلدا</option>
   </select>
-  <input type="phone" id="fromNumber" placeholder="رقم الهاتف المحول منه" required>
+  <input type="text" id="fromNumber" placeholder="رقم الهاتف المحول منه" required pattern="\d{10,11}" title="يجب أن يكون الرقم من 10 أو 11 أرقام">
   <input type="text" id="fromName" placeholder="اسم صاحب الحساب" required>
   <input type="file" id="fromScreenshot" accept="image/*" required>
 
@@ -52,10 +52,10 @@ button:hover { background:#1550a0; }
     <option value="Fawry">فوري</option>
     <option value="Telda">تيلدا</option>
   </select>
-  <input type="phone" id="toNumber" placeholder="رقم المستلم" required>
+  <input type="text" id="toNumber" placeholder="رقم المستلم" required pattern="\d{10,11}" title="يجب أن يكون الرقم من 10 أو 11 أرقام">
   <input type="text" id="toName" placeholder="اسم المستلم" required>
 
-  <input type="number" id="amount" placeholder="المبلغ" required>
+  <input type="number" id="amount" placeholder="المبلغ" required min="5" max="5000">
   <p class="total-display">المبلغ الكلي: <span id="totalAmountDisplay">0</span> جنيه</p>
 
   <div class="terms-container">
@@ -100,7 +100,25 @@ async function submitTransfer(){
   const toNumber = document.getElementById('toNumber').value;
   const toName = document.getElementById('toName').value;
   const amount = parseFloat(amountInput.value);
-  if(!fromNumber || !fromName || !toNumber || !toName || !amount){
+
+  // التحقق من طول أرقام الهاتف
+  const phoneRegex = /^(\d{10}|\d{11})$/;
+  if(!phoneRegex.test(fromNumber)){
+    alert("رقم الهاتف المحول منه يجب أن يكون 10 أو 11 أرقام فقط");
+    return;
+  }
+  if(!phoneRegex.test(toNumber)){
+    alert("رقم الهاتف المستلم يجب أن يكون 10 أو 11 أرقام فقط");
+    return;
+  }
+
+  // التحقق من المبلغ
+  if(amount < 5 || amount > 5000){
+    alert("المبلغ يجب أن يكون بين 5 و 5000 جنيه");
+    return;
+  }
+
+  if(!fromName || !toName){
     alert('الرجاء تعبئة كل الحقول');
     return;
   }
