@@ -38,9 +38,9 @@ button:hover { background:#1550a0; }
     <option value="Fawry">فوري</option>
     <option value="Telda">تيلدا</option>
   </select>
-  <input type="phone" id="fromNumber" placeholder="رقم الهاتف المحول منه">
-  <input type="text" id="fromName" placeholder="اسم صاحب الحساب">
-  <input type="file" id="fromScreenshot" accept="image/*">
+  <input type="phone" id="fromNumber" placeholder="رقم الهاتف المحول منه" required>
+  <input type="text" id="fromName" placeholder="اسم صاحب الحساب" required>
+  <input type="file" id="fromScreenshot" accept="image/*" required>
 
   <label>إلى:</label>
   <select id="toType">
@@ -52,10 +52,10 @@ button:hover { background:#1550a0; }
     <option value="Fawry">فوري</option>
     <option value="Telda">تيلدا</option>
   </select>
-  <input type="phone" id="toNumber" placeholder="رقم المستلم">
-  <input type="text" id="toName" placeholder="اسم المستلم">
+  <input type="phone" id="toNumber" placeholder="رقم المستلم" required>
+  <input type="text" id="toName" placeholder="اسم المستلم" required>
 
-  <input type="number" id="amount" placeholder="المبلغ">
+  <input type="number" id="amount" placeholder="المبلغ" required>
   <p class="total-display">المبلغ الكلي: <span id="totalAmountDisplay">0</span> جنيه</p>
 
   <div class="terms-container">
