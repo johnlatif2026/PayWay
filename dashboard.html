@@ -7,7 +7,7 @@
 <style>
 body { font-family:Cairo,sans-serif; background:#f5f5f5; margin:0; padding:20px;}
 h2 { color:#1a3e8c; }
-.container { max-width:800px; margin:auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+.container { max-width:900px; margin:auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);}
 table { width:100%; border-collapse:collapse; margin-top:20px; }
 th, td { border:1px solid #ccc; padding:8px; text-align:center; }
 th { background:#1a3e8c; color:white; }
@@ -15,6 +15,7 @@ button { padding:6px 10px; border:none; border-radius:4px; cursor:pointer; backg
 button:hover { background:#e74c3c; }
 #logoutBtn { background:#1a3e8c; margin-bottom:10px;}
 #logoutBtn:hover { background:#1550a0; }
+img { border-radius:6px; }
 </style>
 </head>
 <body>
@@ -25,7 +26,7 @@ button:hover { background:#e74c3c; }
 <table>
 <thead>
 <tr>
-<th>من</th><th>إلى</th><th>المبلغ</th><th>العمولة</th><th>الإجمالي</th><th>التاريخ</th><th>إجراءات</th>
+<th>من</th><th>إلى</th><th>المبلغ</th><th>العمولة</th><th>الإجمالي</th><th>التاريخ</th><th>Screenshot</th><th>إجراءات</th>
 </tr>
 </thead>
 <tbody id="transfersTable"></tbody>
@@ -49,6 +50,7 @@ async function loadDashboard(){
       <td>${t.profit}</td>
       <td>${t.totalAmount}</td>
       <td>${new Date(t.date).toLocaleString()}</td>
+      <td>${t.from.screenshot ? `<a href="${t.from.screenshot}" target="_blank"><img src="${t.from.screenshot}" width="50"></a>`:'لا يوجد'}</td>
       <td><button onclick="deleteTransfer(${i})">حذف</button></td>
     </tr>`;
     tbody.innerHTML += row;
