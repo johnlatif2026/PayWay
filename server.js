@@ -91,8 +91,8 @@ app.post('/api/transfer', upload.single('screenshot'), async (req, res) => {
     const textMsg = `طلب تحويل جديد:
 من: ${fromServiceType} (${fromNumber})
 إلى: ${toServiceType} (${toNumber})
-اسم المحول: ${fromName} (${fromName})
-اسم المستلم: ${toName} (${toName})
+اسم المحول: ${fromName}
+اسم المستلم: ${toName}
 المبلغ: ${amount}
 العمولة: ${profit}
 الإجمالي: ${totalAmount}
