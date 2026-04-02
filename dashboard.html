@@ -442,7 +442,8 @@
       const amount = transfer.amount || 0;
       const profit = transfer.profit || (amount * 0.01).toFixed(2);
       const totalAmount = transfer.totalAmount || (amount + parseFloat(profit)).toFixed(2);
-      const dateStr = transfer.date ? new Date(transfer.date).toLocaleString(currentLang === 'ar' ? 'ar-EG' : 'en-US') : '-';
+      const dateObj = transfer.date?.toDate ? transfer.date.toDate() : new Date(transfer.date);
+const dateStr = dateObj.toLocaleString(currentLang === 'ar' ? 'ar-EG' : 'en-US');
       const screenshotHtml = transfer.from.screenshot 
         ? `<a href="${transfer.from.screenshot}" target="_blank"><img class="screenshot-img" src="${transfer.from.screenshot}" alt="screenshot" onerror="this.src='https://placehold.co/48x48?text=Error'"></a>` 
         : '<span style="opacity:0.5;">—</span>';
@@ -455,7 +456,7 @@
         <td><strong>${parseFloat(totalAmount).toFixed(2)} EGP</strong></td>
         <td style="font-size:0.75rem;">${dateStr}</td>
         <td>${screenshotHtml}</td>
-        <td><button class="delete-btn" onclick="deleteTransfer(${idx})"><i class="fas fa-trash-alt"></i> ${currentLang === 'ar' ? 'حذف' : 'Delete'}</button></td>
+        <td><button class="delete-btn" onclick="deleteTransfer('${transfer.id}')"><i class="fas fa-trash-alt"></i> ${currentLang === 'ar' ? 'حذف' : 'Delete'}</button></td>
       `;
       tbody.appendChild(row);
     });
@@ -527,35 +528,35 @@
     const t = translations[currentLang];
     if (!confirm(t.deleteConfirm)) return;
     
-    const token = localStorage.getItem('token');
-    if (!token) {
-      window.location.href = '/login';
-      return;
-    }
-    
-    try {
-      const res = await fetch('/api/transfer/' + index, {
-        method: 'DELETE',
-        headers: { 'Authorization': 'Bearer ' + token }
-      });
-      
-      if (res.status === 200 || res.status === 204) {
-        // Remove from local array and refresh
-        transfersData.splice(index, 1);
-        updateStats();
-        renderTable();
-        // Optionally show success message
-        // alert(t.deleteSuccess);
-      } else {
-        // If API fails, reload from server
-        await loadDashboard();
-      }
-    } catch (err) {
-      console.error('Delete error:', err);
-      // Fallback: reload dashboard
+    async function deleteTransfer(id) {
+  const t = translations[currentLang];
+  if (!confirm(t.deleteConfirm)) return;
+
+  const token = localStorage.getItem('token');
+  if (!token) {
+    window.location.href = '/login';
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/transfer/' + id, {
+      method: 'DELETE',
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+
+    if (res.status === 200 || res.status === 204) {
+      // إزالة من المصفوفة محليًا
+      transfersData = transfersData.filter(t => t.id !== id);
+      updateStats();
+      renderTable();
+    } else {
       await loadDashboard();
     }
+  } catch (err) {
+    console.error('Delete error:', err);
+    await loadDashboard();
   }
+ }
 
   function logout() {
     localStorage.removeItem('token');
