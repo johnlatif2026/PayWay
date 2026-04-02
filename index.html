@@ -302,9 +302,13 @@
     gap: 12px;
     box-shadow: 0 8px 18px rgba(16,58,110,0.2);
   }
-  .btn-submit:hover {
+  .btn-submit:hover:not(:disabled) {
     background: #1e5a9e;
     transform: scale(0.98);
+  }
+  .btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
   .terms-note {
     font-size: 0.7rem;
@@ -411,7 +415,7 @@
         </div>
       </div>
 
-      <!-- SECTION 2: تحويل إلى (معدل بالكامل) -->
+      <!-- SECTION 2: تحويل إلى -->
       <div class="section">
         <div class="section-header">
           <div class="section-number">2</div>
@@ -475,7 +479,7 @@
           <div class="terms-note" id="disclaimerText">
             <i class="fas fa-shield-alt"></i> PayWay غير مسؤول عن الأموال المسروقة أو أي خسائر. تأكد من البيانات.
           </div>
-          <button type="button" class="btn-submit" onclick="submitTransfer()">
+          <button type="button" class="btn-submit" id="submitBtn" onclick="submitTransfer()">
             <i class="fas fa-paper-plane"></i> <span id="submitBtnText">Send Request Now</span>
           </button>
         </div>
@@ -488,6 +492,7 @@
     <a href="https://wa.me/201274445091" target="_blank">John Latif <i class="fab fa-whatsapp"></i></a>
   </div>
 </div>
+
 <script>
   // ==================== BILINGUAL TEXT DICTIONARY ====================
   const translations = {
@@ -538,71 +543,209 @@
   };
 
   let currentLang = 'ar';
+  let currentFileName = ''; // Store current file name to persist across language changes
 
   function updateLanguage(lang) {
     currentLang = lang;
     const t = translations[lang];
-
-    const safeSetText = (id, text) => {
-      const el = document.getElementById(id);
-      if(el) el.innerText = text;
-    };
-
-    const safeSetHTML = (id, html) => {
-      const el = document.getElementById(id);
-      if(el) el.innerHTML = html;
-    };
-
-    safeSetText('brandTitle', t.brand);
-    safeSetText('statusTitle', t.statusTitle);
-    safeSetText('statusDesc', t.statusDesc);
-    safeSetText('section1Title', t.section1);
-    safeSetText('section2Title', t.section2);
-    safeSetText('section3Title', t.section3);
-    safeSetHTML('fromPhoneLabel', `<i class="fas fa-phone-alt"></i> ${t.fromPhone}`);
-    safeSetHTML('fromNameLabel', `<i class="fas fa-user"></i> ${t.fromName}`);
-    safeSetHTML('screenshotLabel', `<i class="fas fa-camera"></i> ${t.screenshot}`);
-    safeSetText('uploadText', t.uploadClick);
-    safeSetHTML('toPhoneLabel', `<i class="fas fa-user-check"></i> ${t.toPhone}`);
-    safeSetHTML('toNameLabel', `<i class="fas fa-id-card"></i> ${t.toName}`);
-    safeSetText('amountLabel', t.amountLabel);
-    safeSetHTML('amountText', `${t.amountPrefix} <span id="displayAmount">${document.getElementById('displayAmount').innerText}</span> EGP`);
-    safeSetHTML('feeText', `<i class="fas fa-percent"></i> ${t.feePrefix}`);
-    safeSetHTML('totalText', `<strong>${t.totalPrefix}</strong>`);
-    safeSetText('termsLabel', t.terms);
-    safeSetHTML('disclaimerText', `<i class="fas fa-shield-alt"></i> ${t.disclaimer}`);
-    safeSetText('submitBtnText', t.submit);
-    safeSetText('footerText', t.footer);
-
+    
+    document.getElementById('brandTitle').innerText = t.brand;
+    document.getElementById('statusTitle').innerText = t.statusTitle;
+    document.getElementById('statusDesc').innerText = t.statusDesc;
+    document.getElementById('section1Title').innerText = t.section1;
+    document.getElementById('section2Title').innerText = t.section2;
+    document.getElementById('section3Title').innerText = t.section3;
+    document.getElementById('fromPhoneLabel').innerHTML = `<i class="fas fa-phone-alt"></i> ${t.fromPhone}`;
+    document.getElementById('fromNameLabel').innerHTML = `<i class="fas fa-user"></i> ${t.fromName}`;
+    document.getElementById('screenshotLabel').innerHTML = `<i class="fas fa-camera"></i> ${t.screenshot}`;
+    document.getElementById('uploadText').innerText = t.uploadClick;
+    document.getElementById('toPhoneLabel').innerHTML = `<i class="fas fa-user-check"></i> ${t.toPhone}`;
+    document.getElementById('toNameLabel').innerHTML = `<i class="fas fa-id-card"></i> ${t.toName}`;
+    document.getElementById('amountLabel').innerText = t.amountLabel;
+    
+    // Update amount display with current value
+    const currentAmount = parseFloat(document.getElementById('amount').value) || 0;
+    document.getElementById('amountText').innerHTML = `${t.amountPrefix} <span id="displayAmount">${currentAmount.toFixed(2)}</span> EGP`;
+    document.getElementById('feeText').innerHTML = `<i class="fas fa-percent"></i> ${t.feePrefix}`;
+    document.getElementById('totalText').innerHTML = `<strong>${t.totalPrefix}</strong>`;
+    document.getElementById('termsLabel').innerText = t.terms;
+    document.getElementById('disclaimerText').innerHTML = `<i class="fas fa-shield-alt"></i> ${t.disclaimer}`;
+    document.getElementById('submitBtnText').innerText = t.submit;
+    document.getElementById('footerText').innerText = t.footer;
+    
+    // Update placeholders based on language
     const isAr = lang === 'ar';
-    const placeholders = [
-      ['fromNumber', isAr ? "مثال: 01012345678" : "e.g., 01012345678"],
-      ['fromName', isAr ? "الاسم بالكامل" : "Full name"],
-      ['toNumber', isAr ? "رقم المستلم أو الحساب" : "Recipient phone / account"],
-      ['toName', isAr ? "اسم المستلم" : "Recipient name"],
-      ['amount', isAr ? "أدخل المبلغ" : "Enter amount"]
-    ];
-    placeholders.forEach(([id, text]) => {
-      const el = document.getElementById(id);
-      if(el) el.placeholder = text;
+    document.getElementById('fromNumber').placeholder = isAr ? "مثال: 01012345678" : "e.g., 01012345678";
+    document.getElementById('fromName').placeholder = isAr ? "الاسم بالكامل" : "Full name";
+    document.getElementById('toNumber').placeholder = isAr ? "رقم المستلم أو الحساب" : "Recipient phone / account";
+    document.getElementById('toName').placeholder = isAr ? "اسم المستلم" : "Recipient name";
+    document.getElementById('amount').placeholder = isAr ? "أدخل المبلغ" : "Enter amount";
+    
+    // Update chip texts
+    const chipTranslations = {
+      ar: {
+        'InstaPay': 'إنستا باي',
+        'Wallet': 'محفظة',
+        'Fawry': 'فوري',
+        'Telda': 'تيلدا',
+        'VodafoneCash': 'فودافون كاش',
+        'OrangeCash': 'أورنج كاش',
+        'EtisalatCash': 'اتصالات كاش',
+        'WePay': 'وي باي'
+      },
+      en: {
+        'InstaPay': 'InstaPay',
+        'Wallet': 'Wallet',
+        'Fawry': 'Fawry',
+        'Telda': 'Telda',
+        'VodafoneCash': 'Vodafone Cash',
+        'OrangeCash': 'Orange Cash',
+        'EtisalatCash': 'Etisalat Cash',
+        'WePay': 'WE Pay'
+      }
+    };
+    
+    const allChips = document.querySelectorAll('.method-chip .chip-text');
+    allChips.forEach(chipSpan => {
+      const parent = chipSpan.closest('.method-chip');
+      if (parent) {
+        const serviceKey = parent.getAttribute('data-service') || parent.getAttribute('data-sub');
+        if (serviceKey && chipTranslations[lang][serviceKey]) {
+          chipSpan.innerText = chipTranslations[lang][serviceKey];
+        }
+      }
     });
-
-    document.body.style.direction = isAr ? 'rtl' : 'ltr';
-    document.querySelector('.transfer-card')?.style.setProperty('direction', isAr ? 'rtl' : 'ltr');
+    
+    // Restore file name display after language change
+    if (currentFileName) {
+      document.getElementById('fileNameDisplay').innerText = currentFileName;
+    }
+    
+    // Adjust direction
+    if (lang === 'en') {
+      document.body.style.direction = 'ltr';
+      document.querySelector('.transfer-card').style.direction = 'ltr';
+      document.querySelectorAll('.section-header, .amount-row, .checkbox-custom, .footer').forEach(el => el.style.direction = 'ltr');
+    } else {
+      document.body.style.direction = 'rtl';
+      document.querySelector('.transfer-card').style.direction = 'rtl';
+      document.querySelectorAll('.section-header, .amount-row, .checkbox-custom, .footer').forEach(el => el.style.direction = 'rtl');
+    }
   }
 
-  document.getElementById('btnAr')?.addEventListener('click', () => {
+  // Language toggle buttons
+  document.getElementById('btnAr').addEventListener('click', () => {
     document.getElementById('btnAr').classList.add('active');
     document.getElementById('btnEn').classList.remove('active');
     updateLanguage('ar');
   });
-  document.getElementById('btnEn')?.addEventListener('click', () => {
+  document.getElementById('btnEn').addEventListener('click', () => {
     document.getElementById('btnEn').classList.add('active');
     document.getElementById('btnAr').classList.remove('active');
     updateLanguage('en');
   });
-
+  
+  // Initialize Arabic by default
   updateLanguage('ar');
+
+  // ==================== FROM SECTION LOGIC ====================
+  const fromServiceChips = document.querySelectorAll('#fromServiceGrid .method-chip');
+  const fromWalletSubChips = document.querySelectorAll('#fromWalletSubGrid .method-chip');
+  const fromServiceHidden = document.getElementById('fromServiceType');
+  const fromWalletHidden = document.getElementById('fromWalletSubtype');
+  const fromWalletOptionsDiv = document.getElementById('fromWalletOptions');
+
+  function updateFromWalletVisibility() {
+    const mainService = fromServiceHidden.value;
+    fromWalletOptionsDiv.style.display = (mainService === 'Wallet') ? 'block' : 'none';
+    // Fix: Update wallet hidden value when main service is not Wallet
+    if (mainService !== 'Wallet') {
+      fromWalletHidden.value = mainService;
+    }
+  }
+
+  fromServiceChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      fromServiceChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const serviceVal = chip.getAttribute('data-service');
+      fromServiceHidden.value = serviceVal;
+      if (serviceVal !== 'Wallet') {
+        fromWalletHidden.value = serviceVal;
+        fromWalletSubChips.forEach(sub => sub.classList.remove('active'));
+      } else {
+        if (!document.querySelector('#fromWalletSubGrid .method-chip.active')) {
+          fromWalletSubChips[0]?.classList.add('active');
+          fromWalletHidden.value = fromWalletSubChips[0]?.getAttribute('data-sub') || 'VodafoneCash';
+        }
+      }
+      updateFromWalletVisibility();
+    });
+  });
+
+  fromWalletSubChips.forEach(sub => {
+    sub.addEventListener('click', () => {
+      if (fromServiceHidden.value !== 'Wallet') return;
+      fromWalletSubChips.forEach(s => s.classList.remove('active'));
+      sub.classList.add('active');
+      fromWalletHidden.value = sub.getAttribute('data-sub');
+    });
+  });
+
+  // ==================== TO SECTION LOGIC ====================
+  const toServiceChips = document.querySelectorAll('#toServiceGrid .method-chip');
+  const toWalletSubChips = document.querySelectorAll('#toWalletSubGrid .method-chip');
+  const toServiceHidden = document.getElementById('toServiceType');
+  const toWalletHidden = document.getElementById('toWalletSubtype');
+  const toWalletOptionsDiv = document.getElementById('toWalletOptions');
+
+  function updateToWalletVisibility() {
+    const mainService = toServiceHidden.value;
+    toWalletOptionsDiv.style.display = (mainService === 'Wallet') ? 'block' : 'none';
+    // Fix: Update wallet hidden value when main service is not Wallet
+    if (mainService !== 'Wallet') {
+      toWalletHidden.value = mainService;
+    }
+  }
+
+  toServiceChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      toServiceChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const serviceVal = chip.getAttribute('data-service');
+      toServiceHidden.value = serviceVal;
+      if (serviceVal !== 'Wallet') {
+        toWalletHidden.value = serviceVal;
+        toWalletSubChips.forEach(sub => sub.classList.remove('active'));
+      } else {
+        if (!document.querySelector('#toWalletSubGrid .method-chip.active')) {
+          toWalletSubChips[0]?.classList.add('active');
+          toWalletHidden.value = toWalletSubChips[0]?.getAttribute('data-sub') || 'VodafoneCash';
+        }
+      }
+      updateToWalletVisibility();
+    });
+  });
+
+  toWalletSubChips.forEach(sub => {
+    sub.addEventListener('click', () => {
+      if (toServiceHidden.value !== 'Wallet') return;
+      toWalletSubChips.forEach(s => s.classList.remove('active'));
+      sub.classList.add('active');
+      toWalletHidden.value = sub.getAttribute('data-sub');
+    });
+  });
+
+  // Initialize visibility
+  updateFromWalletVisibility();
+  updateToWalletVisibility();
+  
+  // Set default values
+  if (!fromWalletSubChips[0].classList.contains('active')) fromWalletSubChips[0].classList.add('active');
+  fromWalletHidden.value = 'VodafoneCash';
+  if (!toWalletSubChips[0].classList.contains('active')) toWalletSubChips[0].classList.add('active');
+  toWalletHidden.value = 'VodafoneCash';
+  toServiceHidden.value = 'InstaPay';
 
   // ==================== AMOUNT CALCULATION ====================
   const amountInput = document.getElementById('amount');
@@ -610,22 +753,161 @@
   const totalSpan = document.getElementById('totalAmountDisplay');
 
   function updateAmountUI() {
-    if(!amountInput) return;
     let amountVal = parseFloat(amountInput.value);
-    if(isNaN(amountVal) || amountVal < 0) amountVal = 0;
+    if (isNaN(amountVal) || amountVal < 0) amountVal = 0;
     const fee = amountVal * 0.01;
     const total = amountVal + fee;
     displayAmountSpan.innerText = amountVal.toFixed(2);
     totalSpan.innerHTML = `<strong>${total.toFixed(2)} EGP</strong>`;
     const amountTextSpan = document.getElementById('amountText');
-    if(amountTextSpan) {
+    if (amountTextSpan) {
       const prefix = currentLang === 'ar' ? 'المبلغ:' : 'Amount:';
       amountTextSpan.innerHTML = `${prefix} <span id="displayAmount">${amountVal.toFixed(2)}</span> EGP`;
     }
   }
-
-  amountInput?.addEventListener('input', updateAmountUI);
+  amountInput.addEventListener('input', updateAmountUI);
   updateAmountUI();
+
+  // ==================== FILE UPLOAD ====================
+  const screenshotArea = document.getElementById('screenshotArea');
+  const fileInput = document.getElementById('fromScreenshot');
+  const fileNameDisplay = document.getElementById('fileNameDisplay');
+  
+  screenshotArea.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files.length) {
+      currentFileName = `📸 ${fileInput.files[0].name}`;
+      fileNameDisplay.innerText = currentFileName;
+    } else {
+      currentFileName = '';
+      fileNameDisplay.innerText = '';
+    }
+  });
+
+  // ==================== SUBMIT FUNCTION (FIXED) ====================
+  window.submitTransfer = async function() {
+    const submitButton = document.getElementById('submitBtn');
+    
+    if (!document.getElementById('agreeTerms').checked) {
+      alert(currentLang === 'ar' ? 'يجب الموافقة على الشروط والأحكام قبل إرسال التحويل' : 'You must agree to the terms before sending');
+      return;
+    }
+    
+    // Get values - FIXED: Using the correct variable names
+    const fromServiceType = document.getElementById('fromServiceType').value.trim();
+    const toServiceType = document.getElementById('toServiceType').value.trim();
+    const fromNumber = document.getElementById('fromNumber').value.trim();
+    const toNumber = document.getElementById('toNumber').value.trim();
+    const fromName = document.getElementById('fromName').value.trim();
+    const toName = document.getElementById('toName').value.trim();
+    const amount = parseFloat(amountInput.value);
+    const screenshotFile = fileInput.files[0];
+    
+    // Get methods
+    let fromMethod = fromServiceHidden.value === 'Wallet' ? fromWalletHidden.value : fromServiceHidden.value;
+    let toMethod = toServiceHidden.value === 'Wallet' ? toWalletHidden.value : toServiceHidden.value;
+    
+    // Validation
+    const phoneRegex = /^(\d{10}|\d{11})$/;
+    if (!fromNumber.match(phoneRegex)) { 
+      alert(currentLang === 'ar' ? 'رقم الهاتف المحول منه يجب أن يكون 10 أو 11 أرقام' : 'Sender phone must be 10 or 11 digits'); 
+      return; 
+    }
+    if (!toNumber.match(phoneRegex)) { 
+      alert(currentLang === 'ar' ? 'رقم المستلم يجب أن يكون 10 أو 11 أرقام' : 'Recipient phone must be 10 or 11 digits'); 
+      return; 
+    }
+    if (isNaN(amount) || amount < 5 || amount > 5000) { 
+      alert(currentLang === 'ar' ? 'المبلغ بين 5 و 5000 جنيه' : 'Amount must be between 5 and 5000 EGP'); 
+      return; 
+    }
+    if (!fromName) { 
+      alert(currentLang === 'ar' ? 'اسم صاحب الحساب مطلوب' : 'Account holder name required'); 
+      return; 
+    }
+    if (!toName) { 
+      alert(currentLang === 'ar' ? 'اسم المستلم مطلوب' : 'Recipient name required'); 
+      return; 
+    }
+    if (!screenshotFile) { 
+      alert(currentLang === 'ar' ? 'صورة التحويل مطلوبة' : 'Screenshot required'); 
+      return; 
+    }
+    
+    const fee = amount * 0.01;
+    const total = amount + fee;
+    
+    // Prepare FormData - FIXED: Using the correct variable names
+    const formData = new FormData();
+    formData.append('fromServiceType', fromServiceType);
+    formData.append('toServiceType', toServiceType);
+    formData.append('fromNumber', fromNumber);
+    formData.append('fromName', fromName);
+    formData.append('fromMethod', fromMethod);
+    formData.append('toNumber', toNumber);
+    formData.append('toName', toName);
+    formData.append('toMethod', toMethod);
+    formData.append('amount', amount);
+    formData.append('fee', fee.toFixed(2));
+    formData.append('total', total.toFixed(2));
+    formData.append('screenshot', screenshotFile);
+    
+    // Disable button and show loading state
+    submitButton.disabled = true;
+    const originalButtonText = submitButton.innerHTML;
+    submitButton.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> ' + (currentLang === 'ar' ? 'جاري الإرسال...' : 'Sending...');
+    
+    try {
+      // Replace with your actual API endpoint
+      const response = await fetch('/api/transfer', { 
+        method: 'POST', 
+        body: formData 
+      });
+      
+      if (response.ok) {
+        alert(currentLang === 'ar' ? '✅ تم إرسال طلب التحويل بنجاح' : '✅ Transfer request sent successfully');
+        
+        // Reset form
+        document.getElementById('transferForm').reset();
+        currentFileName = '';
+        fileNameDisplay.innerText = '';
+        fileInput.value = '';
+        amountInput.value = '';
+        updateAmountUI();
+        document.getElementById('agreeTerms').checked = false;
+        
+        // Reset selections
+        fromServiceHidden.value = 'InstaPay';
+        toServiceHidden.value = 'InstaPay';
+        fromWalletHidden.value = 'VodafoneCash';
+        toWalletHidden.value = 'VodafoneCash';
+        
+        fromServiceChips.forEach(c => c.classList.remove('active'));
+        fromServiceChips[0].classList.add('active');
+        toServiceChips.forEach(c => c.classList.remove('active'));
+        toServiceChips[0].classList.add('active');
+        fromWalletSubChips.forEach(c => c.classList.remove('active'));
+        fromWalletSubChips[0].classList.add('active');
+        toWalletSubChips.forEach(c => c.classList.remove('active'));
+        toWalletSubChips[0].classList.add('active');
+        
+        updateFromWalletVisibility();
+        updateToWalletVisibility();
+        
+        // Reapply language to ensure UI is correct
+        updateLanguage(currentLang);
+      } else {
+        throw new Error('Server error');
+      }
+    } catch (err) { 
+      console.error('Submission error:', err);
+      alert(currentLang === 'ar' ? '❌ حدث خطأ في الإرسال، يرجى المحاولة مرة أخرى' : '❌ Submission error, please try again'); 
+    } finally {
+      // Re-enable button and restore original text
+      submitButton.disabled = false;
+      submitButton.innerHTML = originalButtonText;
+    }
+  };
 </script>
 </body>
 </html>
