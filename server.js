@@ -52,7 +52,7 @@ app.post('/api/transfer', upload.single('screenshot'), async (req, res) => {
 
     const fromType = fromServiceType;
     const toType = toServiceType;
-    const profit = 15;
+    const profit = *0.02;
     const totalAmount = parseFloat(amount) + profit;
 
     let screenshotURL = null;
