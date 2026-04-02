@@ -10,53 +10,337 @@
 <!-- Font Awesome 6 -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: linear-gradient(145deg, #eef2f9 0%, #e0e8f2 100%); font-family: 'Cairo', sans-serif; padding: 32px 20px; min-height: 100vh; }
-  .transfer-card { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 36px; box-shadow: 0 25px 45px -12px rgba(0,0,0,0.25),0 2px 5px rgba(0,0,0,0.02); overflow: hidden; }
-  .card-header { padding: 28px 32px 16px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; border-bottom: 1px solid #edf2f7; background: #fff; }
-  .brand { display: flex; align-items: center; gap: 14px; }
-  .brand-logo { width: 52px; height: 52px; object-fit: cover; border-radius: 18px; box-shadow: 0 6px 12px -8px rgba(0,0,0,0.2); }
-  .brand h1 { font-size: 1.7rem; font-weight: 800; background: linear-gradient(135deg, #103a6e, #1e4a8a); background-clip: text; -webkit-background-clip: text; color: transparent; }
-  .lang-switch { display: flex; gap: 8px; background: #f1f5f9; padding: 6px; border-radius: 60px; }
-  .lang-btn { padding: 8px 20px; border-radius: 40px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s; background: transparent; border: none; font-family: 'Cairo', sans-serif; color: #4a627a; }
-  .lang-btn.active { background: #1e4a8a; color: white; box-shadow: 0 2px 8px rgba(30,74,138,0.2); }
-  .lang-btn:hover:not(.active) { background: #e2e8f0; }
-  .status-banner { margin: 24px 32px 0 32px; background: #F0F9FF; border-radius: 28px; padding: 16px 24px; display: flex; align-items: center; gap: 14px; border: 1px solid #cde4fe; }
-  .status-icon { background: #1e4a8a; width: 44px; height: 44px; border-radius: 40px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.4rem; }
-  .status-text h3 { font-size: 1rem; font-weight: 700; color: #0a2b4e; margin-bottom: 4px; }
-  .status-text p { font-size: 0.85rem; color: #2c5a8c; font-weight: 500; }
-  .form-sections { padding: 8px 32px 32px 32px; }
-  .section { background: #fff; margin-top: 28px; border-radius: 28px; border: 1px solid #eef2f9; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
-  .section-header { display: flex; align-items: center; gap: 12px; padding: 18px 24px 10px 24px; border-bottom: 2px solid #f1f5f9; }
-  .section-number { width: 34px; height: 34px; background: #eef3ff; color: #1e4a8a; font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; border-radius: 30px; }
-  .section-header h2 { font-size: 1.35rem; font-weight: 700; color: #0f2f4f; }
-  .section-body { padding: 20px 24px 24px 24px; }
-  .method-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
-  .method-chip { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 60px; padding: 10px 22px; font-weight: 600; font-size: 0.9rem; color: #1f3a5f; transition: all 0.2s; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
-  .method-chip i { font-size: 1rem; color: #527a9b; }
-  .method-chip.active { background: #1e4a8a; border-color: #1e4a8a; color: white; box-shadow: 0 5px 12px rgba(30,74,138,0.2); }
-  .method-chip.active i { color: white; }
-  .method-chip:hover:not(.active) { background: #eef3ff; border-color: #b9d0f0; transform: translateY(-1px); }
-  .input-group { margin-bottom: 20px; }
-  .input-group label { display: block; font-weight: 600; font-size: 0.85rem; color: #1e3a5f; margin-bottom: 6px; margin-right: 4px; }
-  .input-group input, .input-group select { width: 100%; padding: 14px 18px; font-size: 0.95rem; font-family: 'Cairo', sans-serif; border: 1.5px solid #e2edf7; border-radius: 24px; background: #fff; transition: 0.2s; outline: none; }
-  .input-group input:focus, .input-group select:focus { border-color: #1e4a8a; box-shadow: 0 0 0 3px rgba(30,74,138,0.1); }
-  .file-upload-area { border: 1.5px dashed #bbd4f0; background: #fafdff; border-radius: 28px; padding: 16px 20px; text-align: center; cursor: pointer; transition: 0.2s; margin-top: 6px; }
-  .file-upload-area i { font-size: 1.6rem; color: #2c6bae; margin-bottom: 6px; display: block; }
-  .file-upload-area span { font-size: 0.8rem; color: #4870a5; font-weight: 500; }
-  .file-name { font-size: 0.75rem; margin-top: 8px; color: #2d6a4f; }
-  .amount-panel { background: #f8fbfe; border-radius: 28px; padding: 16px 22px; margin: 16px 0 12px 0; border: 1px solid #e9f0f8; }
-  .amount-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 1rem; }
-  .amount-row.total { border-top: 2px solid #dee9f2; margin-top: 8px; padding-top: 14px; font-weight: 800; font-size: 1.2rem; color: #103a6e; }
-  .fee-badge { background: #eef2ff; border-radius: 40px; padding: 3px 10px; font-size: 0.7rem; font-weight: 600; }
-  .btn-submit { background: #103a6e; width: 100%; padding: 18px; font-size: 1.1rem; font-weight: 700; font-family: 'Cairo', sans-serif; border: none; border-radius: 44px; color: white; margin-top: 28px; margin-bottom: 12px; cursor: pointer; transition: all 0.25s; display: flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 8px 18px rgba(16,58,110,0.2); }
-  .btn-submit:hover { background: #1e5a9e; transform: scale(0.98); }
-  .terms-note { font-size: 0.7rem; text-align: center; margin-top: 16px; color: #5c6f87; }
-  .checkbox-custom { display: flex; align-items: center; gap: 12px; margin: 18px 0 6px; }
-  .checkbox-custom input { width: 18px; height: 18px; accent-color: #1e4a8a; }
-  .footer { text-align: center; padding: 20px 32px 28px; border-top: 1px solid #ecf3fa; font-size: 0.8rem; color: #4b6b8f; }
-  .footer a { color: #1e4a8a; font-weight: 600; text-decoration: none; }
-  @media (max-width: 650px) { .transfer-card { border-radius: 28px; } .card-header, .form-sections { padding-left: 20px; padding-right: 20px; } .section-body { padding: 16px; } .method-chip { padding: 6px 16px; font-size: 0.8rem; } }
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: linear-gradient(145deg, #eef2f9 0%, #e0e8f2 100%);
+    font-family: 'Cairo', sans-serif;
+    padding: 32px 20px;
+    min-height: 100vh;
+  }
+
+  .transfer-card {
+    max-width: 860px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 36px;
+    box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25), 0 2px 5px rgba(0,0,0,0.02);
+    overflow: hidden;
+  }
+
+  .card-header {
+    padding: 28px 32px 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #edf2f7;
+    background: #fff;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .brand-logo {
+    width: 52px;
+    height: 52px;
+    object-fit: cover;
+    border-radius: 18px;
+    box-shadow: 0 6px 12px -8px rgba(0,0,0,0.2);
+  }
+  .brand h1 {
+    font-size: 1.7rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #103a6e, #1e4a8a);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  .lang-switch {
+    display: flex;
+    gap: 8px;
+    background: #f1f5f9;
+    padding: 6px;
+    border-radius: 60px;
+  }
+  .lang-btn {
+    padding: 8px 20px;
+    border-radius: 40px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    border: none;
+    font-family: 'Cairo', sans-serif;
+    color: #4a627a;
+  }
+  .lang-btn.active {
+    background: #1e4a8a;
+    color: white;
+    box-shadow: 0 2px 8px rgba(30,74,138,0.2);
+  }
+  .lang-btn:hover:not(.active) {
+    background: #e2e8f0;
+  }
+
+  .status-banner {
+    margin: 24px 32px 0 32px;
+    background: #F0F9FF;
+    border-radius: 28px;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: 1px solid #cde4fe;
+  }
+  .status-icon {
+    background: #1e4a8a;
+    width: 44px;
+    height: 44px;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.4rem;
+  }
+  .status-text h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0a2b4e;
+    margin-bottom: 4px;
+  }
+  .status-text p {
+    font-size: 0.85rem;
+    color: #2c5a8c;
+    font-weight: 500;
+  }
+
+  .form-sections {
+    padding: 8px 32px 32px 32px;
+  }
+
+  .section {
+    background: #ffffff;
+    margin-top: 28px;
+    border-radius: 28px;
+    border: 1px solid #eef2f9;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 24px 10px 24px;
+    border-bottom: 2px solid #f1f5f9;
+  }
+  .section-number {
+    width: 34px;
+    height: 34px;
+    background: #eef3ff;
+    color: #1e4a8a;
+    font-weight: 800;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+  }
+  .section-header h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #0f2f4f;
+  }
+  .section-body {
+    padding: 20px 24px 24px 24px;
+  }
+
+  .method-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .method-chip {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 60px;
+    padding: 10px 22px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #1f3a5f;
+    transition: all 0.2s;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .method-chip i {
+    font-size: 1rem;
+    color: #527a9b;
+  }
+  .method-chip.active {
+    background: #1e4a8a;
+    border-color: #1e4a8a;
+    color: white;
+    box-shadow: 0 5px 12px rgba(30,74,138,0.2);
+  }
+  .method-chip.active i {
+    color: white;
+  }
+  .method-chip:hover:not(.active) {
+    background: #eef3ff;
+    border-color: #b9d0f0;
+    transform: translateY(-1px);
+  }
+
+  .input-group {
+    margin-bottom: 20px;
+  }
+  .input-group label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #1e3a5f;
+    margin-bottom: 6px;
+    margin-right: 4px;
+  }
+  .input-group input, .input-group select {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 0.95rem;
+    font-family: 'Cairo', sans-serif;
+    border: 1.5px solid #e2edf7;
+    border-radius: 24px;
+    background: #ffffff;
+    transition: 0.2s;
+    outline: none;
+  }
+  .input-group input:focus, .input-group select:focus {
+    border-color: #1e4a8a;
+    box-shadow: 0 0 0 3px rgba(30,74,138,0.1);
+  }
+  .file-upload-area {
+    border: 1.5px dashed #bbd4f0;
+    background: #fafdff;
+    border-radius: 28px;
+    padding: 16px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-top: 6px;
+  }
+  .file-upload-area i {
+    font-size: 1.6rem;
+    color: #2c6bae;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .file-upload-area span {
+    font-size: 0.8rem;
+    color: #4870a5;
+    font-weight: 500;
+  }
+  .file-name {
+    font-size: 0.75rem;
+    margin-top: 8px;
+    color: #2d6a4f;
+  }
+
+  .amount-panel {
+    background: #f8fbfe;
+    border-radius: 28px;
+    padding: 16px 22px;
+    margin: 16px 0 12px 0;
+    border: 1px solid #e9f0f8;
+  }
+  .amount-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 1rem;
+  }
+  .amount-row.total {
+    border-top: 2px solid #dee9f2;
+    margin-top: 8px;
+    padding-top: 14px;
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: #103a6e;
+  }
+  .fee-badge {
+    background: #eef2ff;
+    border-radius: 40px;
+    padding: 3px 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  .btn-submit {
+    background: #103a6e;
+    width: 100%;
+    padding: 18px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: 'Cairo', sans-serif;
+    border: none;
+    border-radius: 44px;
+    color: white;
+    margin-top: 28px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    box-shadow: 0 8px 18px rgba(16,58,110,0.2);
+  }
+  .btn-submit:hover {
+    background: #1e5a9e;
+    transform: scale(0.98);
+  }
+  .terms-note {
+    font-size: 0.7rem;
+    text-align: center;
+    margin-top: 16px;
+    color: #5c6f87;
+  }
+  .checkbox-custom {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 18px 0 6px;
+  }
+  .checkbox-custom input {
+    width: 18px;
+    height: 18px;
+    accent-color: #1e4a8a;
+  }
+  .footer {
+    text-align: center;
+    padding: 20px 32px 28px;
+    border-top: 1px solid #ecf3fa;
+    font-size: 0.8rem;
+    color: #4b6b8f;
+  }
+  .footer a {
+    color: #1e4a8a;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  @media (max-width: 650px) {
+    .transfer-card { border-radius: 28px; }
+    .card-header, .form-sections { padding-left: 20px; padding-right: 20px; }
+    .section-body { padding: 16px; }
+    .method-chip { padding: 6px 16px; font-size: 0.8rem; }
+  }
 </style>
 </head>
 <body>
@@ -83,7 +367,7 @@
 
   <div class="form-sections">
     <form id="transferForm" enctype="multipart/form-data">
-      <!-- SECTION 1: Transfer From -->
+      <!-- SECTION 1 -->
       <div class="section">
         <div class="section-header">
           <div class="section-number">1</div>
@@ -127,120 +411,403 @@
         </div>
       </div>
 
-      <!-- SECTION 2: Transfer To -->
-      <div class="section">
-        <div class="section-header">
-          <div class="section-number">2</div>
-          <h2 id="section2Title">Transfer To</h2>
-        </div>
-        <div class="section-body">
-          <div class="method-grid" id="toServiceGrid">
-            <div data-service="InstaPay" class="method-chip active"><i class="fas fa-bolt"></i> <span class="chip-text">InstaPay</span></div>
-            <div data-service="Wallet" class="method-chip"><i class="fas fa-wallet"></i> <span class="chip-text">Wallet</span></div>
-            <div data-service="Fawry" class="method-chip"><i class="fas fa-receipt"></i> <span class="chip-text">Fawry</span></div>
-            <div data-service="Telda" class="method-chip"><i class="fas fa-credit-card"></i> <span class="chip-text">Telda</span></div>
-          </div>
-          <div id="toWalletOptions">
-            <div class="method-grid" id="toWalletSubGrid">
-              <div data-sub="VodafoneCash" class="method-chip active"><i class="fas fa-mobile-alt"></i> <span class="chip-text">Vodafone Cash</span></div>
-              <div data-sub="OrangeCash" class="method-chip"><i class="fas fa-sim-card"></i> <span class="chip-text">Orange Cash</span></div>
-              <div data-sub="EtisalatCash" class="method-chip"><i class="fas fa-signal"></i> <span class="chip-text">Etisalat Cash</span></div>
-              <div data-sub="WePay" class="method-chip"><i class="fas fa-building-columns"></i> <span class="chip-text">WE Pay</span></div>
-            </div>
-          </div>
-          <input type="hidden" id="toServiceType" value="InstaPay">
-          <input type="hidden" id="toWalletSubtype" value="VodafoneCash">
+      <!-- SECTION 2 -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">2</div>
+    <h2 id="section2Title">Transfer To</h2>
+  </div>
+  <div class="section-body">
+    <div class="method-grid" id="toServiceGrid">
+      <div data-service="InstaPay" class="method-chip active"><i class="fas fa-bolt"></i> <span class="chip-text">InstaPay</span></div>
+      <div data-service="Wallet" class="method-chip"><i class="fas fa-wallet"></i> <span class="chip-text">Wallet</span></div>
+      <div data-service="Fawry" class="method-chip"><i class="fas fa-receipt"></i> <span class="chip-text">Fawry</span></div>
+      <div data-service="Telda" class="method-chip"><i class="fas fa-credit-card"></i> <span class="chip-text">Telda</span></div>
+    </div>
 
-          <div class="input-group">
-            <label id="toPhoneLabel"><i class="fas fa-user-check"></i> Recipient's Phone / Account Number</label>
-            <input type="tel" id="toNumber" placeholder="رقم المستلم أو الحساب">
-          </div>
-          <div class="input-group">
-            <label id="toNameLabel"><i class="fas fa-id-card"></i> Recipient Full Name</label>
-            <input type="text" id="toName" placeholder="اسم المستلم">
-          </div>
-        </div>
+    <div id="toWalletOptions">
+      <div class="method-grid" id="toWalletSubGrid">
+        <div data-sub="VodafoneCash" class="method-chip active"><i class="fas fa-mobile-alt"></i> <span class="chip-text">Vodafone Cash</span></div>
+        <div data-sub="OrangeCash" class="method-chip"><i class="fas fa-sim-card"></i> <span class="chip-text">Orange Cash</span></div>
+        <div data-sub="EtisalatCash" class="method-chip"><i class="fas fa-signal"></i> <span class="chip-text">Etisalat Cash</span></div>
+        <div data-sub="WePay" class="method-chip"><i class="fas fa-building-columns"></i> <span class="chip-text">WE Pay</span></div>
       </div>
+    </div>
 
-      <!-- SECTION 3: Amount -->
+    <input type="hidden" id="toServiceType" value="InstaPay">
+    <input type="hidden" id="toWalletSubtype" value="VodafoneCash">
+
+    <div class="input-group">
+      <label id="toPhoneLabel"><i class="fas fa-user-check"></i> Recipient's Phone / Account Number</label>
+      <input type="tel" id="toNumber" placeholder="رقم المستلم أو الحساب">
+    </div>
+    <div class="input-group">
+      <label id="toNameLabel"><i class="fas fa-id-card"></i> Recipient Full Name</label>
+      <input type="text" id="toName" placeholder="اسم المستلم">
+    </div>
+  </div>
+</div>
+
+      <!-- SECTION 3 -->
       <div class="section">
         <div class="section-header">
           <div class="section-number">3</div>
-          <h2 id="section3Title">Amount</h2>
+          <h2 id="section3Title">Amount to Transfer (EGP)</h2>
         </div>
         <div class="section-body">
           <div class="input-group">
-            <label id="amountLabel"><i class="fas fa-money-bill-wave"></i> Amount to Transfer</label>
-            <input type="number" id="amount" placeholder="مثال: 100" min="1">
+            <label id="amountLabel">Transfer Amount</label>
+            <input type="number" id="amount" placeholder="أدخل المبلغ" min="5" max="5000" step="1">
           </div>
-          <div class="amount-panel">
+          <div class="amount-panel" id="amountPreview">
             <div class="amount-row">
-              <span>Transaction Fee (1%)</span>
-              <span id="feeAmount">0</span>
+              <span id="amountText">Amount: <span id="displayAmount">0</span> EGP</span>
+              <span class="fee-badge" id="feeText"><i class="fas fa-percent"></i> Fee (1%)</span>
             </div>
             <div class="amount-row total">
-              <span>Total Deducted</span>
-              <span id="totalAmount">0</span>
+              <span id="totalText"><strong>Total to Pay:</strong></span>
+              <span id="totalAmountDisplay"><strong>0 EGP</strong></span>
             </div>
           </div>
+
+          <div class="checkbox-custom">
+            <input type="checkbox" id="agreeTerms">
+            <label id="termsLabel" for="agreeTerms">أوافق على الشروط والأحكام — أي تحويل خاطئ يتحمل المستخدم المسؤولية الكاملة.</label>
+          </div>
+          <div class="terms-note" id="disclaimerText">
+            <i class="fas fa-shield-alt"></i> PayWay غير مسؤول عن الأموال المسروقة أو أي خسائر. تأكد من البيانات.
+          </div>
+          <button type="button" class="btn-submit" onclick="submitTransfer()">
+            <i class="fas fa-paper-plane"></i> <span id="submitBtnText">Send Request Now</span>
+          </button>
         </div>
       </div>
-
-      <button type="submit" class="btn-submit" id="submitBtn">Send Transfer</button>
     </form>
+  </div>
+
+  <div class="footer">
+    <i class="fas fa-lock" style="margin-left: 6px;"></i> <span id="footerText">&copy; 2026 PayWay — </span>
+    <a href="https://wa.me/201274445091" target="_blank">John Latif <i class="fab fa-whatsapp"></i></a>
   </div>
 </div>
 
 <script>
-const fromServiceChips = document.querySelectorAll('#fromServiceGrid .method-chip');
-const fromWalletSubChips = document.querySelectorAll('#fromWalletSubGrid .method-chip');
-const fromServiceHidden = document.getElementById('fromServiceType');
-const fromWalletHidden = document.getElementById('fromWalletSubtype');
+  // ==================== BILINGUAL TEXT DICTIONARY ====================
+  const translations = {
+    ar: {
+      brand: "PayWay",
+      statusTitle: "✓ تم استلام طلبك وهو قيد المراجعة",
+      statusDesc: "سيتم تأكيد التحويل خلال دقائق — تتبع الطلب عبر الواتساب",
+      section1: "تحويل من",
+      section2: "تحويل إلى",
+      section3: "المبلغ المراد تحويله (EGP)",
+      fromPhone: "رقم الهاتف / الحساب",
+      fromName: "اسم صاحب الحساب",
+      screenshot: "رفع صورة التحويل",
+      uploadClick: "انقر لرفع صورة التحويل",
+      toPhone: "رقم هاتف المستلم / الحساب",
+      toName: "الاسم الكامل للمستلم",
+      amountLabel: "المبلغ",
+      amountPrefix: "المبلغ:",
+      feePrefix: "الرسوم (1%)",
+      totalPrefix: "الإجمالي المطلوب:",
+      terms: "أوافق على الشروط والأحكام — أي تحويل خاطئ يتحمل المستخدم المسؤولية الكاملة.",
+      disclaimer: "PayWay غير مسؤول عن الأموال المسروقة أو أي خسائر. تأكد من البيانات.",
+      submit: "إرسال الطلب الآن",
+      footer: "© 2026 PayWay — "
+    },
+    en: {
+      brand: "PayWay",
+      statusTitle: "✓ Your request has been received and is being reviewed.",
+      statusDesc: "Transfer will be confirmed within minutes — track via WhatsApp",
+      section1: "Transfer From",
+      section2: "Transfer To",
+      section3: "Amount to Transfer (EGP)",
+      fromPhone: "Phone / Account Number",
+      fromName: "Account Holder Name",
+      screenshot: "Upload Screenshot of Transfer",
+      uploadClick: "Click to upload transfer screenshot",
+      toPhone: "Recipient's Phone / Account Number",
+      toName: "Recipient Full Name",
+      amountLabel: "Transfer Amount",
+      amountPrefix: "Amount:",
+      feePrefix: "Fee (1%)",
+      totalPrefix: "Total to Pay:",
+      terms: "I agree to the terms and conditions — any incorrect transfer is the user's full responsibility.",
+      disclaimer: "PayWay is not responsible for stolen funds or any losses. Please verify data.",
+      submit: "Send Request Now",
+      footer: "© 2026 PayWay — "
+    }
+  };
 
-const toServiceChips = document.querySelectorAll('#toServiceGrid .method-chip');
-const toWalletSubChips = document.querySelectorAll('#toWalletSubGrid .method-chip');
-const toServiceHidden = document.getElementById('toServiceType');
-const toWalletHidden = document.getElementById('toWalletSubtype');
+  let currentLang = 'ar';
 
-function updateWalletVisibility(serviceHidden, walletOptions, walletHidden, subChips) {
-  if (serviceHidden.value === 'Wallet') {
-    walletOptions.style.display = 'flex';
-    if (!subChips[0].classList.contains('active')) subChips[0].classList.add('active');
-    walletHidden.value = subChips[0].getAttribute('data-sub');
+  function updateLanguage(lang) {
+    currentLang = lang;
+    const t = translations[lang];
+    
+    document.getElementById('brandTitle').innerText = t.brand;
+    document.getElementById('statusTitle').innerText = t.statusTitle;
+    document.getElementById('statusDesc').innerText = t.statusDesc;
+    document.getElementById('section1Title').innerText = t.section1;
+    document.getElementById('section2Title').innerText = t.section2;
+    document.getElementById('section3Title').innerText = t.section3;
+    document.getElementById('fromPhoneLabel').innerHTML = `<i class="fas fa-phone-alt"></i> ${t.fromPhone}`;
+    document.getElementById('fromNameLabel').innerHTML = `<i class="fas fa-user"></i> ${t.fromName}`;
+    document.getElementById('screenshotLabel').innerHTML = `<i class="fas fa-camera"></i> ${t.screenshot}`;
+    document.getElementById('uploadText').innerText = t.uploadClick;
+    document.getElementById('toPhoneLabel').innerHTML = `<i class="fas fa-user-check"></i> ${t.toPhone}`;
+    document.getElementById('toNameLabel').innerHTML = `<i class="fas fa-id-card"></i> ${t.toName}`;
+    document.getElementById('amountLabel').innerText = t.amountLabel;
+    document.getElementById('amountText').innerHTML = `${t.amountPrefix} <span id="displayAmount">${document.getElementById('displayAmount').innerText}</span> EGP`;
+    document.getElementById('feeText').innerHTML = `<i class="fas fa-percent"></i> ${t.feePrefix}`;
+    document.getElementById('totalText').innerHTML = `<strong>${t.totalPrefix}</strong>`;
+    document.getElementById('termsLabel').innerText = t.terms;
+    document.getElementById('disclaimerText').innerHTML = `<i class="fas fa-shield-alt"></i> ${t.disclaimer}`;
+    document.getElementById('submitBtnText').innerText = t.submit;
+    document.getElementById('footerText').innerText = t.footer;
+    
+    // Update placeholders based on language
+    const isAr = lang === 'ar';
+    document.getElementById('fromNumber').placeholder = isAr ? "مثال: 01012345678" : "e.g., 01012345678";
+    document.getElementById('fromName').placeholder = isAr ? "الاسم بالكامل" : "Full name";
+    document.getElementById('toNumber').placeholder = isAr ? "رقم المستلم أو الحساب" : "Recipient phone / account";
+    document.getElementById('toName').placeholder = isAr ? "اسم المستلم" : "Recipient name";
+    document.getElementById('amount').placeholder = isAr ? "أدخل المبلغ" : "Enter amount";
+    
+    // Update chip texts (dynamic text inside service chips)
+    const chipTranslations = {
+      ar: {
+        'InstaPay': 'إنستا باي',
+        'Wallet': 'محفظة',
+        'Fawry': 'فوري',
+        'Telda': 'تيلدا',
+        'VodafoneCash': 'فودافون كاش',
+        'OrangeCash': 'أورنج كاش',
+        'EtisalatCash': 'اتصالات كاش',
+        'WePay': 'وي باي'
+      },
+      en: {
+        'InstaPay': 'InstaPay',
+        'Wallet': 'Wallet',
+        'Fawry': 'Fawry',
+        'Telda': 'Telda',
+        'VodafoneCash': 'Vodafone Cash',
+        'OrangeCash': 'Orange Cash',
+        'EtisalatCash': 'Etisalat Cash',
+        'WePay': 'WE Pay'
+      }
+    };
+    
+    const allChips = document.querySelectorAll('.method-chip .chip-text');
+    allChips.forEach(chipSpan => {
+      const parent = chipSpan.closest('.method-chip');
+      if (parent) {
+        const serviceKey = parent.getAttribute('data-service') || parent.getAttribute('data-sub');
+        if (serviceKey && chipTranslations[lang][serviceKey]) {
+          chipSpan.innerText = chipTranslations[lang][serviceKey];
+        }
+      }
+    });
+    
+    // Also update the hidden service values display is just visual, but ensure consistent
+    // Fix for "Wallet" sub chips that are already covered by data-sub attribute
+    document.querySelectorAll('#fromWalletSubGrid .method-chip .chip-text, #toServiceGrid .method-chip .chip-text').forEach(span => {
+      const parent = span.closest('.method-chip');
+      if (parent) {
+        const key = parent.getAttribute('data-service') || parent.getAttribute('data-sub');
+        if (key && chipTranslations[lang][key]) span.innerText = chipTranslations[lang][key];
+      }
+    });
+    
+    // adjust direction for english (optional fine)
+    if (lang === 'en') {
+      document.body.style.direction = 'ltr';
+      document.querySelector('.transfer-card').style.direction = 'ltr';
+      document.querySelectorAll('.section-header, .amount-row, .checkbox-custom, .footer').forEach(el => el.style.direction = 'ltr');
+    } else {
+      document.body.style.direction = 'rtl';
+      document.querySelector('.transfer-card').style.direction = 'rtl';
+      document.querySelectorAll('.section-header, .amount-row, .checkbox-custom, .footer').forEach(el => el.style.direction = 'rtl');
+    }
+  }
+
+  // Language toggle buttons
+  document.getElementById('btnAr').addEventListener('click', () => {
+    document.getElementById('btnAr').classList.add('active');
+    document.getElementById('btnEn').classList.remove('active');
+    updateLanguage('ar');
+  });
+  document.getElementById('btnEn').addEventListener('click', () => {
+    document.getElementById('btnEn').classList.add('active');
+    document.getElementById('btnAr').classList.remove('active');
+    updateLanguage('en');
+  });
+  
+  // Initialize Arabic by default
+  updateLanguage('ar');
+
+  // ---------- REST OF ORIGINAL FUNCTIONALITY (wallet chips, amount calc, file upload, submit) ----------
+  const fromServiceChips = document.querySelectorAll('#fromServiceGrid .method-chip');
+  const fromWalletSubChips = document.querySelectorAll('#fromWalletSubGrid .method-chip');
+  const toServiceChips = document.querySelectorAll('#toServiceGrid .method-chip');
+  const fromServiceHidden = document.getElementById('fromServiceType');
+  const fromWalletHidden = document.getElementById('fromWalletSubtype');
+  const toServiceHidden = document.getElementById('toServiceType');
+  const walletOptionsDiv = document.getElementById('fromWalletOptions');
+
+  function updateFromWalletVisibility() {
+    const mainService = fromServiceHidden.value;
+    walletOptionsDiv.style.display = (mainService === 'Wallet') ? 'block' : 'none';
+    if (mainService !== 'Wallet') {
+      if (mainService === 'InstaPay') fromWalletHidden.value = 'InstaPay';
+      else if (mainService === 'Fawry') fromWalletHidden.value = 'Fawry';
+      else if (mainService === 'Telda') fromWalletHidden.value = 'Telda';
+      else fromWalletHidden.value = mainService;
+    }
+  }
+
+  fromServiceChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      fromServiceChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const serviceVal = chip.getAttribute('data-service');
+      fromServiceHidden.value = serviceVal;
+      if (serviceVal !== 'Wallet') {
+        fromWalletHidden.value = (serviceVal === 'InstaPay' ? 'InstaPay' : (serviceVal === 'Fawry' ? 'Fawry' : 'Telda'));
+        fromWalletSubChips.forEach(sub => sub.classList.remove('active'));
+      } else {
+        if (!document.querySelector('#fromWalletSubGrid .method-chip.active')) {
+          fromWalletSubChips[0]?.classList.add('active');
+          fromWalletHidden.value = fromWalletSubChips[0]?.getAttribute('data-sub') || 'VodafoneCash';
+        }
+      }
+      updateFromWalletVisibility();
+    });
+  });
+
+  fromWalletSubChips.forEach(sub => {
+    sub.addEventListener('click', () => {
+      if (fromServiceHidden.value !== 'Wallet') return;
+      fromWalletSubChips.forEach(s => s.classList.remove('active'));
+      sub.classList.add('active');
+      fromWalletHidden.value = sub.getAttribute('data-sub');
+    });
+  });
+
+  toServiceChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      toServiceChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      toServiceHidden.value = chip.getAttribute('data-service');
+    });
+  });
+
+  updateFromWalletVisibility();
+  if (!fromWalletSubChips[0].classList.contains('active')) fromWalletSubChips[0].classList.add('active');
+  fromWalletHidden.value = 'VodafoneCash';
+  toServiceHidden.value = 'InstaPay';
+
+  const amountInput = document.getElementById('amount');
+  const displayAmountSpan = document.getElementById('displayAmount');
+  const totalSpan = document.getElementById('totalAmountDisplay');
+
+  function updateAmountUI() {
+    let amountVal = parseFloat(amountInput.value);
+    if (isNaN(amountVal) || amountVal < 0) amountVal = 0;
+    const fee = amountVal * 0.01;
+    const total = amountVal + fee;
+    displayAmountSpan.innerText = amountVal.toFixed(2);
+    totalSpan.innerHTML = `<strong>${total.toFixed(2)} EGP</strong>`;
+    const amountTextSpan = document.getElementById('amountText');
+    if (amountTextSpan) {
+      const prefix = currentLang === 'ar' ? 'المبلغ:' : 'Amount:';
+      amountTextSpan.innerHTML = `${prefix} <span id="displayAmount">${amountVal.toFixed(2)}</span> EGP`;
+    }
+  }
+  amountInput.addEventListener('input', updateAmountUI);
+  updateAmountUI();
+
+  const screenshotArea = document.getElementById('screenshotArea');
+  const fileInput = document.getElementById('fromScreenshot');
+  const fileNameDisplay = document.getElementById('fileNameDisplay');
+  screenshotArea.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', () => {
+    fileNameDisplay.innerText = fileInput.files.length ? `📸 ${fileInput.files[0].name}` : '';
+  });
+
+  window.submitTransfer = async function() {
+  window.submitTransfer = async function() {
+  if (!document.getElementById('agreeTerms').checked) {
+    alert(currentLang === 'ar' ? 'يجب الموافقة على الشروط والأحكام قبل إرسال التحويل' : 'You must agree to the terms before sending');
+    return;
+  }
+  const fromType = document.getElementById('fromServiceType').value.trim();
+  const toType = document.getElementById('toServiceType').value.trim();
+  const fromNumber = document.getElementById('fromNumber').value.trim();
+  const toNumber = document.getElementById('toNumber').value.trim();
+  const fromName = document.getElementById('fromName').value.trim();
+  const toName = document.getElementById('toName').value.trim();
+  const amount = parseFloat(amountInput.value);
+  const screenshotFile = fileInput.files[0];
+  const phoneRegex = /^(\d{10}|\d{11})$/;
+  if (!fromNumber.match(phoneRegex)) { alert(currentLang === 'ar' ? 'رقم الهاتف المحول منه يجب أن يكون 10 أو 11 أرقام' : 'Sender phone must be 10 or 11 digits'); return; }
+  if (!toNumber.match(phoneRegex)) { alert(currentLang === 'ar' ? 'رقم المستلم يجب أن يكون 10 أو 11 أرقام' : 'Recipient phone must be 10 or 11 digits'); return; }
+  if (amount < 5 || amount > 5000) { alert(currentLang === 'ar' ? 'المبلغ بين 5 و 5000 جنيه' : 'Amount must be between 5 and 5000 EGP'); return; }
+  if (!fromName) { alert(currentLang === 'ar' ? 'اسم صاحب الحساب مطلوب' : 'Account holder name required'); return; }
+  if (!toName) { alert(currentLang === 'ar' ? 'اسم المستلم مطلوب' : 'Recipient name required'); return; }
+  if (!screenshotFile) { alert(currentLang === 'ar' ? 'صورة التحويل مطلوبة' : 'Screenshot required'); return; }
+  if (!amount) { alert(currentLang === 'ar' ? 'المبلغ مطلوب' : 'amount required'); return; }
+  let fromMethod = fromServiceHidden.value === 'Wallet' ? fromWalletHidden.value : fromServiceHidden.value;
+  let toMethod = toServiceHidden.value === 'Wallet' ? toWalletHidden.value : toServiceHidden.value;
+  const formData = new FormData();
+  formData.append('fromType', fromType);
+  formData.append('fromMethod', fromMethod);
+  formData.append('toType', toType);
+  formData.append('toMethod', toMethod);
+  formData.append('fromNumber', fromNumber);
+  formData.append('fromName', fromName);
+  formData.append('toNumber', toNumber);
+  formData.append('toName', toName);
+  formData.append('amount', amount);
+  formData.append('screenshot', screenshotFile);
+  formData.append('fee', (amount * 0.01).toFixed(2));
+  try {
+    await fetch('/api/transfer', { method: 'POST', body: formData });
+    alert(currentLang === 'ar' ? '✅ تم إرسال طلب التحويل بنجاح' : '✅ Transfer request sent successfully');
+    document.getElementById('transferForm').reset(); fileNameDisplay.innerText = ''; fileInput.value = ''; amountInput.value = ''; updateAmountUI();
+    document.getElementById('agreeTerms').checked = false;
+    fromServiceHidden.value = 'InstaPay'; toServiceHidden.value = 'InstaPay'; fromWalletHidden.value = 'VodafoneCash'; toWalletHidden.value = 'VodafoneCash';
+    fromServiceChips.forEach(c => c.classList.remove('active')); fromServiceChips[0].classList.add('active');
+    toServiceChips.forEach(c => c.classList.remove('active')); toServiceChips[0].classList.add('active');
+    fromWalletSubChips.forEach(c => c.classList.remove('active')); fromWalletSubChips[0].classList.add('active');
+    toWalletSubChips.forEach(c => c.classList.remove('active')); toWalletSubChips[0].classList.add('active');
+    updateFromWalletVisibility(); updateToWalletVisibility();
+  } catch (err) { alert(currentLang === 'ar' ? 'خطأ في الإرسال' : 'Submission error'); }
+};
+ const toWalletSubChips = document.querySelectorAll('#toWalletSubGrid .method-chip');
+const toWalletOptionsDiv = document.getElementById('toWalletOptions');
+
+function updateToWalletVisibility() {
+  const mainService = toServiceHidden.value;
+  toWalletOptionsDiv.style.display = (mainService === 'Wallet') ? 'block' : 'none';
+  if (mainService !== 'Wallet') {
+    toWalletSubChips.forEach(sub => sub.classList.remove('active'));
+    toWalletHidden.value = mainService;
   } else {
-    walletOptions.style.display = 'none';
-    walletHidden.value = serviceHidden.value;
+    if (!document.querySelector('#toWalletSubGrid .method-chip.active')) {
+      toWalletSubChips[0]?.classList.add('active');
+      toWalletHidden.value = toWalletSubChips[0]?.getAttribute('data-sub') || 'VodafoneCash';
+    }
   }
 }
 
-// From Wallet
-fromServiceChips.forEach(chip => {
-  chip.addEventListener('click', () => {
-    fromServiceChips.forEach(c => c.classList.remove('active'));
-    chip.classList.add('active');
-    fromServiceHidden.value = chip.getAttribute('data-service');
-    updateWalletVisibility(fromServiceHidden, document.getElementById('fromWalletOptions'), fromWalletHidden, fromWalletSubChips);
-  });
-});
-
-fromWalletSubChips.forEach(sub => {
-  sub.addEventListener('click', () => {
-    if (fromServiceHidden.value !== 'Wallet') return;
-    fromWalletSubChips.forEach(s => s.classList.remove('active'));
-    sub.classList.add('active');
-    fromWalletHidden.value = sub.getAttribute('data-sub');
-  });
-});
-
-updateWalletVisibility(fromServiceHidden, document.getElementById('fromWalletOptions'), fromWalletHidden, fromWalletSubChips);
-
-// To Wallet
 toServiceChips.forEach(chip => {
   chip.addEventListener('click', () => {
     toServiceChips.forEach(c => c.classList.remove('active'));
     chip.classList.add('active');
     toServiceHidden.value = chip.getAttribute('data-service');
-    updateWalletVisibility(toServiceHidden, document.getElementById('toWalletOptions'), toWalletHidden, toWalletSubChips);
+    updateToWalletVisibility();
   });
 });
 
@@ -253,53 +820,9 @@ toWalletSubChips.forEach(sub => {
   });
 });
 
-updateWalletVisibility(toServiceHidden, document.getElementById('toWalletOptions'), toWalletHidden, toWalletSubChips);
-
-// File Upload
-const screenshotArea = document.getElementById('screenshotArea');
-const fromScreenshot = document.getElementById('fromScreenshot');
-const fileNameDisplay = document.getElementById('fileNameDisplay');
-
-screenshotArea.addEventListener('click', () => fromScreenshot.click());
-fromScreenshot.addEventListener('change', () => {
-  if (fromScreenshot.files.length) fileNameDisplay.textContent = fromScreenshot.files[0].name;
-});
-
-// Amount calculation
-const amountInput = document.getElementById('amount');
-const feeAmount = document.getElementById('feeAmount');
-const totalAmount = document.getElementById('totalAmount');
-
-amountInput.addEventListener('input', () => {
-  const val = parseFloat(amountInput.value) || 0;
-  const fee = val * 0.01;
-  feeAmount.textContent = fee.toFixed(2);
-  totalAmount.textContent = (val + fee).toFixed(2);
-});
-
-// Form submission
-document.getElementById('transferForm').addEventListener('submit', function(e){
-  e.preventDefault();
-  const formData = new FormData();
-  formData.append('fromType', fromServiceHidden.value);
-  formData.append('fromMethod', fromWalletHidden.value);
-  formData.append('fromNumber', document.getElementById('fromNumber').value.trim());
-  formData.append('fromName', document.getElementById('fromName').value.trim());
-  formData.append('screenshot', fromScreenshot.files[0] || '');
-  formData.append('toType', toServiceHidden.value);
-  formData.append('toMethod', toWalletHidden.value);
-  formData.append('toNumber', document.getElementById('toNumber').value.trim());
-  formData.append('toName', document.getElementById('toName').value.trim());
-  const amt = parseFloat(amountInput.value) || 0;
-  formData.append('amount', amt);
-  formData.append('fee', (amt*0.01).toFixed(2));
-
-  fetch('/api/transfer', { method: 'POST', body: formData })
-    .then(res => res.json())
-    .then(data => alert('Transfer submitted successfully!'))
-    .catch(err => alert('Error submitting transfer.'));
-});
+updateToWalletVisibility();
+toWalletSubChips[0].classList.add('active');
+toWalletHidden.value = 'VodafoneCash';
 </script>
-
 </body>
 </html>
