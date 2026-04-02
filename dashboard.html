@@ -94,6 +94,8 @@
           <tr>
             <th id="thFrom">من</th>
             <th id="thTo">إلى</th>
+            <th id="thFromName">اسم المحول</th>
+            <th id="thToName">اسم المستلم</th>
             <th id="thAmount">المبلغ</th>
             <th id="thProfit">العمولة</th>
             <th id="thTotal">الإجمالي</th>
@@ -177,8 +179,8 @@ function renderTable() {
   tbody.innerHTML = '';
   transfersData.forEach(transfer=>{
     const row=document.createElement('tr');
-    const fromText=`${transfer.from.type} (${transfer.from.name}) (${transfer.from.number})`;
-    const toText=`${transfer.to.type} (${transfer.to.name}) (${transfer.to.number})`;
+    const fromText=`${transfer.from.type} (${transfer.from.number})`;
+    const toText=`${transfer.to.type} (${transfer.to.number})`;
     const amount=transfer.amount||0;
     const profit=transfer.profit||(amount*0.02);
     const totalAmount=transfer.totalAmount||(amount+parseFloat(profit));
