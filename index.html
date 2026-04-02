@@ -755,7 +755,7 @@
   function updateAmountUI() {
     let amountVal = parseFloat(amountInput.value);
     if (isNaN(amountVal) || amountVal < 0) amountVal = 0;
-    const fee = amountVal * 0.01;
+    const fee = amountVal * 0.02;
     const total = amountVal + fee;
     displayAmountSpan.innerText = amountVal.toFixed(2);
     totalSpan.innerHTML = `<strong>${total.toFixed(2)} EGP</strong>`;
@@ -834,7 +834,7 @@
       return; 
     }
     
-    const fee = amount * 0.01;
+    const fee = amount * 0.02;
     const total = amount + fee;
     
     // Prepare FormData - FIXED: Using the correct variable names
