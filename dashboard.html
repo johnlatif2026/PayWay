@@ -180,8 +180,10 @@ function renderTable() {
     const amount=transfer.amount||0;
     const profit=transfer.profit||(amount*0.02);
     const totalAmount=transfer.totalAmount||(amount+parseFloat(profit));
-    const dateObj=transfer.date?.toDate ? transfer.date.toDate() : new Date(transfer.date||Date.now());
-    const dateStr=dateObj.toLocaleString(currentLang==='ar'?'ar-EG':'en-US');
+    const dateObj = transfer.date
+    ? (transfer.date.toDate ? transfer.date.toDate() : new Date(transfer.date))
+    : new Date();
+    const dateStr = isNaN(dateObj) ? '—' : dateObj.toLocaleString(currentLang==='ar'?'ar-EG':'en-US');
     const screenshotHtml=transfer.from.screenshot
       ? `<a href="${transfer.from.screenshot}" target="_blank"><img class="screenshot-img" src="${transfer.from.screenshot}" alt="screenshot" onerror="this.src='https://placehold.co/48x48?text=Error'"></a>` 
       : '<span style="opacity:0.5;">—</span>';
