@@ -90,7 +90,7 @@ app.delete('/api/transfer/:index', authenticateToken,(req,res)=>{
   if(idx>=0 && idx<transfers.length){
     transfers.splice(idx,1);
     res.json({message:'تم حذف التحويل'});
-  } else res.status(404).json({message:'التحويل غير موجود'});
+  }else res.status(404).json({message:'التحويل غير موجود'});
 });
 
 // صفحات
