@@ -82,7 +82,7 @@ app.post('/api/transfer', upload.single('screenshot'), async (req, res) => {
       amount: parseFloat(amount),
       profit,
       totalAmount,
-      date: dateStr
+      date: new Date()
     };
 
     const docRef = await db.collection('transfers').add(transfer);
@@ -135,7 +135,10 @@ app.post('/api/transfer', upload.single('screenshot'), async (req, res) => {
 app.get('/api/dashboard', authenticateToken, async (req, res) => {
   try {
     const snapshot = await db.collection('transfers').orderBy('date', 'desc').get();
-    const transfers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const transfers = snapshot.docs.map(doc => {
+  const data = doc.data();
+  return { id: doc.id, ...data, date: data.date.toDate ? data.date.toDate() : new Date(data.date) };
+});
     const totalProfit = transfers.reduce((sum, t) => sum + t.profit, 0);
     res.json({ transfers, totalProfit });
   } catch (err) {
