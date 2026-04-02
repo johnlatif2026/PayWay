@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>PayWay | Dashboard Login</title>
+<title>PayWay | Login</title>
 <!-- Google Fonts + Cairo -->
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <!-- Font Awesome 6 -->
@@ -335,10 +335,6 @@
       usernameLabel: "اسم المستخدم",
       passwordLabel: "كلمة المرور",
       loginBtn: "تسجيل الدخول",
-      demoHint: "بيانات تجريبية للدخول:",
-      demoAnd: " / ",
-      demoUsernameText: "admin",
-      demoPasswordText: "payway123",
       footer: "© 2026 PayWay Dashboard",
       errorMessage: "بيانات الدخول غير صحيحة. يرجى المحاولة مرة أخرى",
       successRedirect: "جاري التوجيه إلى لوحة التحكم..."
@@ -350,10 +346,6 @@
       usernameLabel: "Username",
       passwordLabel: "Password",
       loginBtn: "Login",
-      demoHint: "Demo credentials:",
-      demoAnd: " / ",
-      demoUsernameText: "admin",
-      demoPasswordText: "payway123",
       footer: "© 2026 PayWay Dashboard",
       errorMessage: "Invalid credentials. Please try again.",
       successRedirect: "Redirecting to dashboard..."
@@ -472,26 +464,7 @@
       }
     } catch (err) {
       console.error('Login error:', err);
-      
-      // For demo purposes - if API is not available, show demo mode message
-      // This makes the login functional for testing with demo credentials
-      if (username === 'admin' && password === 'payway123') {
-        // Demo mode - simulate successful login
-        showError(currentLang === 'ar' ? '✓ وضع العرض: تم تسجيل الدخول بنجاح' : '✓ Demo mode: Login successful');
-        localStorage.setItem('token', 'demo-token-12345');
-        localStorage.setItem('user', JSON.stringify({ username: 'admin', name: 'Administrator' }));
-        setTimeout(() => {
-          window.location.href = '/dashboard';
-        }, 800);
-      } else {
-        // Real error
-        showError(t.errorMessage);
-        loginBtn.innerHTML = originalText;
-        loginBtn.disabled = false;
-        document.getElementById('password').value = '';
-      }
-    }
-  }
+     
 
   // Add enter key support
   document.getElementById('password').addEventListener('keypress', function(e) {
@@ -508,10 +481,6 @@
   // Check if user is already logged in and redirect if token exists
   const existingToken = localStorage.getItem('token');
   if (existingToken && window.location.pathname !== '/dashboard') {
-    // Optional: verify token validity with server, but for now just redirect
-    // This prevents showing login page if already authenticated
-    // Uncomment if needed:
-    // window.location.href = '/dashboard';
   }
 </script>
 </body>
