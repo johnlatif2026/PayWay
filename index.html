@@ -772,9 +772,8 @@
     }
     
     // Get values
-    const fromType = document.getElementById('fromType').value.trim();
-    const toType = document.getElementById('toType').value.trim();
-    const fromNumber = document.getElementById('fromNumber').value.trim();
+    const fromType = document.getElementById('fromServiceType').value.trim();
+    const toType = document.getElementById('toServiceType').value.trim();    const fromNumber = document.getElementById('fromNumber').value.trim();
     const toNumber = document.getElementById('toNumber').value.trim();
     const fromName = document.getElementById('fromName').value.trim();
     const toName = document.getElementById('toName').value.trim();
@@ -820,8 +819,8 @@
     
     // Prepare FormData
     const formData = new FormData();
-    formData.append('fromType', fromType);
-    formData.append('toType',toType);
+    formData.append('fromServiceType', fromServiceType);
+    formData.append('toServiceType',toServiceType);
     formData.append('fromNumber', fromNumber);
     formData.append('fromName', fromName);
     formData.append('fromMethod', fromMethod);
