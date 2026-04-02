@@ -494,8 +494,7 @@
     </div>
     <div style="display: flex; gap: 12px; align-items: center;">
       <!-- 🐒 MONKEY DARK MODE TOGGLE - OUTSIDE THE BOX, BOUNCY & FUN -->
-      <div class="monkey-toggle" id="darkModeToggle">
-        <span class="sun" id="sun">☀️</span>
+      <div class="darkModeToggle" id="darkModeToggle">
         <span class="toggle-text" id="modeText">Dark Mode</span>
         <span class="mode-badge" id="modeBadge">🌙</span>
       </div>
@@ -648,21 +647,15 @@
   function setDarkMode(enabled) {
     if (enabled) {
       document.body.classList.add('dark');
-      sun.innerHTML = '☀️';
       modeTextSpan.innerText = 'Light Mode';
       modeBadgeSpan.innerHTML = '☀️';
       localStorage.setItem('payway-darkmode', 'enabled');
     } else {
       document.body.classList.remove('dark');
-      sun.innerHTML = '☀️';
       modeTextSpan.innerText = 'Dark Mode';
       modeBadgeSpan.innerHTML = '🌙';
       localStorage.setItem('payway-darkmode', 'disabled');
     }
-    // tiny bounce animation on monkey
-    sun.style.transform = 'scale(1.2)';
-    setTimeout(() => { sun.style.transform = ''; }, 150);
-  }
 
   // Load saved preference
   const savedMode = localStorage.getItem('payway-darkmode');
