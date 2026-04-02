@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PayWay</title>
+<link rel="icon" href="https://i.postimg.cc/NfPBr7hs/Picsart-26-04-02-02-54-03-157.jpg" type="image/png">  
+<style>
+body { font-family: Cairo, sans-serif; background: #f5f5f5; margin:0; padding:0; }
+.container { max-width: 500px; margin: 50px auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+h2 { text-align:center; color:#1a3e8c; }
+input, select { width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:4px; }
+button { background:#1a3e8c; color:white; padding:12px; border:none; border-radius:4px; cursor:pointer; width:100%; }
+button:hover { background:#1550a0; }
+</style>
+</head>
+<body>
+<div class="container">
+<img src="https://i.postimg.cc/NfPBr7hs/Picsart-26-04-02-02-54-03-157.jpg" class="logo">
+<h2>PayWay</h2>
+<form id="transferForm">
+  <label>من:</label>
+  <select id="fromType">
+    <option value="InstaPay">InstaPay</option>
+    <option value="OrangeCash">محفظة أورنج كاش</option>
+    <option value="VodafoneCash">محفظة فودافون كاش</option>
+    <option value="EtisalatCash">محفظة اتصالات كاش</option>
+    <option value="WePay">محفظة وي باي</option>
+    <option value="Fawry">فوري</option>
+    <option value="Telda">تيلدا</option>
+  </select>
+  <input type="text" id="fromNumber" placeholder="رقم الحساب">
+  <input type="text" id="fromName" placeholder="اسم صاحب الحساب">
+  <input type="file" id="fromScreenshot">
+
+  <label>إلى:</label>
+  <select id="toType">
+    <option value="InstaPay">InstaPay</option>
+    <option value="OrangeCash">محفظة أورنج كاش</option>
+    <option value="VodafoneCash">محفظة فودافون كاش</option>
+    <option value="EtisalatCash">محفظة اتصالات كاش</option>
+    <option value="WePay">محفظة وي باي</option>
+    <option value="Fawry">فوري</option>
+    <option value="Telda">تيلدا</option>
+  </select>
+  <input type="text" id="toNumber" placeholder="رقم المستلم">
+  <input type="text" id="toName" placeholder="اسم المستلم">
+
+  <input type="number" id="amount" placeholder="المبلغ">
+  <button type="button" onclick="submitTransfer()">إرسال التحويل</button>
+</form>
+<script>
+async function submitTransfer() {
+  const from = document.getElementById('fromType').value;
+  const to = document.getElementById('toType').value;
+  const fromNumber = document.getElementById('fromNumber').value;
+  const fromName = document.getElementById('fromName').value;
+  const toNumber = document.getElementById('toNumber').value;
+  const toName = document.getElementById('toName').value;
+  const amount = parseFloat(document.getElementById('amount').value);
+  if(!fromNumber || !fromName || !toNumber || !toName || !amount){ alert('الرجاء تعبئة كل الحقول'); return; }
+
+  const res = await fetch('/api/transfer', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({from:{type:from,number:fromNumber,name:fromName}, to:{type:to,number:toNumber,name:toName}, amount})
+  });
+  const data = await res.json();
+  alert(data.message + ' - العمولة: ' + data.profit.toFixed(2));
+  document.getElementById('transferForm').reset();
+}
+</script>
+</body>
+</html>
