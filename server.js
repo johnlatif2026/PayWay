@@ -1,17 +1,15 @@
 require('dotenv').config();
 const express = require('express');
+const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const path = require('path');
-const multer = require('multer');
-const jwt = require('jsonwebtoken');
-const fs = require('fs');
 const axios = require('axios');
 
 const app = express();
 app.use(cors());
+app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname)));
-
-const upload = multer({ storage: multer.memoryStorage() });
 
 let transfers = [];
 
@@ -19,7 +17,7 @@ let transfers = [];
 function authenticateToken(req,res,next){
   const token = req.headers['authorization']?.split(' ')[1];
   if(!token) return res.sendStatus(401);
-  jwt.verify(token, process.env.JWT_SECRET, (err,user)=>{
+  jwt.verify(token, process.env.JWT_SECRET,(err,user)=>{
     if(err) return res.sendStatus(403);
     req.user = user;
     next();
