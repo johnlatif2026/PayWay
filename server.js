@@ -60,19 +60,9 @@ app.post('/api/login', (req, res) => {
 });
 
 // Transfer
-const FormData = require('form-data');
-
-app.post('/api/transfer', upload.single('screenshot'), async (req,res)=>{
-  try{
-    const {
-      fromServiceType,
-      toServiceType,
-      fromNumber,
-      fromName,
-      toNumber,
-      toName,
-      amount
-    } = req.body;
+app.post('/api/transfer', upload.single('screenshot'), async (req, res) => {
+  try {
+    const { fromServiceType, toServiceType, fromNumber, fromName, toNumber, toName, amount } = req.body;
 
     const fromType = fromServiceType;
     const toType = toServiceType;
@@ -81,7 +71,7 @@ app.post('/api/transfer', upload.single('screenshot'), async (req,res)=>{
 
     let screenshotURL = null;
 
-    if(req.file){
+    if (req.file) {
       const form = new FormData();
       form.append('image', req.file.buffer.toString('base64'));
       form.append('key', process.env.IMGBB_API_KEY);
@@ -93,19 +83,21 @@ app.post('/api/transfer', upload.single('screenshot'), async (req,res)=>{
     }
 
     const transfer = {
-      from: {type:fromType, number:fromNumber, name:fromName, screenshot: screenshotURL},
-      to: {type:toType, number:toNumber, name:toName},
+      from: { type: fromType, number: fromNumber, name: fromName, screenshot: screenshotURL },
+      to: { type: toType, number: toNumber, name: toName },
       amount: parseFloat(amount),
       profit,
       totalAmount,
       date: new Date()
     };
 
-    transfers.push(transfer);
+    // حفظ التحويل في Firebase
+    await db.collection('transfers').add(transfer);
 
+    // إرسال الرسالة على تيليجرام
     let textMsg = `طلب تحويل جديد:\nمن: ${fromType} (${fromNumber})\nإلى: ${toType} (${toNumber})\nالمبلغ: ${amount}\nالعمولة: ${profit}\nالإجمالي: ${totalAmount}`;
 
-    if(screenshotURL){
+    if (screenshotURL) {
       await axios.post(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendPhoto`, {
         chat_id: process.env.TELEGRAM_CHAT_ID,
         photo: screenshotURL,
@@ -118,10 +110,10 @@ app.post('/api/transfer', upload.single('screenshot'), async (req,res)=>{
       });
     }
 
-    res.json({message:'تم تسجيل التحويل', totalAmount});
-  } catch(err) {
+    res.json({ message: 'تم تسجيل التحويل', totalAmount });
+  } catch (err) {
     console.error(err);
-    res.status(500).json({message:'حدث خطأ أثناء تسجيل التحويل'});
+    res.status(500).json({ message: 'حدث خطأ أثناء تسجيل التحويل' });
   }
 });
 
