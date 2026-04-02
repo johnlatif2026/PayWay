@@ -122,52 +122,55 @@
   .brand h1 {
     font-size: 1.7rem;
     font-weight: 800;
-    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    background: linear-gradient(135deg, #103a6e, #1e4a8a);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
   }
-  /* Monkey Dark Mode Toggle - Unique & Bouncy */
-  .monkey-toggle {
-    position: relative;
+  body.dark .brand h1 {
+    background: linear-gradient(135deg, #60a5fa, #93c5fd);
+    background-clip: text;
+    -webkit-background-clip: text;
+  }
+  
+  /* Dark mode toggle button - elegant & modern */
+  .darkmode-toggle {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     background: var(--chip-bg);
-    padding: 6px 16px 6px 12px;
-    border-radius: 80px;
+    padding: 8px 18px;
+    border-radius: 60px;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transition: all 0.25s ease;
     border: 1px solid var(--chip-border);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   }
-  .monkey-toggle:hover {
-    transform: scale(1.02);
+  .darkmode-toggle:hover {
+    transform: translateY(-2px);
     background: var(--amount-panel-bg);
+    border-color: var(--input-focus);
   }
-  .monkey-emoji {
-    font-size: 2rem;
-    display: inline-block;
-    transition: transform 0.2s ease;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  .darkmode-toggle:active {
+    transform: translateY(1px);
   }
-  .monkey-toggle:active .monkey-emoji {
-    transform: rotate(10deg) scale(1.1);
+  .toggle-icon {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    transition: all 0.2s;
   }
   .toggle-text {
-    font-weight: 700;
-    font-size: 0.9rem;
+    font-weight: 600;
+    font-size: 0.85rem;
     color: var(--text-secondary);
-    transition: color 0.2s;
   }
   .mode-badge {
     background: var(--btn-bg);
-    padding: 5px 12px;
-    border-radius: 40px;
+    padding: 4px 10px;
+    border-radius: 30px;
     color: white;
     font-size: 0.7rem;
     font-weight: bold;
-    letter-spacing: 0.5px;
   }
 
   .lang-switch {
@@ -472,15 +475,16 @@
     .card-header, .form-sections { padding-left: 20px; padding-right: 20px; }
     .section-body { padding: 16px; }
     .method-chip { padding: 6px 16px; font-size: 0.8rem; }
+    .darkmode-toggle { padding: 6px 14px; }
+    .toggle-text { font-size: 0.75rem; }
   }
-  /* additional dark mode adjustments */
   body.dark input::placeholder {
     color: #94a3b8;
   }
-  body.dark .brand h1 {
-    background: linear-gradient(135deg, #60a5fa, #93c5fd);
-    background-clip: text;
-    -webkit-background-clip: text;
+  .header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
   }
 </style>
 </head>
@@ -492,10 +496,11 @@
       <img class="brand-logo" src="https://i.postimg.cc/NfPBr7hs/Picsart-26-04-02-02-54-03-157.jpg" alt="PayWay">
       <h1 id="brandTitle">PayWay</h1>
     </div>
-    <div style="display: flex; gap: 12px; align-items: center;">
-      <!-- 🐒 MONKEY DARK MODE TOGGLE - OUTSIDE THE BOX, BOUNCY & FUN -->
-      <div class="darkModeToggle" id="darkModeToggle">
-        <span class="toggle-text" id="modeText">Dark Mode</span>
+    <div class="header-actions">
+      <!-- Elegant Dark Mode Toggle (No monkey) -->
+      <div class="darkmode-toggle" id="darkModeToggle">
+        <i class="fas fa-moon toggle-icon" id="toggleIcon"></i>
+        <span class="toggle-text" id="modeText">داكن</span>
         <span class="mode-badge" id="modeBadge">🌙</span>
       </div>
       <div class="lang-switch">
@@ -508,7 +513,7 @@
   <div class="status-banner">
     <div class="status-icon"><i class="fas fa-clock"></i></div>
     <div class="status-text">
-      <h3 id="statusTitle">✓ Your request has been received and is being reviewed.</h3>
+      <h3 id="statusTitle">✓ تم استلام طلبك وهو قيد المراجعة</h3>
       <p id="statusDesc">سيتم تأكيد التحويل خلال دقائق — تتبع الطلب عبر الواتساب</p>
     </div>
   </div>
@@ -519,36 +524,36 @@
       <div class="section">
         <div class="section-header">
           <div class="section-number">1</div>
-          <h2 id="section1Title">Transfer From</h2>
+          <h2 id="section1Title">تحويل من</h2>
         </div>
         <div class="section-body">
           <div class="method-grid" id="fromServiceGrid">
-            <div data-service="InstaPay" class="method-chip active"><i class="fas fa-bolt"></i> <span class="chip-text">InstaPay</span></div>
-            <div data-service="Wallet" class="method-chip"><i class="fas fa-wallet"></i> <span class="chip-text">Wallet</span></div>
-            <div data-service="Fawry" class="method-chip"><i class="fas fa-receipt"></i> <span class="chip-text">Fawry</span></div>
-            <div data-service="Telda" class="method-chip"><i class="fas fa-credit-card"></i> <span class="chip-text">Telda</span></div>
+            <div data-service="InstaPay" class="method-chip active"><i class="fas fa-bolt"></i> <span class="chip-text">إنستا باي</span></div>
+            <div data-service="Wallet" class="method-chip"><i class="fas fa-wallet"></i> <span class="chip-text">محفظة</span></div>
+            <div data-service="Fawry" class="method-chip"><i class="fas fa-receipt"></i> <span class="chip-text">فوري</span></div>
+            <div data-service="Telda" class="method-chip"><i class="fas fa-credit-card"></i> <span class="chip-text">تيلدا</span></div>
           </div>
           <div id="fromWalletOptions">
             <div class="method-grid" id="fromWalletSubGrid">
-              <div data-sub="VodafoneCash" class="method-chip active"><i class="fas fa-mobile-alt"></i> <span class="chip-text">Vodafone Cash</span></div>
-              <div data-sub="OrangeCash" class="method-chip"><i class="fas fa-sim-card"></i> <span class="chip-text">Orange Cash</span></div>
-              <div data-sub="EtisalatCash" class="method-chip"><i class="fas fa-signal"></i> <span class="chip-text">Etisalat Cash</span></div>
-              <div data-sub="WePay" class="method-chip"><i class="fas fa-building-columns"></i> <span class="chip-text">WE Pay</span></div>
+              <div data-sub="VodafoneCash" class="method-chip active"><i class="fas fa-mobile-alt"></i> <span class="chip-text">فودافون كاش</span></div>
+              <div data-sub="OrangeCash" class="method-chip"><i class="fas fa-sim-card"></i> <span class="chip-text">أورنج كاش</span></div>
+              <div data-sub="EtisalatCash" class="method-chip"><i class="fas fa-signal"></i> <span class="chip-text">اتصالات كاش</span></div>
+              <div data-sub="WePay" class="method-chip"><i class="fas fa-building-columns"></i> <span class="chip-text">وي باي</span></div>
             </div>
           </div>
           <input type="hidden" id="fromServiceType" value="InstaPay">
           <input type="hidden" id="fromWalletSubtype" value="VodafoneCash">
           
           <div class="input-group">
-            <label id="fromPhoneLabel"><i class="fas fa-phone-alt"></i> Phone / Account Number</label>
+            <label id="fromPhoneLabel"><i class="fas fa-phone-alt"></i> رقم الهاتف / الحساب</label>
             <input type="tel" id="fromNumber" placeholder="مثال: 01012345678" autocomplete="off">
           </div>
           <div class="input-group">
-            <label id="fromNameLabel"><i class="fas fa-user"></i> Account Holder Name</label>
+            <label id="fromNameLabel"><i class="fas fa-user"></i> اسم صاحب الحساب</label>
             <input type="text" id="fromName" placeholder="الاسم بالكامل">
           </div>
           <div class="input-group">
-            <label id="screenshotLabel"><i class="fas fa-camera"></i> Upload Screenshot of Transfer</label>
+            <label id="screenshotLabel"><i class="fas fa-camera"></i> رفع صورة التحويل</label>
             <div class="file-upload-area" id="screenshotArea">
               <i class="fas fa-cloud-upload-alt"></i>
               <span id="uploadText">انقر لرفع صورة التحويل</span>
@@ -563,32 +568,32 @@
       <div class="section">
         <div class="section-header">
           <div class="section-number">2</div>
-          <h2 id="section2Title">Transfer To</h2>
+          <h2 id="section2Title">تحويل إلى</h2>
         </div>
         <div class="section-body">
           <div class="method-grid" id="toServiceGrid">
-            <div data-service="InstaPay" class="method-chip active"><i class="fas fa-bolt"></i> <span class="chip-text">InstaPay</span></div>
-            <div data-service="Wallet" class="method-chip"><i class="fas fa-wallet"></i> <span class="chip-text">Wallet</span></div>
-            <div data-service="Fawry" class="method-chip"><i class="fas fa-receipt"></i> <span class="chip-text">Fawry</span></div>
-            <div data-service="Telda" class="method-chip"><i class="fas fa-credit-card"></i> <span class="chip-text">Telda</span></div>
+            <div data-service="InstaPay" class="method-chip active"><i class="fas fa-bolt"></i> <span class="chip-text">إنستا باي</span></div>
+            <div data-service="Wallet" class="method-chip"><i class="fas fa-wallet"></i> <span class="chip-text">محفظة</span></div>
+            <div data-service="Fawry" class="method-chip"><i class="fas fa-receipt"></i> <span class="chip-text">فوري</span></div>
+            <div data-service="Telda" class="method-chip"><i class="fas fa-credit-card"></i> <span class="chip-text">تيلدا</span></div>
           </div>
           <div id="toWalletOptions">
             <div class="method-grid" id="toWalletSubGrid">
-              <div data-sub="VodafoneCash" class="method-chip active"><i class="fas fa-mobile-alt"></i> <span class="chip-text">Vodafone Cash</span></div>
-              <div data-sub="OrangeCash" class="method-chip"><i class="fas fa-sim-card"></i> <span class="chip-text">Orange Cash</span></div>
-              <div data-sub="EtisalatCash" class="method-chip"><i class="fas fa-signal"></i> <span class="chip-text">Etisalat Cash</span></div>
-              <div data-sub="WePay" class="method-chip"><i class="fas fa-building-columns"></i> <span class="chip-text">WE Pay</span></div>
+              <div data-sub="VodafoneCash" class="method-chip active"><i class="fas fa-mobile-alt"></i> <span class="chip-text">فودافون كاش</span></div>
+              <div data-sub="OrangeCash" class="method-chip"><i class="fas fa-sim-card"></i> <span class="chip-text">أورنج كاش</span></div>
+              <div data-sub="EtisalatCash" class="method-chip"><i class="fas fa-signal"></i> <span class="chip-text">اتصالات كاش</span></div>
+              <div data-sub="WePay" class="method-chip"><i class="fas fa-building-columns"></i> <span class="chip-text">وي باي</span></div>
             </div>
           </div>
           <input type="hidden" id="toServiceType" value="InstaPay">
           <input type="hidden" id="toWalletSubtype" value="VodafoneCash">
           
           <div class="input-group">
-            <label id="toPhoneLabel"><i class="fas fa-user-check"></i> Recipient's Phone / Account Number</label>
+            <label id="toPhoneLabel"><i class="fas fa-user-check"></i> رقم هاتف المستلم / الحساب</label>
             <input type="tel" id="toNumber" placeholder="رقم المستلم أو الحساب">
           </div>
           <div class="input-group">
-            <label id="toNameLabel"><i class="fas fa-id-card"></i> Recipient Full Name</label>
+            <label id="toNameLabel"><i class="fas fa-id-card"></i> الاسم الكامل للمستلم</label>
             <input type="text" id="toName" placeholder="اسم المستلم">
           </div>
         </div>
@@ -598,20 +603,20 @@
       <div class="section">
         <div class="section-header">
           <div class="section-number">3</div>
-          <h2 id="section3Title">Amount to Transfer (EGP)</h2>
+          <h2 id="section3Title">المبلغ المراد تحويله (EGP)</h2>
         </div>
         <div class="section-body">
           <div class="input-group">
-            <label id="amountLabel">Transfer Amount</label>
+            <label id="amountLabel">المبلغ</label>
             <input type="number" id="amount" placeholder="أدخل المبلغ" min="5" max="5000" step="1">
           </div>
           <div class="amount-panel" id="amountPreview">
             <div class="amount-row">
-              <span id="amountText">Amount: <span id="displayAmount">0</span> EGP</span>
-              <span class="fee-badge" id="feeText"><i class="fas fa-percent"></i> Fee (2%)</span>
+              <span id="amountText">المبلغ: <span id="displayAmount">0</span> EGP</span>
+              <span class="fee-badge" id="feeText"><i class="fas fa-percent"></i> الرسوم (2%)</span>
             </div>
             <div class="amount-row total">
-              <span id="totalText"><strong>Total to Pay:</strong></span>
+              <span id="totalText"><strong>الإجمالي المطلوب:</strong></span>
               <span id="totalAmountDisplay"><strong>0 EGP</strong></span>
             </div>
           </div>
@@ -624,7 +629,7 @@
             <i class="fas fa-shield-alt"></i> PayWay غير مسؤول عن الأموال المسروقة أو أي خسائر. تأكد من البيانات.
           </div>
           <button type="button" class="btn-submit" id="submitBtn" onclick="submitTransfer()">
-            <i class="fas fa-paper-plane"></i> <span id="submitBtnText">Send Request Now</span>
+            <i class="fas fa-paper-plane"></i> <span id="submitBtnText">إرسال الطلب الآن</span>
           </button>
         </div>
       </div>
@@ -638,24 +643,27 @@
 </div>
 
 <script>
-  // ==================== DARK MODE MONKEY TOGGLE ====================
+  // ==================== DARK MODE TOGGLE (CLEAN VERSION) ====================
   const darkModeToggle = document.getElementById('darkModeToggle');
-  const monkeyEmoji = document.getElementById('monkeyEmoji');
+  const toggleIcon = document.getElementById('toggleIcon');
   const modeTextSpan = document.getElementById('modeText');
   const modeBadgeSpan = document.getElementById('modeBadge');
 
   function setDarkMode(enabled) {
     if (enabled) {
       document.body.classList.add('dark');
-      modeTextSpan.innerText = 'Light Mode';
+      toggleIcon.className = 'fas fa-sun toggle-icon';
+      modeTextSpan.innerText = currentLang === 'ar' ? 'فاتح' : 'Light';
       modeBadgeSpan.innerHTML = '☀️';
       localStorage.setItem('payway-darkmode', 'enabled');
     } else {
       document.body.classList.remove('dark');
-      modeTextSpan.innerText = 'Dark Mode';
+      toggleIcon.className = 'fas fa-moon toggle-icon';
+      modeTextSpan.innerText = currentLang === 'ar' ? 'داكن' : 'Dark';
       modeBadgeSpan.innerHTML = '🌙';
       localStorage.setItem('payway-darkmode', 'disabled');
     }
+  }
 
   // Load saved preference
   const savedMode = localStorage.getItem('payway-darkmode');
@@ -669,7 +677,7 @@
     e.preventDefault();
     const isDark = document.body.classList.contains('dark');
     setDarkMode(!isDark);
-    // extra playful hop effect
+    // subtle animation
     darkModeToggle.style.transform = 'scale(0.97)';
     setTimeout(() => { darkModeToggle.style.transform = ''; }, 150);
   });
@@ -696,7 +704,9 @@
       terms: "أوافق على الشروط والأحكام — أي تحويل خاطئ يتحمل المستخدم المسؤولية الكاملة.",
       disclaimer: "PayWay غير مسؤول عن الأموال المسروقة أو أي خسائر. تأكد من البيانات.",
       submit: "إرسال الطلب الآن",
-      footer: "© 2026 PayWay — "
+      footer: "© 2026 PayWay — ",
+      darkText: "داكن",
+      lightText: "فاتح"
     },
     en: {
       brand: "PayWay",
@@ -718,7 +728,9 @@
       terms: "I agree to the terms and conditions — any incorrect transfer is the user's full responsibility.",
       disclaimer: "PayWay is not responsible for stolen funds or any losses. Please verify data.",
       submit: "Send Request Now",
-      footer: "© 2026 PayWay — "
+      footer: "© 2026 PayWay — ",
+      darkText: "Dark",
+      lightText: "Light"
     }
   };
 
@@ -728,6 +740,7 @@
   function updateLanguage(lang) {
     currentLang = lang;
     const t = translations[lang];
+    
     document.getElementById('brandTitle').innerText = t.brand;
     document.getElementById('statusTitle').innerText = t.statusTitle;
     document.getElementById('statusDesc').innerText = t.statusDesc;
@@ -741,6 +754,7 @@
     document.getElementById('toPhoneLabel').innerHTML = `<i class="fas fa-user-check"></i> ${t.toPhone}`;
     document.getElementById('toNameLabel').innerHTML = `<i class="fas fa-id-card"></i> ${t.toName}`;
     document.getElementById('amountLabel').innerText = t.amountLabel;
+    
     const currentAmount = parseFloat(document.getElementById('amount').value) || 0;
     document.getElementById('amountText').innerHTML = `${t.amountPrefix} <span id="displayAmount">${currentAmount.toFixed(2)}</span> EGP`;
     document.getElementById('feeText').innerHTML = `<i class="fas fa-percent"></i> ${t.feePrefix}`;
@@ -749,6 +763,8 @@
     document.getElementById('disclaimerText').innerHTML = `<i class="fas fa-shield-alt"></i> ${t.disclaimer}`;
     document.getElementById('submitBtnText').innerText = t.submit;
     document.getElementById('footerText').innerText = t.footer;
+    
+    // Update placeholders based on language
     const isAr = lang === 'ar';
     document.getElementById('fromNumber').placeholder = isAr ? "مثال: 01012345678" : "e.g., 01012345678";
     document.getElementById('fromName').placeholder = isAr ? "الاسم بالكامل" : "Full name";
@@ -756,46 +772,226 @@
     document.getElementById('toName').placeholder = isAr ? "اسم المستلم" : "Recipient name";
     document.getElementById('amount').placeholder = isAr ? "أدخل المبلغ" : "Enter amount";
     
-    const chipTranslations = { ar: { 'InstaPay': 'إنستا باي', 'Wallet': 'محفظة', 'Fawry': 'فوري', 'Telda': 'تيلدا', 'VodafoneCash': 'فودافون كاش', 'OrangeCash': 'أورنج كاش', 'EtisalatCash': 'اتصالات كاش', 'WePay': 'وي باي' }, en: { 'InstaPay': 'InstaPay', 'Wallet': 'Wallet', 'Fawry': 'Fawry', 'Telda': 'Telda', 'VodafoneCash': 'Vodafone Cash', 'OrangeCash': 'Orange Cash', 'EtisalatCash': 'Etisalat Cash', 'WePay': 'WE Pay' } };
-    document.querySelectorAll('.method-chip .chip-text').forEach(chipSpan => { const parent = chipSpan.closest('.method-chip'); if(parent){ const key = parent.getAttribute('data-service') || parent.getAttribute('data-sub'); if(key && chipTranslations[lang][key]) chipSpan.innerText = chipTranslations[lang][key]; } });
+    // Update chip texts
+    const chipTranslations = {
+      ar: { 'InstaPay': 'إنستا باي', 'Wallet': 'محفظة', 'Fawry': 'فوري', 'Telda': 'تيلدا', 'VodafoneCash': 'فودافون كاش', 'OrangeCash': 'أورنج كاش', 'EtisalatCash': 'اتصالات كاش', 'WePay': 'وي باي' },
+      en: { 'InstaPay': 'InstaPay', 'Wallet': 'Wallet', 'Fawry': 'Fawry', 'Telda': 'Telda', 'VodafoneCash': 'Vodafone Cash', 'OrangeCash': 'Orange Cash', 'EtisalatCash': 'Etisalat Cash', 'WePay': 'WE Pay' }
+    };
+    document.querySelectorAll('.method-chip .chip-text').forEach(chipSpan => {
+      const parent = chipSpan.closest('.method-chip');
+      if(parent) {
+        const key = parent.getAttribute('data-service') || parent.getAttribute('data-sub');
+        if(key && chipTranslations[lang][key]) chipSpan.innerText = chipTranslations[lang][key];
+      }
+    });
+    
     if(currentFileName) document.getElementById('fileNameDisplay').innerText = currentFileName;
+    
+    // Update dark mode toggle text based on current mode & language
+    const isDark = document.body.classList.contains('dark');
+    if(isDark) {
+      modeTextSpan.innerText = lang === 'ar' ? 'فاتح' : 'Light';
+    } else {
+      modeTextSpan.innerText = lang === 'ar' ? 'داكن' : 'Dark';
+    }
+    
+    // Adjust direction
     document.body.style.direction = lang === 'en' ? 'ltr' : 'rtl';
     document.querySelector('.transfer-card').style.direction = lang === 'en' ? 'ltr' : 'rtl';
   }
 
-  document.getElementById('btnAr').addEventListener('click', () => { document.getElementById('btnAr').classList.add('active'); document.getElementById('btnEn').classList.remove('active'); updateLanguage('ar'); });
-  document.getElementById('btnEn').addEventListener('click', () => { document.getElementById('btnEn').classList.add('active'); document.getElementById('btnAr').classList.remove('active'); updateLanguage('en'); });
+  document.getElementById('btnAr').addEventListener('click', () => {
+    document.getElementById('btnAr').classList.add('active');
+    document.getElementById('btnEn').classList.remove('active');
+    updateLanguage('ar');
+  });
+  document.getElementById('btnEn').addEventListener('click', () => {
+    document.getElementById('btnEn').classList.add('active');
+    document.getElementById('btnAr').classList.remove('active');
+    updateLanguage('en');
+  });
+  
+  // Initialize Arabic
   updateLanguage('ar');
 
-  // === existing logic for services, amount, file upload, and submit ===
-  // (keeping all original interactions intact)
+  // ==================== ALL EXISTING LOGIC (SERVICES, AMOUNT, FILE, SUBMIT) ====================
   const fromServiceChips = document.querySelectorAll('#fromServiceGrid .method-chip');
   const fromWalletSubChips = document.querySelectorAll('#fromWalletSubGrid .method-chip');
   const fromServiceHidden = document.getElementById('fromServiceType');
   const fromWalletHidden = document.getElementById('fromWalletSubtype');
   const fromWalletOptionsDiv = document.getElementById('fromWalletOptions');
-  function updateFromWalletVisibility() { fromWalletOptionsDiv.style.display = (fromServiceHidden.value === 'Wallet') ? 'block' : 'none'; if(fromServiceHidden.value !== 'Wallet') fromWalletHidden.value = fromServiceHidden.value; }
-  fromServiceChips.forEach(chip => chip.addEventListener('click', () => { fromServiceChips.forEach(c=>c.classList.remove('active')); chip.classList.add('active'); fromServiceHidden.value = chip.getAttribute('data-service'); if(fromServiceHidden.value !== 'Wallet'){ fromWalletHidden.value = fromServiceHidden.value; fromWalletSubChips.forEach(s=>s.classList.remove('active')); } else { if(!document.querySelector('#fromWalletSubGrid .method-chip.active')) { fromWalletSubChips[0]?.classList.add('active'); fromWalletHidden.value = fromWalletSubChips[0]?.getAttribute('data-sub') || 'VodafoneCash'; } } updateFromWalletVisibility(); }));
-  fromWalletSubChips.forEach(sub => sub.addEventListener('click', () => { if(fromServiceHidden.value !== 'Wallet') return; fromWalletSubChips.forEach(s=>s.classList.remove('active')); sub.classList.add('active'); fromWalletHidden.value = sub.getAttribute('data-sub'); }));
+
+  function updateFromWalletVisibility() {
+    fromWalletOptionsDiv.style.display = (fromServiceHidden.value === 'Wallet') ? 'block' : 'none';
+    if(fromServiceHidden.value !== 'Wallet') fromWalletHidden.value = fromServiceHidden.value;
+  }
+
+  fromServiceChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      fromServiceChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      fromServiceHidden.value = chip.getAttribute('data-service');
+      if(fromServiceHidden.value !== 'Wallet') {
+        fromWalletHidden.value = fromServiceHidden.value;
+        fromWalletSubChips.forEach(s => s.classList.remove('active'));
+      } else {
+        if(!document.querySelector('#fromWalletSubGrid .method-chip.active')) {
+          fromWalletSubChips[0]?.classList.add('active');
+          fromWalletHidden.value = fromWalletSubChips[0]?.getAttribute('data-sub') || 'VodafoneCash';
+        }
+      }
+      updateFromWalletVisibility();
+    });
+  });
+
+  fromWalletSubChips.forEach(sub => {
+    sub.addEventListener('click', () => {
+      if(fromServiceHidden.value !== 'Wallet') return;
+      fromWalletSubChips.forEach(s => s.classList.remove('active'));
+      sub.classList.add('active');
+      fromWalletHidden.value = sub.getAttribute('data-sub');
+    });
+  });
+
   const toServiceChips = document.querySelectorAll('#toServiceGrid .method-chip');
   const toWalletSubChips = document.querySelectorAll('#toWalletSubGrid .method-chip');
   const toServiceHidden = document.getElementById('toServiceType');
   const toWalletHidden = document.getElementById('toWalletSubtype');
   const toWalletOptionsDiv = document.getElementById('toWalletOptions');
-  function updateToWalletVisibility() { toWalletOptionsDiv.style.display = (toServiceHidden.value === 'Wallet') ? 'block' : 'none'; if(toServiceHidden.value !== 'Wallet') toWalletHidden.value = toServiceHidden.value; }
-  toServiceChips.forEach(chip => chip.addEventListener('click', () => { toServiceChips.forEach(c=>c.classList.remove('active')); chip.classList.add('active'); toServiceHidden.value = chip.getAttribute('data-service'); if(toServiceHidden.value !== 'Wallet'){ toWalletHidden.value = toServiceHidden.value; toWalletSubChips.forEach(s=>s.classList.remove('active')); } else { if(!document.querySelector('#toWalletSubGrid .method-chip.active')) { toWalletSubChips[0]?.classList.add('active'); toWalletHidden.value = toWalletSubChips[0]?.getAttribute('data-sub') || 'VodafoneCash'; } } updateToWalletVisibility(); }));
-  toWalletSubChips.forEach(sub => sub.addEventListener('click', () => { if(toServiceHidden.value !== 'Wallet') return; toWalletSubChips.forEach(s=>s.classList.remove('active')); sub.classList.add('active'); toWalletHidden.value = sub.getAttribute('data-sub'); }));
-  updateFromWalletVisibility(); updateToWalletVisibility();
+
+  function updateToWalletVisibility() {
+    toWalletOptionsDiv.style.display = (toServiceHidden.value === 'Wallet') ? 'block' : 'none';
+    if(toServiceHidden.value !== 'Wallet') toWalletHidden.value = toServiceHidden.value;
+  }
+
+  toServiceChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      toServiceChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      toServiceHidden.value = chip.getAttribute('data-service');
+      if(toServiceHidden.value !== 'Wallet') {
+        toWalletHidden.value = toServiceHidden.value;
+        toWalletSubChips.forEach(s => s.classList.remove('active'));
+      } else {
+        if(!document.querySelector('#toWalletSubGrid .method-chip.active')) {
+          toWalletSubChips[0]?.classList.add('active');
+          toWalletHidden.value = toWalletSubChips[0]?.getAttribute('data-sub') || 'VodafoneCash';
+        }
+      }
+      updateToWalletVisibility();
+    });
+  });
+
+  toWalletSubChips.forEach(sub => {
+    sub.addEventListener('click', () => {
+      if(toServiceHidden.value !== 'Wallet') return;
+      toWalletSubChips.forEach(s => s.classList.remove('active'));
+      sub.classList.add('active');
+      toWalletHidden.value = sub.getAttribute('data-sub');
+    });
+  });
+
+  updateFromWalletVisibility();
+  updateToWalletVisibility();
   if(!fromWalletSubChips[0].classList.contains('active')) fromWalletSubChips[0].classList.add('active');
   if(!toWalletSubChips[0].classList.contains('active')) toWalletSubChips[0].classList.add('active');
+  toServiceHidden.value = 'InstaPay';
+
   const amountInput = document.getElementById('amount');
   const displayAmountSpan = document.getElementById('displayAmount');
   const totalSpan = document.getElementById('totalAmountDisplay');
-  function updateAmountUI() { let val = parseFloat(amountInput.value) || 0; const fee = val*0.02; const total = val+fee; displayAmountSpan.innerText = val.toFixed(2); totalSpan.innerHTML = `<strong>${total.toFixed(2)} EGP</strong>`; const prefix = currentLang === 'ar' ? 'المبلغ:' : 'Amount:'; document.getElementById('amountText').innerHTML = `${prefix} <span id="displayAmount">${val.toFixed(2)}</span> EGP`; }
-  amountInput.addEventListener('input', updateAmountUI); updateAmountUI();
-  const screenshotArea = document.getElementById('screenshotArea'); const fileInput = document.getElementById('fromScreenshot'); const fileNameDisplayElem = document.getElementById('fileNameDisplay');
-  screenshotArea.addEventListener('click',()=>fileInput.click()); fileInput.addEventListener('change',()=>{ if(fileInput.files.length){ currentFileName = `📸 ${fileInput.files[0].name}`; fileNameDisplayElem.innerText = currentFileName; } else { currentFileName = ''; fileNameDisplayElem.innerText = ''; } });
-  window.submitTransfer = async function() { if(!document.getElementById('agreeTerms').checked){ alert(currentLang === 'ar' ? 'يجب الموافقة على الشروط والأحكام قبل إرسال التحويل' : 'You must agree to the terms before sending'); return; } const fromNumber = document.getElementById('fromNumber').value.trim(); const toNumber = document.getElementById('toNumber').value.trim(); const fromName = document.getElementById('fromName').value.trim(); const toName = document.getElementById('toName').value.trim(); const amount = parseFloat(amountInput.value); const screenshotFile = fileInput.files[0]; const fromMethod = fromServiceHidden.value === 'Wallet' ? fromWalletHidden.value : fromServiceHidden.value; const toMethod = toServiceHidden.value === 'Wallet' ? toWalletHidden.value : toServiceHidden.value; const phoneRegex = /^(\d{10}|\d{11})$/; if(!fromNumber.match(phoneRegex)){ alert(currentLang === 'ar' ? 'رقم الهاتف المحول منه يجب أن يكون 10 أو 11 أرقام' : 'Sender phone must be 10 or 11 digits'); return; } if(!toNumber.match(phoneRegex)){ alert(currentLang === 'ar' ? 'رقم المستلم يجب أن يكون 10 أو 11 أرقام' : 'Recipient phone must be 10 or 11 digits'); return; } if(isNaN(amount) || amount<5 || amount>5000){ alert(currentLang === 'ar' ? 'المبلغ بين 5 و 5000 جنيه' : 'Amount must be between 5 and 5000 EGP'); return; } if(!fromName){ alert(currentLang === 'ar' ? 'اسم صاحب الحساب مطلوب' : 'Account holder name required'); return; } if(!toName){ alert(currentLang === 'ar' ? 'اسم المستلم مطلوب' : 'Recipient name required'); return; } if(!screenshotFile){ alert(currentLang === 'ar' ? 'صورة التحويل مطلوبة' : 'Screenshot required'); return; } const fee = amount*0.02; const total = amount+fee; const formData = new FormData(); formData.append('fromServiceType', fromServiceHidden.value); formData.append('toServiceType', toServiceHidden.value); formData.append('fromNumber', fromNumber); formData.append('fromName', fromName); formData.append('fromMethod', fromMethod); formData.append('toNumber', toNumber); formData.append('toName', toName); formData.append('toMethod', toMethod); formData.append('amount', amount); formData.append('fee', fee.toFixed(2)); formData.append('total', total.toFixed(2)); formData.append('screenshot', screenshotFile); const btn = document.getElementById('submitBtn'); btn.disabled = true; const origHtml = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> ' + (currentLang === 'ar' ? 'جاري الإرسال...' : 'Sending...'); try { const response = await fetch('/api/transfer', { method: 'POST', body: formData }); if(response.ok){ alert(currentLang === 'ar' ? '✅ تم إرسال طلب التحويل بنجاح' : '✅ Transfer request sent successfully'); document.getElementById('transferForm').reset(); currentFileName = ''; fileNameDisplayElem.innerText = ''; fileInput.value = ''; amountInput.value = ''; updateAmountUI(); document.getElementById('agreeTerms').checked = false; fromServiceHidden.value='InstaPay'; toServiceHidden.value='InstaPay'; fromWalletHidden.value='VodafoneCash'; toWalletHidden.value='VodafoneCash'; fromServiceChips.forEach(c=>c.classList.remove('active')); fromServiceChips[0].classList.add('active'); toServiceChips.forEach(c=>c.classList.remove('active')); toServiceChips[0].classList.add('active'); fromWalletSubChips.forEach(c=>c.classList.remove('active')); fromWalletSubChips[0].classList.add('active'); toWalletSubChips.forEach(c=>c.classList.remove('active')); toWalletSubChips[0].classList.add('active'); updateFromWalletVisibility(); updateToWalletVisibility(); updateLanguage(currentLang); } else { throw new Error('Server error'); } } catch(err){ console.error(err); } finally { btn.disabled = false; btn.innerHTML = origHtml; } };
+
+  function updateAmountUI() {
+    let amountVal = parseFloat(amountInput.value) || 0;
+    const fee = amountVal * 0.02;
+    const total = amountVal + fee;
+    displayAmountSpan.innerText = amountVal.toFixed(2);
+    totalSpan.innerHTML = `<strong>${total.toFixed(2)} EGP</strong>`;
+    const prefix = currentLang === 'ar' ? 'المبلغ:' : 'Amount:';
+    document.getElementById('amountText').innerHTML = `${prefix} <span id="displayAmount">${amountVal.toFixed(2)}</span> EGP`;
+  }
+  amountInput.addEventListener('input', updateAmountUI);
+  updateAmountUI();
+
+  const screenshotArea = document.getElementById('screenshotArea');
+  const fileInput = document.getElementById('fromScreenshot');
+  const fileNameDisplayElem = document.getElementById('fileNameDisplay');
+  
+  screenshotArea.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', () => {
+    if(fileInput.files.length) {
+      currentFileName = `📸 ${fileInput.files[0].name}`;
+      fileNameDisplayElem.innerText = currentFileName;
+    } else {
+      currentFileName = '';
+      fileNameDisplayElem.innerText = '';
+    }
+  });
+
+  window.submitTransfer = async function() {
+    if(!document.getElementById('agreeTerms').checked) {
+      alert(currentLang === 'ar' ? 'يجب الموافقة على الشروط والأحكام قبل إرسال التحويل' : 'You must agree to the terms before sending');
+      return;
+    }
+    const fromNumber = document.getElementById('fromNumber').value.trim();
+    const toNumber = document.getElementById('toNumber').value.trim();
+    const fromName = document.getElementById('fromName').value.trim();
+    const toName = document.getElementById('toName').value.trim();
+    const amount = parseFloat(amountInput.value);
+    const screenshotFile = fileInput.files[0];
+    const fromMethod = fromServiceHidden.value === 'Wallet' ? fromWalletHidden.value : fromServiceHidden.value;
+    const toMethod = toServiceHidden.value === 'Wallet' ? toWalletHidden.value : toServiceHidden.value;
+    const phoneRegex = /^(\d{10}|\d{11})$/;
+    if(!fromNumber.match(phoneRegex)) { alert(currentLang === 'ar' ? 'رقم الهاتف المحول منه يجب أن يكون 10 أو 11 أرقام' : 'Sender phone must be 10 or 11 digits'); return; }
+    if(!toNumber.match(phoneRegex)) { alert(currentLang === 'ar' ? 'رقم المستلم يجب أن يكون 10 أو 11 أرقام' : 'Recipient phone must be 10 or 11 digits'); return; }
+    if(isNaN(amount) || amount<5 || amount>5000) { alert(currentLang === 'ar' ? 'المبلغ بين 5 و 5000 جنيه' : 'Amount must be between 5 and 5000 EGP'); return; }
+    if(!fromName) { alert(currentLang === 'ar' ? 'اسم صاحب الحساب مطلوب' : 'Account holder name required'); return; }
+    if(!toName) { alert(currentLang === 'ar' ? 'اسم المستلم مطلوب' : 'Recipient name required'); return; }
+    if(!screenshotFile) { alert(currentLang === 'ar' ? 'صورة التحويل مطلوبة' : 'Screenshot required'); return; }
+    
+    const fee = amount * 0.02;
+    const total = amount + fee;
+    const formData = new FormData();
+    formData.append('fromServiceType', fromServiceHidden.value);
+    formData.append('toServiceType', toServiceHidden.value);
+    formData.append('fromNumber', fromNumber);
+    formData.append('fromName', fromName);
+    formData.append('fromMethod', fromMethod);
+    formData.append('toNumber', toNumber);
+    formData.append('toName', toName);
+    formData.append('toMethod', toMethod);
+    formData.append('amount', amount);
+    formData.append('fee', fee.toFixed(2));
+    formData.append('total', total.toFixed(2));
+    formData.append('screenshot', screenshotFile);
+    
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    const originalHtml = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> ' + (currentLang === 'ar' ? 'جاري الإرسال...' : 'Sending...');
+    try {
+      const response = await fetch('/api/transfer', { method: 'POST', body: formData });
+      if(response.ok) {
+        alert(currentLang === 'ar' ? '✅ تم إرسال طلب التحويل بنجاح' : '✅ Transfer request sent successfully');
+        document.getElementById('transferForm').reset();
+        currentFileName = '';
+        fileNameDisplayElem.innerText = '';
+        fileInput.value = '';
+        amountInput.value = '';
+        updateAmountUI();
+        document.getElementById('agreeTerms').checked = false;
+        fromServiceHidden.value='InstaPay'; toServiceHidden.value='InstaPay';
+        fromWalletHidden.value='VodafoneCash'; toWalletHidden.value='VodafoneCash';
+        fromServiceChips.forEach(c=>c.classList.remove('active')); fromServiceChips[0].classList.add('active');
+        toServiceChips.forEach(c=>c.classList.remove('active')); toServiceChips[0].classList.add('active');
+        fromWalletSubChips.forEach(c=>c.classList.remove('active')); fromWalletSubChips[0].classList.add('active');
+        toWalletSubChips.forEach(c=>c.classList.remove('active')); toWalletSubChips[0].classList.add('active');
+        updateFromWalletVisibility(); updateToWalletVisibility();
+        updateLanguage(currentLang);
+      } else throw new Error('Server error');
+    } catch(err) { console.error(err); }
+    finally { btn.disabled = false; btn.innerHTML = originalHtml; }
+  };
 </script>
 </body>
 </html>
