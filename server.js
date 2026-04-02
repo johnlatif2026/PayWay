@@ -50,13 +50,12 @@ app.post('/api/transfer', upload.single('screenshot'), async (req, res) => {
   try {
     const { fromServiceType, toServiceType, fromNumber, fromName, toNumber, toName, amount } = req.body;
 
-    // حساب الأرباح والإجمالي
     const profit = parseFloat(amount) * 0.02;
     const totalAmount = parseFloat(amount) + profit;
 
     let screenshotURL = null;
 
-    // رفع الصورة لو موجودة
+    // رفع الصورة إذا موجودة
     if (req.file) {
       const form = new FormData();
       form.append('image', req.file.buffer.toString('base64'));
@@ -69,16 +68,14 @@ app.post('/api/transfer', upload.single('screenshot'), async (req, res) => {
         screenshotURL = response.data.data.display_url;
       } catch (imgErr) {
         console.error('ImgBB upload failed:', imgErr.message);
-        // نستمر بدون الصورة
       }
     }
 
-    // صياغة التاريخ بالعربية
     const now = new Date();
     const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
     const dateStr = now.toLocaleString('ar-EG', options);
 
-    // حفظ التحويل في Firestore
+    // تسجيل التحويل في Firestore
     const transfer = {
       from: { type: fromServiceType, number: fromNumber, name: fromName, screenshot: screenshotURL },
       to: { type: toServiceType, number: toNumber, name: toName },
@@ -90,7 +87,7 @@ app.post('/api/transfer', upload.single('screenshot'), async (req, res) => {
 
     const docRef = await db.collection('transfers').add(transfer);
 
-    // رسالة Telegram
+    // تحضير رسالة Telegram
     const textMsg = `طلب تحويل جديد:
 من: ${fromServiceType} (${fromNumber})
 إلى: ${toServiceType} (${toNumber})
@@ -99,7 +96,7 @@ app.post('/api/transfer', upload.single('screenshot'), async (req, res) => {
 الإجمالي: ${totalAmount}
 التاريخ: ${dateStr}`;
 
-    // إرسال رسالة Telegram مع التعامل مع الخطأ
+    // إرسال رسالة Telegram لكن لا نرسل الرد مباشرة هنا
     let telegramError = false;
     try {
       if (screenshotURL) {
@@ -119,20 +116,12 @@ app.post('/api/transfer', upload.single('screenshot'), async (req, res) => {
       telegramError = true;
     }
 
-    // الرد على العميل
-    if (telegramError) {
-      res.json({ 
-        message: 'تم تسجيل التحويل، لكن لم يتم إرسال الإشعار', 
-        totalAmount, 
-        id: docRef.id 
-      });
-    } else {
-      res.json({ 
-        message: 'تم تسجيل التحويل', 
-        totalAmount, 
-        id: docRef.id 
-      });
-    }
+    // إرسال الرد مرة واحدة فقط
+    res.json({
+      message: telegramError ? 'تم تسجيل التحويل، لكن لم يتم إرسال الإشعار' : 'تم تسجيل التحويل بنجاح',
+      totalAmount,
+      id: docRef.id
+    });
 
   } catch (err) {
     console.error('Transfer failed:', err);
