@@ -6,38 +6,62 @@ const multer = require('multer');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const axios = require('axios');
+const { initializeApp, applicationDefault } = require('firebase-admin/app');
+const { getFirestore } = require('firebase-admin/firestore');
+
+// تهيئة Firebase
+initializeApp({
+  credential: applicationDefault(),
+});
+const db = getFirestore();
 
 const app = express();
 app.use(cors());
-app.use(express.static(path.join(__dirname)));
+app.use(express.json());
 
-const upload = multer({ storage: multer.memoryStorage() });
+// المجلد اللي هيتحفظ فيه الصور
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir);
 
-let transfers = [];
+// نخلي المجلد static علشان نقدر نوصل للصور بالرابط
+app.use('/uploads', express.static(uploadsDir));
+
+// إعداد multer لحفظ الملفات على السيرفر
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, uploadsDir),
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const ext = path.extname(file.originalname);
+    cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
+  }
+});
+const upload = multer({ storage });
 
 // Middleware JWT
-function authenticateToken(req,res,next){
+function authenticateToken(req, res, next) {
   const token = req.headers['authorization']?.split(' ')[1];
-  if(!token) return res.sendStatus(401);
-  jwt.verify(token, process.env.JWT_SECRET, (err,user)=>{
-    if(err) return res.sendStatus(403);
+  if (!token) return res.sendStatus(401);
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
     req.user = user;
     next();
   });
 }
 
 // Login
-app.post('/api/login', express.json(), (req,res)=>{
-  const {username,password} = req.body;
-  if(username===process.env.ADMIN_USER && password===process.env.ADMIN_PASS){
-    const token = jwt.sign({username}, process.env.JWT_SECRET, {expiresIn:'8h'});
-    res.json({token});
-  } else res.status(401).json({message:'بيانات الدخول خاطئة'});
+app.post('/api/login', (req, res) => {
+  const { username, password } = req.body;
+  if (username === process.env.ADMIN_USER && password === process.env.ADMIN_PASS) {
+    const token = jwt.sign({ username }, process.env.JWT_SECRET, { expiresIn: '8h' });
+    res.json({ token });
+  } else {
+    res.status(401).json({ message: 'بيانات الدخول خاطئة' });
+  }
 });
 
 // Transfer
-app.post('/api/transfer', upload.single('screenshot'), async (req,res)=>{
-  try{
+app.post('/api/transfer', upload.single('screenshot'), async (req, res) => {
+  try {
     const {
       fromServiceType,
       toServiceType,
@@ -53,42 +77,29 @@ app.post('/api/transfer', upload.single('screenshot'), async (req,res)=>{
     const profit = 15;
     const totalAmount = parseFloat(amount) + profit;
 
-    let screenshotBase64 = null;
-    if(req.file){
-      screenshotBase64 = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+    let screenshotUrl = null;
+    if (req.file) {
+      screenshotUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
     }
 
-    const transfer = {
-      from: {type:fromType,number:fromNumber,name:fromName,screenshot:screenshotBase64},
-      to: {type:toType,number:toNumber,name:toName},
+    // حفظ البيانات في Firestore
+    const transferDoc = {
+      from: { type: fromType, number: fromNumber, name: fromName, screenshot: screenshotUrl },
+      to: { type: toType, number: toNumber, name: toName },
       amount: parseFloat(amount),
       profit,
       totalAmount,
       date: new Date()
     };
-
-    transfers.push(transfer);
+    const docRef = await db.collection('transfers').add(transferDoc);
 
     // إرسال على Telegram
     let textMsg = `طلب تحويل جديد:\nمن: ${fromType} (${fromNumber})\nإلى: ${toType} (${toNumber})\nالمبلغ: ${amount}\nالعمولة: ${profit}\nالإجمالي: ${totalAmount}`;
-
-    if(screenshotBase64){
-      // نحذف prefix Base64
-      const base64Data = screenshotBase64.replace(/^data:image\/\w+;base64,/, "");
-
-      // رفع على Imgur
-      const imgurRes = await axios.post(
-        "https://api.imgur.com/3/image",
-        { image: base64Data, type: "base64" },
-        { headers: { Authorization: `Client-ID ${process.env.IMGUR_CLIENT_ID}` } }
-      );
-
-      const imageUrl = imgurRes.data.data.link;
-
-      // إرسال اللينك على Telegram
-      await axios.post(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`, {
+    if (screenshotUrl) {
+      await axios.post(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendPhoto`, {
         chat_id: process.env.TELEGRAM_CHAT_ID,
-        text: textMsg + "\n\nصورة التحويل:\n" + imageUrl
+        photo: screenshotUrl,
+        caption: textMsg
       });
     } else {
       await axios.post(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`, {
@@ -97,32 +108,53 @@ app.post('/api/transfer', upload.single('screenshot'), async (req,res)=>{
       });
     }
 
-    res.json({message:'تم تسجيل التحويل', totalAmount});
-  } catch(err){
+    res.json({ message: 'تم تسجيل التحويل', totalAmount, id: docRef.id });
+  } catch (err) {
     console.error(err);
-    res.status(500).json({message:'حدث خطأ أثناء تسجيل التحويل'});
+    res.status(500).json({ message: 'حدث خطأ أثناء تسجيل التحويل' });
   }
 });
 
 // Dashboard
-app.get('/api/dashboard', authenticateToken,(req,res)=>{
-  const totalProfit = transfers.reduce((sum,t)=>sum+t.profit,0);
-  res.json({transfers,totalProfit});
+app.get('/api/dashboard', authenticateToken, async (req, res) => {
+  try {
+    const snapshot = await db.collection('transfers').orderBy('date', 'desc').get();
+    const transfers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const totalProfit = transfers.reduce((sum, t) => sum + t.profit, 0);
+    res.json({ transfers, totalProfit });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'حدث خطأ أثناء جلب البيانات' });
+  }
 });
 
 // Delete transfer
-app.delete('/api/transfer/:index', authenticateToken,(req,res)=>{
-  const idx = parseInt(req.params.index);
-  if(idx>=0 && idx<transfers.length){
-    transfers.splice(idx,1);
-    res.json({message:'تم حذف التحويل'});
-  } else res.status(404).json({message:'التحويل غير موجود'});
+app.delete('/api/transfer/:id', authenticateToken, async (req, res) => {
+  try {
+    const id = req.params.id;
+    const docRef = db.collection('transfers').doc(id);
+    const doc = await docRef.get();
+    if (!doc.exists) return res.status(404).json({ message: 'التحويل غير موجود' });
+
+    // حذف الصورة من السيرفر لو موجودة
+    const screenshotUrl = doc.data().from.screenshot;
+    if (screenshotUrl) {
+      const filePath = path.join(__dirname, 'uploads', path.basename(screenshotUrl));
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+    }
+
+    await docRef.delete();
+    res.json({ message: 'تم حذف التحويل' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'حدث خطأ أثناء حذف التحويل' });
+  }
 });
 
 // صفحات
-app.get('/', (req,res)=>res.sendFile(path.join(__dirname,'index.html')));
-app.get('/login', (req,res)=>res.sendFile(path.join(__dirname,'login.html')));
-app.get('/dashboard', (req,res)=>res.sendFile(path.join(__dirname,'dashboard.html')));
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
+app.get('/dashboard', (req, res) => res.sendFile(path.join(__dirname, 'dashboard.html')));
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT,()=>console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
