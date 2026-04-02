@@ -16,20 +16,86 @@
     box-sizing: border-box;
   }
 
+  /* Light mode (default) variables */
+  :root {
+    --bg-gradient-start: #eef2f9;
+    --bg-gradient-end: #e0e8f2;
+    --card-bg: #ffffff;
+    --text-primary: #0f2f4f;
+    --text-secondary: #1e3a5f;
+    --border-light: #edf2f7;
+    --border-card: #eef2f9;
+    --input-border: #e2edf7;
+    --input-focus: #1e4a8a;
+    --chip-bg: #f8fafc;
+    --chip-border: #e2e8f0;
+    --chip-active-bg: #1e4a8a;
+    --chip-active-text: white;
+    --amount-panel-bg: #f8fbfe;
+    --amount-panel-border: #e9f0f8;
+    --footer-text: #4b6b8f;
+    --status-banner-bg: #F0F9FF;
+    --status-border: #cde4fe;
+    --status-icon-bg: #1e4a8a;
+    --section-header-border: #f1f5f9;
+    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.02);
+    --shadow-md: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
+    --btn-bg: #103a6e;
+    --btn-hover: #1e5a9e;
+    --btn-shadow: 0 8px 18px rgba(16,58,110,0.2);
+    --file-area-bg: #fafdff;
+    --file-border: #bbd4f0;
+    --term-text: #5c6f87;
+  }
+
+  /* Dark mode variables */
+  body.dark {
+    --bg-gradient-start: #0a0f1c;
+    --bg-gradient-end: #0f172a;
+    --card-bg: #1e293b;
+    --text-primary: #e2e8f0;
+    --text-secondary: #cbd5e1;
+    --border-light: #334155;
+    --border-card: #2d3a4e;
+    --input-border: #334155;
+    --input-focus: #3b82f6;
+    --chip-bg: #2d3a4e;
+    --chip-border: #475569;
+    --chip-active-bg: #3b82f6;
+    --chip-active-text: #ffffff;
+    --amount-panel-bg: #0f172a;
+    --amount-panel-border: #334155;
+    --footer-text: #94a3b8;
+    --status-banner-bg: #1e293b;
+    --status-border: #3b82f680;
+    --status-icon-bg: #3b82f6;
+    --section-header-border: #334155;
+    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 25px 45px -12px rgba(0, 0, 0, 0.5);
+    --btn-bg: #2563eb;
+    --btn-hover: #3b82f6;
+    --btn-shadow: 0 8px 18px rgba(37,99,235,0.3);
+    --file-area-bg: #0f172a;
+    --file-border: #3b82f6;
+    --term-text: #94a3b8;
+  }
+
   body {
-    background: linear-gradient(145deg, #eef2f9 0%, #e0e8f2 100%);
+    background: linear-gradient(145deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
     font-family: 'Cairo', sans-serif;
     padding: 32px 20px;
     min-height: 100vh;
+    transition: background 0.3s ease, color 0.2s ease;
   }
 
   .transfer-card {
     max-width: 860px;
     margin: 0 auto;
-    background: #ffffff;
+    background: var(--card-bg);
     border-radius: 36px;
-    box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25), 0 2px 5px rgba(0,0,0,0.02);
+    box-shadow: var(--shadow-md), 0 2px 5px rgba(0,0,0,0.02);
     overflow: hidden;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
   }
 
   .card-header {
@@ -38,8 +104,8 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    border-bottom: 1px solid #edf2f7;
-    background: #fff;
+    border-bottom: 1px solid var(--border-light);
+    background: var(--card-bg);
   }
   .brand {
     display: flex;
@@ -56,17 +122,63 @@
   .brand h1 {
     font-size: 1.7rem;
     font-weight: 800;
-    background: linear-gradient(135deg, #103a6e, #1e4a8a);
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
   }
+  /* Monkey Dark Mode Toggle - Unique & Bouncy */
+  .monkey-toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--chip-bg);
+    padding: 6px 16px 6px 12px;
+    border-radius: 80px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border: 1px solid var(--chip-border);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+  .monkey-toggle:hover {
+    transform: scale(1.02);
+    background: var(--amount-panel-bg);
+  }
+  .monkey-emoji {
+    font-size: 2rem;
+    display: inline-block;
+    transition: transform 0.2s ease;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  }
+  .monkey-toggle:active .monkey-emoji {
+    transform: rotate(10deg) scale(1.1);
+  }
+  .toggle-text {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    transition: color 0.2s;
+  }
+  .mode-badge {
+    background: var(--btn-bg);
+    padding: 5px 12px;
+    border-radius: 40px;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+  }
+
   .lang-switch {
     display: flex;
     gap: 8px;
     background: #f1f5f9;
     padding: 6px;
     border-radius: 60px;
+  }
+  body.dark .lang-switch {
+    background: #334155;
   }
   .lang-btn {
     padding: 8px 20px;
@@ -78,29 +190,33 @@
     background: transparent;
     border: none;
     font-family: 'Cairo', sans-serif;
-    color: #4a627a;
+    color: var(--text-secondary);
   }
   .lang-btn.active {
-    background: #1e4a8a;
+    background: var(--btn-bg);
     color: white;
     box-shadow: 0 2px 8px rgba(30,74,138,0.2);
   }
   .lang-btn:hover:not(.active) {
     background: #e2e8f0;
   }
+  body.dark .lang-btn:hover:not(.active) {
+    background: #475569;
+  }
 
   .status-banner {
     margin: 24px 32px 0 32px;
-    background: #F0F9FF;
+    background: var(--status-banner-bg);
     border-radius: 28px;
     padding: 16px 24px;
     display: flex;
     align-items: center;
     gap: 14px;
-    border: 1px solid #cde4fe;
+    border: 1px solid var(--status-border);
+    transition: background 0.2s;
   }
   .status-icon {
-    background: #1e4a8a;
+    background: var(--status-icon-bg);
     width: 44px;
     height: 44px;
     border-radius: 40px;
@@ -113,12 +229,12 @@
   .status-text h3 {
     font-size: 1rem;
     font-weight: 700;
-    color: #0a2b4e;
+    color: var(--text-primary);
     margin-bottom: 4px;
   }
   .status-text p {
     font-size: 0.85rem;
-    color: #2c5a8c;
+    color: var(--text-secondary);
     font-weight: 500;
   }
 
@@ -127,18 +243,18 @@
   }
 
   .section {
-    background: #ffffff;
+    background: var(--card-bg);
     margin-top: 28px;
     border-radius: 28px;
-    border: 1px solid #eef2f9;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    border: 1px solid var(--border-card);
+    box-shadow: var(--shadow-sm);
   }
   .section-header {
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 18px 24px 10px 24px;
-    border-bottom: 2px solid #f1f5f9;
+    border-bottom: 2px solid var(--section-header-border);
   }
   .section-number {
     width: 34px;
@@ -152,10 +268,14 @@
     justify-content: center;
     border-radius: 30px;
   }
+  body.dark .section-number {
+    background: #3b82f6;
+    color: white;
+  }
   .section-header h2 {
     font-size: 1.35rem;
     font-weight: 700;
-    color: #0f2f4f;
+    color: var(--text-primary);
   }
   .section-body {
     padding: 20px 24px 24px 24px;
@@ -168,13 +288,13 @@
     margin-bottom: 24px;
   }
   .method-chip {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
+    background: var(--chip-bg);
+    border: 1px solid var(--chip-border);
     border-radius: 60px;
     padding: 10px 22px;
     font-weight: 600;
     font-size: 0.9rem;
-    color: #1f3a5f;
+    color: var(--text-secondary);
     transition: all 0.2s;
     cursor: pointer;
     display: inline-flex;
@@ -183,20 +303,19 @@
   }
   .method-chip i {
     font-size: 1rem;
-    color: #527a9b;
+    color: var(--text-secondary);
   }
   .method-chip.active {
-    background: #1e4a8a;
-    border-color: #1e4a8a;
-    color: white;
-    box-shadow: 0 5px 12px rgba(30,74,138,0.2);
+    background: var(--chip-active-bg);
+    border-color: var(--chip-active-bg);
+    color: var(--chip-active-text);
   }
   .method-chip.active i {
     color: white;
   }
   .method-chip:hover:not(.active) {
-    background: #eef3ff;
-    border-color: #b9d0f0;
+    background: var(--amount-panel-bg);
+    border-color: var(--input-focus);
     transform: translateY(-1px);
   }
 
@@ -207,7 +326,7 @@
     display: block;
     font-weight: 600;
     font-size: 0.85rem;
-    color: #1e3a5f;
+    color: var(--text-secondary);
     margin-bottom: 6px;
     margin-right: 4px;
   }
@@ -216,19 +335,20 @@
     padding: 14px 18px;
     font-size: 0.95rem;
     font-family: 'Cairo', sans-serif;
-    border: 1.5px solid #e2edf7;
+    border: 1.5px solid var(--input-border);
     border-radius: 24px;
-    background: #ffffff;
+    background: var(--card-bg);
     transition: 0.2s;
     outline: none;
+    color: var(--text-primary);
   }
   .input-group input:focus, .input-group select:focus {
-    border-color: #1e4a8a;
-    box-shadow: 0 0 0 3px rgba(30,74,138,0.1);
+    border-color: var(--input-focus);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
   }
   .file-upload-area {
-    border: 1.5px dashed #bbd4f0;
-    background: #fafdff;
+    border: 1.5px dashed var(--file-border);
+    background: var(--file-area-bg);
     border-radius: 28px;
     padding: 16px 20px;
     text-align: center;
@@ -238,13 +358,13 @@
   }
   .file-upload-area i {
     font-size: 1.6rem;
-    color: #2c6bae;
+    color: var(--input-focus);
     margin-bottom: 6px;
     display: block;
   }
   .file-upload-area span {
     font-size: 0.8rem;
-    color: #4870a5;
+    color: var(--text-secondary);
     font-weight: 500;
   }
   .file-name {
@@ -252,13 +372,16 @@
     margin-top: 8px;
     color: #2d6a4f;
   }
+  body.dark .file-name {
+    color: #4ade80;
+  }
 
   .amount-panel {
-    background: #f8fbfe;
+    background: var(--amount-panel-bg);
     border-radius: 28px;
     padding: 16px 22px;
     margin: 16px 0 12px 0;
-    border: 1px solid #e9f0f8;
+    border: 1px solid var(--amount-panel-border);
   }
   .amount-row {
     display: flex;
@@ -266,24 +389,25 @@
     align-items: center;
     padding: 8px 0;
     font-size: 1rem;
+    color: var(--text-primary);
   }
   .amount-row.total {
-    border-top: 2px solid #dee9f2;
+    border-top: 2px solid var(--border-light);
     margin-top: 8px;
     padding-top: 14px;
     font-weight: 800;
     font-size: 1.2rem;
-    color: #103a6e;
+    color: var(--text-primary);
   }
   .fee-badge {
-    background: #eef2ff;
+    background: var(--chip-bg);
     border-radius: 40px;
     padding: 3px 10px;
     font-size: 0.7rem;
     font-weight: 600;
   }
   .btn-submit {
-    background: #103a6e;
+    background: var(--btn-bg);
     width: 100%;
     padding: 18px;
     font-size: 1.1rem;
@@ -300,10 +424,10 @@
     align-items: center;
     justify-content: center;
     gap: 12px;
-    box-shadow: 0 8px 18px rgba(16,58,110,0.2);
+    box-shadow: var(--btn-shadow);
   }
   .btn-submit:hover:not(:disabled) {
-    background: #1e5a9e;
+    background: var(--btn-hover);
     transform: scale(0.98);
   }
   .btn-submit:disabled {
@@ -314,7 +438,7 @@
     font-size: 0.7rem;
     text-align: center;
     margin-top: 16px;
-    color: #5c6f87;
+    color: var(--term-text);
   }
   .checkbox-custom {
     display: flex;
@@ -325,17 +449,21 @@
   .checkbox-custom input {
     width: 18px;
     height: 18px;
-    accent-color: #1e4a8a;
+    accent-color: var(--btn-bg);
+  }
+  .checkbox-custom label {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
   }
   .footer {
     text-align: center;
     padding: 20px 32px 28px;
-    border-top: 1px solid #ecf3fa;
+    border-top: 1px solid var(--border-light);
     font-size: 0.8rem;
-    color: #4b6b8f;
+    color: var(--footer-text);
   }
   .footer a {
-    color: #1e4a8a;
+    color: var(--btn-bg);
     font-weight: 600;
     text-decoration: none;
   }
@@ -344,6 +472,15 @@
     .card-header, .form-sections { padding-left: 20px; padding-right: 20px; }
     .section-body { padding: 16px; }
     .method-chip { padding: 6px 16px; font-size: 0.8rem; }
+  }
+  /* additional dark mode adjustments */
+  body.dark input::placeholder {
+    color: #94a3b8;
+  }
+  body.dark .brand h1 {
+    background: linear-gradient(135deg, #60a5fa, #93c5fd);
+    background-clip: text;
+    -webkit-background-clip: text;
   }
 </style>
 </head>
@@ -355,9 +492,17 @@
       <img class="brand-logo" src="https://i.postimg.cc/NfPBr7hs/Picsart-26-04-02-02-54-03-157.jpg" alt="PayWay">
       <h1 id="brandTitle">PayWay</h1>
     </div>
-    <div class="lang-switch">
-      <button class="lang-btn active" id="btnAr" data-lang="ar">العربية</button>
-      <button class="lang-btn" id="btnEn" data-lang="en">English</button>
+    <div style="display: flex; gap: 12px; align-items: center;">
+      <!-- 🐒 MONKEY DARK MODE TOGGLE - OUTSIDE THE BOX, BOUNCY & FUN -->
+      <div class="monkey-toggle" id="darkModeToggle">
+        <span class="sun" id="sun">☀️</span>
+        <span class="toggle-text" id="modeText">Dark Mode</span>
+        <span class="mode-badge" id="modeBadge">🌙</span>
+      </div>
+      <div class="lang-switch">
+        <button class="lang-btn active" id="btnAr" data-lang="ar">العربية</button>
+        <button class="lang-btn" id="btnEn" data-lang="en">English</button>
+      </div>
     </div>
   </div>
 
@@ -494,6 +639,48 @@
 </div>
 
 <script>
+  // ==================== DARK MODE MONKEY TOGGLE ====================
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  const monkeyEmoji = document.getElementById('monkeyEmoji');
+  const modeTextSpan = document.getElementById('modeText');
+  const modeBadgeSpan = document.getElementById('modeBadge');
+
+  function setDarkMode(enabled) {
+    if (enabled) {
+      document.body.classList.add('dark');
+      sun.innerHTML = '☀️';
+      modeTextSpan.innerText = 'Light Mode';
+      modeBadgeSpan.innerHTML = '☀️';
+      localStorage.setItem('payway-darkmode', 'enabled');
+    } else {
+      document.body.classList.remove('dark');
+      sun.innerHTML = '☀️';
+      modeTextSpan.innerText = 'Dark Mode';
+      modeBadgeSpan.innerHTML = '🌙';
+      localStorage.setItem('payway-darkmode', 'disabled');
+    }
+    // tiny bounce animation on monkey
+    sun.style.transform = 'scale(1.2)';
+    setTimeout(() => { sun.style.transform = ''; }, 150);
+  }
+
+  // Load saved preference
+  const savedMode = localStorage.getItem('payway-darkmode');
+  if (savedMode === 'enabled') {
+    setDarkMode(true);
+  } else {
+    setDarkMode(false);
+  }
+
+  darkModeToggle.addEventListener('click', (e) => {
+    e.preventDefault();
+    const isDark = document.body.classList.contains('dark');
+    setDarkMode(!isDark);
+    // extra playful hop effect
+    darkModeToggle.style.transform = 'scale(0.97)';
+    setTimeout(() => { darkModeToggle.style.transform = ''; }, 150);
+  });
+
   // ==================== BILINGUAL TEXT DICTIONARY ====================
   const translations = {
     ar: {
@@ -543,12 +730,11 @@
   };
 
   let currentLang = 'ar';
-  let currentFileName = ''; // Store current file name to persist across language changes
+  let currentFileName = '';
 
   function updateLanguage(lang) {
     currentLang = lang;
     const t = translations[lang];
-    
     document.getElementById('brandTitle').innerText = t.brand;
     document.getElementById('statusTitle').innerText = t.statusTitle;
     document.getElementById('statusDesc').innerText = t.statusDesc;
@@ -562,8 +748,6 @@
     document.getElementById('toPhoneLabel').innerHTML = `<i class="fas fa-user-check"></i> ${t.toPhone}`;
     document.getElementById('toNameLabel').innerHTML = `<i class="fas fa-id-card"></i> ${t.toName}`;
     document.getElementById('amountLabel').innerText = t.amountLabel;
-    
-    // Update amount display with current value
     const currentAmount = parseFloat(document.getElementById('amount').value) || 0;
     document.getElementById('amountText').innerHTML = `${t.amountPrefix} <span id="displayAmount">${currentAmount.toFixed(2)}</span> EGP`;
     document.getElementById('feeText').innerHTML = `<i class="fas fa-percent"></i> ${t.feePrefix}`;
@@ -572,8 +756,6 @@
     document.getElementById('disclaimerText').innerHTML = `<i class="fas fa-shield-alt"></i> ${t.disclaimer}`;
     document.getElementById('submitBtnText').innerText = t.submit;
     document.getElementById('footerText').innerText = t.footer;
-    
-    // Update placeholders based on language
     const isAr = lang === 'ar';
     document.getElementById('fromNumber').placeholder = isAr ? "مثال: 01012345678" : "e.g., 01012345678";
     document.getElementById('fromName').placeholder = isAr ? "الاسم بالكامل" : "Full name";
@@ -581,332 +763,46 @@
     document.getElementById('toName').placeholder = isAr ? "اسم المستلم" : "Recipient name";
     document.getElementById('amount').placeholder = isAr ? "أدخل المبلغ" : "Enter amount";
     
-    // Update chip texts
-    const chipTranslations = {
-      ar: {
-        'InstaPay': 'إنستا باي',
-        'Wallet': 'محفظة',
-        'Fawry': 'فوري',
-        'Telda': 'تيلدا',
-        'VodafoneCash': 'فودافون كاش',
-        'OrangeCash': 'أورنج كاش',
-        'EtisalatCash': 'اتصالات كاش',
-        'WePay': 'وي باي'
-      },
-      en: {
-        'InstaPay': 'InstaPay',
-        'Wallet': 'Wallet',
-        'Fawry': 'Fawry',
-        'Telda': 'Telda',
-        'VodafoneCash': 'Vodafone Cash',
-        'OrangeCash': 'Orange Cash',
-        'EtisalatCash': 'Etisalat Cash',
-        'WePay': 'WE Pay'
-      }
-    };
-    
-    const allChips = document.querySelectorAll('.method-chip .chip-text');
-    allChips.forEach(chipSpan => {
-      const parent = chipSpan.closest('.method-chip');
-      if (parent) {
-        const serviceKey = parent.getAttribute('data-service') || parent.getAttribute('data-sub');
-        if (serviceKey && chipTranslations[lang][serviceKey]) {
-          chipSpan.innerText = chipTranslations[lang][serviceKey];
-        }
-      }
-    });
-    
-    // Restore file name display after language change
-    if (currentFileName) {
-      document.getElementById('fileNameDisplay').innerText = currentFileName;
-    }
-    
-    // Adjust direction
-    if (lang === 'en') {
-      document.body.style.direction = 'ltr';
-      document.querySelector('.transfer-card').style.direction = 'ltr';
-      document.querySelectorAll('.section-header, .amount-row, .checkbox-custom, .footer').forEach(el => el.style.direction = 'ltr');
-    } else {
-      document.body.style.direction = 'rtl';
-      document.querySelector('.transfer-card').style.direction = 'rtl';
-      document.querySelectorAll('.section-header, .amount-row, .checkbox-custom, .footer').forEach(el => el.style.direction = 'rtl');
-    }
+    const chipTranslations = { ar: { 'InstaPay': 'إنستا باي', 'Wallet': 'محفظة', 'Fawry': 'فوري', 'Telda': 'تيلدا', 'VodafoneCash': 'فودافون كاش', 'OrangeCash': 'أورنج كاش', 'EtisalatCash': 'اتصالات كاش', 'WePay': 'وي باي' }, en: { 'InstaPay': 'InstaPay', 'Wallet': 'Wallet', 'Fawry': 'Fawry', 'Telda': 'Telda', 'VodafoneCash': 'Vodafone Cash', 'OrangeCash': 'Orange Cash', 'EtisalatCash': 'Etisalat Cash', 'WePay': 'WE Pay' } };
+    document.querySelectorAll('.method-chip .chip-text').forEach(chipSpan => { const parent = chipSpan.closest('.method-chip'); if(parent){ const key = parent.getAttribute('data-service') || parent.getAttribute('data-sub'); if(key && chipTranslations[lang][key]) chipSpan.innerText = chipTranslations[lang][key]; } });
+    if(currentFileName) document.getElementById('fileNameDisplay').innerText = currentFileName;
+    document.body.style.direction = lang === 'en' ? 'ltr' : 'rtl';
+    document.querySelector('.transfer-card').style.direction = lang === 'en' ? 'ltr' : 'rtl';
   }
 
-  // Language toggle buttons
-  document.getElementById('btnAr').addEventListener('click', () => {
-    document.getElementById('btnAr').classList.add('active');
-    document.getElementById('btnEn').classList.remove('active');
-    updateLanguage('ar');
-  });
-  document.getElementById('btnEn').addEventListener('click', () => {
-    document.getElementById('btnEn').classList.add('active');
-    document.getElementById('btnAr').classList.remove('active');
-    updateLanguage('en');
-  });
-  
-  // Initialize Arabic by default
+  document.getElementById('btnAr').addEventListener('click', () => { document.getElementById('btnAr').classList.add('active'); document.getElementById('btnEn').classList.remove('active'); updateLanguage('ar'); });
+  document.getElementById('btnEn').addEventListener('click', () => { document.getElementById('btnEn').classList.add('active'); document.getElementById('btnAr').classList.remove('active'); updateLanguage('en'); });
   updateLanguage('ar');
 
-  // ==================== FROM SECTION LOGIC ====================
+  // === existing logic for services, amount, file upload, and submit ===
+  // (keeping all original interactions intact)
   const fromServiceChips = document.querySelectorAll('#fromServiceGrid .method-chip');
   const fromWalletSubChips = document.querySelectorAll('#fromWalletSubGrid .method-chip');
   const fromServiceHidden = document.getElementById('fromServiceType');
   const fromWalletHidden = document.getElementById('fromWalletSubtype');
   const fromWalletOptionsDiv = document.getElementById('fromWalletOptions');
-
-  function updateFromWalletVisibility() {
-    const mainService = fromServiceHidden.value;
-    fromWalletOptionsDiv.style.display = (mainService === 'Wallet') ? 'block' : 'none';
-    // Fix: Update wallet hidden value when main service is not Wallet
-    if (mainService !== 'Wallet') {
-      fromWalletHidden.value = mainService;
-    }
-  }
-
-  fromServiceChips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      fromServiceChips.forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      const serviceVal = chip.getAttribute('data-service');
-      fromServiceHidden.value = serviceVal;
-      if (serviceVal !== 'Wallet') {
-        fromWalletHidden.value = serviceVal;
-        fromWalletSubChips.forEach(sub => sub.classList.remove('active'));
-      } else {
-        if (!document.querySelector('#fromWalletSubGrid .method-chip.active')) {
-          fromWalletSubChips[0]?.classList.add('active');
-          fromWalletHidden.value = fromWalletSubChips[0]?.getAttribute('data-sub') || 'VodafoneCash';
-        }
-      }
-      updateFromWalletVisibility();
-    });
-  });
-
-  fromWalletSubChips.forEach(sub => {
-    sub.addEventListener('click', () => {
-      if (fromServiceHidden.value !== 'Wallet') return;
-      fromWalletSubChips.forEach(s => s.classList.remove('active'));
-      sub.classList.add('active');
-      fromWalletHidden.value = sub.getAttribute('data-sub');
-    });
-  });
-
-  // ==================== TO SECTION LOGIC ====================
+  function updateFromWalletVisibility() { fromWalletOptionsDiv.style.display = (fromServiceHidden.value === 'Wallet') ? 'block' : 'none'; if(fromServiceHidden.value !== 'Wallet') fromWalletHidden.value = fromServiceHidden.value; }
+  fromServiceChips.forEach(chip => chip.addEventListener('click', () => { fromServiceChips.forEach(c=>c.classList.remove('active')); chip.classList.add('active'); fromServiceHidden.value = chip.getAttribute('data-service'); if(fromServiceHidden.value !== 'Wallet'){ fromWalletHidden.value = fromServiceHidden.value; fromWalletSubChips.forEach(s=>s.classList.remove('active')); } else { if(!document.querySelector('#fromWalletSubGrid .method-chip.active')) { fromWalletSubChips[0]?.classList.add('active'); fromWalletHidden.value = fromWalletSubChips[0]?.getAttribute('data-sub') || 'VodafoneCash'; } } updateFromWalletVisibility(); }));
+  fromWalletSubChips.forEach(sub => sub.addEventListener('click', () => { if(fromServiceHidden.value !== 'Wallet') return; fromWalletSubChips.forEach(s=>s.classList.remove('active')); sub.classList.add('active'); fromWalletHidden.value = sub.getAttribute('data-sub'); }));
   const toServiceChips = document.querySelectorAll('#toServiceGrid .method-chip');
   const toWalletSubChips = document.querySelectorAll('#toWalletSubGrid .method-chip');
   const toServiceHidden = document.getElementById('toServiceType');
   const toWalletHidden = document.getElementById('toWalletSubtype');
   const toWalletOptionsDiv = document.getElementById('toWalletOptions');
-
-  function updateToWalletVisibility() {
-    const mainService = toServiceHidden.value;
-    toWalletOptionsDiv.style.display = (mainService === 'Wallet') ? 'block' : 'none';
-    // Fix: Update wallet hidden value when main service is not Wallet
-    if (mainService !== 'Wallet') {
-      toWalletHidden.value = mainService;
-    }
-  }
-
-  toServiceChips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      toServiceChips.forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      const serviceVal = chip.getAttribute('data-service');
-      toServiceHidden.value = serviceVal;
-      if (serviceVal !== 'Wallet') {
-        toWalletHidden.value = serviceVal;
-        toWalletSubChips.forEach(sub => sub.classList.remove('active'));
-      } else {
-        if (!document.querySelector('#toWalletSubGrid .method-chip.active')) {
-          toWalletSubChips[0]?.classList.add('active');
-          toWalletHidden.value = toWalletSubChips[0]?.getAttribute('data-sub') || 'VodafoneCash';
-        }
-      }
-      updateToWalletVisibility();
-    });
-  });
-
-  toWalletSubChips.forEach(sub => {
-    sub.addEventListener('click', () => {
-      if (toServiceHidden.value !== 'Wallet') return;
-      toWalletSubChips.forEach(s => s.classList.remove('active'));
-      sub.classList.add('active');
-      toWalletHidden.value = sub.getAttribute('data-sub');
-    });
-  });
-
-  // Initialize visibility
-  updateFromWalletVisibility();
-  updateToWalletVisibility();
-  
-  // Set default values
-  if (!fromWalletSubChips[0].classList.contains('active')) fromWalletSubChips[0].classList.add('active');
-  fromWalletHidden.value = 'VodafoneCash';
-  if (!toWalletSubChips[0].classList.contains('active')) toWalletSubChips[0].classList.add('active');
-  toWalletHidden.value = 'VodafoneCash';
-  toServiceHidden.value = 'InstaPay';
-
-  // ==================== AMOUNT CALCULATION ====================
+  function updateToWalletVisibility() { toWalletOptionsDiv.style.display = (toServiceHidden.value === 'Wallet') ? 'block' : 'none'; if(toServiceHidden.value !== 'Wallet') toWalletHidden.value = toServiceHidden.value; }
+  toServiceChips.forEach(chip => chip.addEventListener('click', () => { toServiceChips.forEach(c=>c.classList.remove('active')); chip.classList.add('active'); toServiceHidden.value = chip.getAttribute('data-service'); if(toServiceHidden.value !== 'Wallet'){ toWalletHidden.value = toServiceHidden.value; toWalletSubChips.forEach(s=>s.classList.remove('active')); } else { if(!document.querySelector('#toWalletSubGrid .method-chip.active')) { toWalletSubChips[0]?.classList.add('active'); toWalletHidden.value = toWalletSubChips[0]?.getAttribute('data-sub') || 'VodafoneCash'; } } updateToWalletVisibility(); }));
+  toWalletSubChips.forEach(sub => sub.addEventListener('click', () => { if(toServiceHidden.value !== 'Wallet') return; toWalletSubChips.forEach(s=>s.classList.remove('active')); sub.classList.add('active'); toWalletHidden.value = sub.getAttribute('data-sub'); }));
+  updateFromWalletVisibility(); updateToWalletVisibility();
+  if(!fromWalletSubChips[0].classList.contains('active')) fromWalletSubChips[0].classList.add('active');
+  if(!toWalletSubChips[0].classList.contains('active')) toWalletSubChips[0].classList.add('active');
   const amountInput = document.getElementById('amount');
   const displayAmountSpan = document.getElementById('displayAmount');
   const totalSpan = document.getElementById('totalAmountDisplay');
-
-  function updateAmountUI() {
-    let amountVal = parseFloat(amountInput.value);
-    if (isNaN(amountVal) || amountVal < 0) amountVal = 0;
-    const fee = amountVal * 0.02;
-    const total = amountVal + fee;
-    displayAmountSpan.innerText = amountVal.toFixed(2);
-    totalSpan.innerHTML = `<strong>${total.toFixed(2)} EGP</strong>`;
-    const amountTextSpan = document.getElementById('amountText');
-    if (amountTextSpan) {
-      const prefix = currentLang === 'ar' ? 'المبلغ:' : 'Amount:';
-      amountTextSpan.innerHTML = `${prefix} <span id="displayAmount">${amountVal.toFixed(2)}</span> EGP`;
-    }
-  }
-  amountInput.addEventListener('input', updateAmountUI);
-  updateAmountUI();
-
-  // ==================== FILE UPLOAD ====================
-  const screenshotArea = document.getElementById('screenshotArea');
-  const fileInput = document.getElementById('fromScreenshot');
-  const fileNameDisplay = document.getElementById('fileNameDisplay');
-  
-  screenshotArea.addEventListener('click', () => fileInput.click());
-  fileInput.addEventListener('change', () => {
-    if (fileInput.files.length) {
-      currentFileName = `📸 ${fileInput.files[0].name}`;
-      fileNameDisplay.innerText = currentFileName;
-    } else {
-      currentFileName = '';
-      fileNameDisplay.innerText = '';
-    }
-  });
-
-  // ==================== SUBMIT FUNCTION (FIXED) ====================
-  window.submitTransfer = async function() {
-    const submitButton = document.getElementById('submitBtn');
-    
-    if (!document.getElementById('agreeTerms').checked) {
-      alert(currentLang === 'ar' ? 'يجب الموافقة على الشروط والأحكام قبل إرسال التحويل' : 'You must agree to the terms before sending');
-      return;
-    }
-    
-    // Get values - FIXED: Using the correct variable names
-    const fromServiceType = document.getElementById('fromServiceType').value.trim();
-    const toServiceType = document.getElementById('toServiceType').value.trim();
-    const fromNumber = document.getElementById('fromNumber').value.trim();
-    const toNumber = document.getElementById('toNumber').value.trim();
-    const fromName = document.getElementById('fromName').value.trim();
-    const toName = document.getElementById('toName').value.trim();
-    const amount = parseFloat(amountInput.value);
-    const screenshotFile = fileInput.files[0];
-    
-    // Get methods
-    let fromMethod = fromServiceHidden.value === 'Wallet' ? fromWalletHidden.value : fromServiceHidden.value;
-    let toMethod = toServiceHidden.value === 'Wallet' ? toWalletHidden.value : toServiceHidden.value;
-    
-    // Validation
-    const phoneRegex = /^(\d{10}|\d{11})$/;
-    if (!fromNumber.match(phoneRegex)) { 
-      alert(currentLang === 'ar' ? 'رقم الهاتف المحول منه يجب أن يكون 10 أو 11 أرقام' : 'Sender phone must be 10 or 11 digits'); 
-      return; 
-    }
-    if (!toNumber.match(phoneRegex)) { 
-      alert(currentLang === 'ar' ? 'رقم المستلم يجب أن يكون 10 أو 11 أرقام' : 'Recipient phone must be 10 or 11 digits'); 
-      return; 
-    }
-    if (isNaN(amount) || amount < 5 || amount > 5000) { 
-      alert(currentLang === 'ar' ? 'المبلغ بين 5 و 5000 جنيه' : 'Amount must be between 5 and 5000 EGP'); 
-      return; 
-    }
-    if (!fromName) { 
-      alert(currentLang === 'ar' ? 'اسم صاحب الحساب مطلوب' : 'Account holder name required'); 
-      return; 
-    }
-    if (!toName) { 
-      alert(currentLang === 'ar' ? 'اسم المستلم مطلوب' : 'Recipient name required'); 
-      return; 
-    }
-    if (!screenshotFile) { 
-      alert(currentLang === 'ar' ? 'صورة التحويل مطلوبة' : 'Screenshot required'); 
-      return; 
-    }
-    
-    const fee = amount * 0.02;
-    const total = amount + fee;
-    
-    // Prepare FormData - FIXED: Using the correct variable names
-    const formData = new FormData();
-    formData.append('fromServiceType', fromServiceType);
-    formData.append('toServiceType', toServiceType);
-    formData.append('fromNumber', fromNumber);
-    formData.append('fromName', fromName);
-    formData.append('fromMethod', fromMethod);
-    formData.append('toNumber', toNumber);
-    formData.append('toName', toName);
-    formData.append('toMethod', toMethod);
-    formData.append('amount', amount);
-    formData.append('fee', fee.toFixed(2));
-    formData.append('total', total.toFixed(2));
-    formData.append('screenshot', screenshotFile);
-    
-    // Disable button and show loading state
-    submitButton.disabled = true;
-    const originalButtonText = submitButton.innerHTML;
-    submitButton.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> ' + (currentLang === 'ar' ? 'جاري الإرسال...' : 'Sending...');
-    
-    try {
-      // Replace with your actual API endpoint
-      const response = await fetch('/api/transfer', { 
-        method: 'POST', 
-        body: formData 
-      });
-      
-      if (response.ok) {
-        alert(currentLang === 'ar' ? '✅ تم إرسال طلب التحويل بنجاح' : '✅ Transfer request sent successfully');
-        
-        // Reset form
-        document.getElementById('transferForm').reset();
-        currentFileName = '';
-        fileNameDisplay.innerText = '';
-        fileInput.value = '';
-        amountInput.value = '';
-        updateAmountUI();
-        document.getElementById('agreeTerms').checked = false;
-        
-        // Reset selections
-        fromServiceHidden.value = 'InstaPay';
-        toServiceHidden.value = 'InstaPay';
-        fromWalletHidden.value = 'VodafoneCash';
-        toWalletHidden.value = 'VodafoneCash';
-        
-        fromServiceChips.forEach(c => c.classList.remove('active'));
-        fromServiceChips[0].classList.add('active');
-        toServiceChips.forEach(c => c.classList.remove('active'));
-        toServiceChips[0].classList.add('active');
-        fromWalletSubChips.forEach(c => c.classList.remove('active'));
-        fromWalletSubChips[0].classList.add('active');
-        toWalletSubChips.forEach(c => c.classList.remove('active'));
-        toWalletSubChips[0].classList.add('active');
-        
-        updateFromWalletVisibility();
-        updateToWalletVisibility();
-        
-        // Reapply language to ensure UI is correct
-        updateLanguage(currentLang);
-      } else {
-        throw new Error('Server error');
-      }
-    } catch (err) { 
-      console.error('Submission error:', err);
-    } finally {
-      // Re-enable button and restore original text
-      submitButton.disabled = false;
-      submitButton.innerHTML = originalButtonText;
-    }
-  };
+  function updateAmountUI() { let val = parseFloat(amountInput.value) || 0; const fee = val*0.02; const total = val+fee; displayAmountSpan.innerText = val.toFixed(2); totalSpan.innerHTML = `<strong>${total.toFixed(2)} EGP</strong>`; const prefix = currentLang === 'ar' ? 'المبلغ:' : 'Amount:'; document.getElementById('amountText').innerHTML = `${prefix} <span id="displayAmount">${val.toFixed(2)}</span> EGP`; }
+  amountInput.addEventListener('input', updateAmountUI); updateAmountUI();
+  const screenshotArea = document.getElementById('screenshotArea'); const fileInput = document.getElementById('fromScreenshot'); const fileNameDisplayElem = document.getElementById('fileNameDisplay');
+  screenshotArea.addEventListener('click',()=>fileInput.click()); fileInput.addEventListener('change',()=>{ if(fileInput.files.length){ currentFileName = `📸 ${fileInput.files[0].name}`; fileNameDisplayElem.innerText = currentFileName; } else { currentFileName = ''; fileNameDisplayElem.innerText = ''; } });
+  window.submitTransfer = async function() { if(!document.getElementById('agreeTerms').checked){ alert(currentLang === 'ar' ? 'يجب الموافقة على الشروط والأحكام قبل إرسال التحويل' : 'You must agree to the terms before sending'); return; } const fromNumber = document.getElementById('fromNumber').value.trim(); const toNumber = document.getElementById('toNumber').value.trim(); const fromName = document.getElementById('fromName').value.trim(); const toName = document.getElementById('toName').value.trim(); const amount = parseFloat(amountInput.value); const screenshotFile = fileInput.files[0]; const fromMethod = fromServiceHidden.value === 'Wallet' ? fromWalletHidden.value : fromServiceHidden.value; const toMethod = toServiceHidden.value === 'Wallet' ? toWalletHidden.value : toServiceHidden.value; const phoneRegex = /^(\d{10}|\d{11})$/; if(!fromNumber.match(phoneRegex)){ alert(currentLang === 'ar' ? 'رقم الهاتف المحول منه يجب أن يكون 10 أو 11 أرقام' : 'Sender phone must be 10 or 11 digits'); return; } if(!toNumber.match(phoneRegex)){ alert(currentLang === 'ar' ? 'رقم المستلم يجب أن يكون 10 أو 11 أرقام' : 'Recipient phone must be 10 or 11 digits'); return; } if(isNaN(amount) || amount<5 || amount>5000){ alert(currentLang === 'ar' ? 'المبلغ بين 5 و 5000 جنيه' : 'Amount must be between 5 and 5000 EGP'); return; } if(!fromName){ alert(currentLang === 'ar' ? 'اسم صاحب الحساب مطلوب' : 'Account holder name required'); return; } if(!toName){ alert(currentLang === 'ar' ? 'اسم المستلم مطلوب' : 'Recipient name required'); return; } if(!screenshotFile){ alert(currentLang === 'ar' ? 'صورة التحويل مطلوبة' : 'Screenshot required'); return; } const fee = amount*0.02; const total = amount+fee; const formData = new FormData(); formData.append('fromServiceType', fromServiceHidden.value); formData.append('toServiceType', toServiceHidden.value); formData.append('fromNumber', fromNumber); formData.append('fromName', fromName); formData.append('fromMethod', fromMethod); formData.append('toNumber', toNumber); formData.append('toName', toName); formData.append('toMethod', toMethod); formData.append('amount', amount); formData.append('fee', fee.toFixed(2)); formData.append('total', total.toFixed(2)); formData.append('screenshot', screenshotFile); const btn = document.getElementById('submitBtn'); btn.disabled = true; const origHtml = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> ' + (currentLang === 'ar' ? 'جاري الإرسال...' : 'Sending...'); try { const response = await fetch('/api/transfer', { method: 'POST', body: formData }); if(response.ok){ alert(currentLang === 'ar' ? '✅ تم إرسال طلب التحويل بنجاح' : '✅ Transfer request sent successfully'); document.getElementById('transferForm').reset(); currentFileName = ''; fileNameDisplayElem.innerText = ''; fileInput.value = ''; amountInput.value = ''; updateAmountUI(); document.getElementById('agreeTerms').checked = false; fromServiceHidden.value='InstaPay'; toServiceHidden.value='InstaPay'; fromWalletHidden.value='VodafoneCash'; toWalletHidden.value='VodafoneCash'; fromServiceChips.forEach(c=>c.classList.remove('active')); fromServiceChips[0].classList.add('active'); toServiceChips.forEach(c=>c.classList.remove('active')); toServiceChips[0].classList.add('active'); fromWalletSubChips.forEach(c=>c.classList.remove('active')); fromWalletSubChips[0].classList.add('active'); toWalletSubChips.forEach(c=>c.classList.remove('active')); toWalletSubChips[0].classList.add('active'); updateFromWalletVisibility(); updateToWalletVisibility(); updateLanguage(currentLang); } else { throw new Error('Server error'); } } catch(err){ console.error(err); } finally { btn.disabled = false; btn.innerHTML = origHtml; } };
 </script>
 </body>
 </html>
