@@ -8,41 +8,155 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { background: linear-gradient(145deg,#eef2f9 0%,#e0e8f2 100%); font-family:'Cairo',sans-serif; padding:32px 20px; min-height:100vh; }
-  .dashboard-card { max-width:1400px; margin:0 auto; background:#fff; border-radius:36px; box-shadow:0 25px 45px -12px rgba(0,0,0,0.25),0 2px 5px rgba(0,0,0,0.02); overflow:hidden; }
-  .card-header { padding:28px 32px 20px 32px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; border-bottom:1px solid #edf2f7; background:#fff; }
-  .brand { display:flex; align-items:center; gap:14px; }
-  .brand-logo { width:52px; height:52px; object-fit:cover; border-radius:18px; box-shadow:0 6px 12px -8px rgba(0,0,0,0.2); }
-  .brand h1 { font-size:1.7rem; font-weight:800; background:linear-gradient(135deg,#103a6e,#1e4a8a); background-clip:text; -webkit-background-clip:text; color:transparent; }
-  .header-actions { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
-  .lang-switch { display:flex; gap:8px; background:#f1f5f9; padding:6px; border-radius:60px; }
-  .lang-btn { padding:8px 20px; border-radius:40px; font-size:0.9rem; font-weight:700; cursor:pointer; transition:all 0.2s; background:transparent; border:none; font-family:'Cairo',sans-serif; color:#4a627a; }
-  .lang-btn.active { background:#1e4a8a; color:white; box-shadow:0 2px 8px rgba(30,74,138,0.2); }
-  .logout-btn { background:#dc2626; color:white; border:none; padding:10px 24px; border-radius:40px; font-size:0.9rem; font-weight:600; font-family:'Cairo',sans-serif; cursor:pointer; display:flex; align-items:center; gap:8px; transition:all 0.2s; }
-  .logout-btn:hover { background:#b91c1c; transform:translateY(-1px); box-shadow:0 4px 12px rgba(220,38,38,0.3); }
-  .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; padding:28px 32px 0 32px; }
-  .stat-card { background:linear-gradient(135deg,#f8fbfe,#ffffff); border-radius:28px; padding:22px 24px; border:1px solid #e9f0f8; box-shadow:0 2px 8px rgba(0,0,0,0.02); transition:all 0.2s; }
-  .stat-card:hover { transform:translateY(-2px); box-shadow:0 12px 24px -12px rgba(0,0,0,0.1); }
-  .stat-title { font-size:0.85rem; font-weight:600; color:#5c6f87; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
-  .stat-value { font-size:2.2rem; font-weight:800; color:#103a6e; }
-  .stat-sub { font-size:0.7rem; color:#7c8ea0; margin-top:8px; }
-  .table-section { padding:24px 32px 32px 32px; }
-  .section-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px; }
-  .section-header h2 { font-size:1.25rem; font-weight:700; color:#0f2f4f; display:flex; align-items:center; gap:8px; }
-  .transfer-count { background:#eef3ff; padding:4px 12px; border-radius:40px; font-size:0.75rem; font-weight:600; color:#1e4a8a; }
-  .table-wrapper { overflow-x:auto; border-radius:24px; border:1px solid #edf2f7; background:#fff; }
-  table { width:100%; border-collapse:collapse; font-size:0.85rem; }
-  th { background:#f8fafc; color:#1e3a5f; padding:16px 12px; font-weight:700; border-bottom:2px solid #e2edf7; text-align:center; }
-  td { padding:14px 12px; text-align:center; border-bottom:1px solid #f0f4f9; vertical-align:middle; }
-  tr:hover { background:#fafdff; }
-  .screenshot-img { width:48px; height:48px; object-fit:cover; border-radius:12px; cursor:pointer; transition:0.2s; border:1px solid #e2e8f0; }
-  .screenshot-img:hover { transform:scale(1.05); box-shadow:0 4px 12px rgba(0,0,0,0.15); }
-  .delete-btn { background:#fee2e2; border:none; color:#dc2626; padding:8px 14px; border-radius:30px; font-size:0.75rem; font-weight:600; cursor:pointer; transition:all 0.2s; display:inline-flex; align-items:center; gap:6px; font-family:'Cairo',sans-serif; }
-  .delete-btn:hover { background:#dc2626; color:white; transform:scale(0.98); }
-  .empty-state { text-align:center; padding:48px; color:#8ba0bc; }
-  .empty-state i { font-size:3rem; margin-bottom:12px; opacity:0.5; }
-  .badge { background:#eef3ff; padding:4px 10px; border-radius:30px; font-size:0.7rem; font-weight:600; display:inline-block; }
-  @media (max-width:768px) { body{padding:16px;} .card-header,.stats-grid,.table-section{padding-left:20px;padding-right:20px;} th,td{padding:10px 8px;font-size:0.75rem;} .stat-value{font-size:1.6rem;} }
+  
+  /* Light mode (default) */
+  :root {
+    --bg-gradient-start: #eef2f9;
+    --bg-gradient-end: #e0e8f2;
+    --card-bg: #ffffff;
+    --card-header-bg: #ffffff;
+    --text-primary: #0f2f4f;
+    --text-secondary: #1e3a5f;
+    --text-muted: #5c6f87;
+    --border-light: #edf2f7;
+    --border-card: #e9f0f8;
+    --stat-card-bg: linear-gradient(135deg,#f8fbfe,#ffffff);
+    --stat-title-color: #5c6f87;
+    --stat-value-color: #103a6e;
+    --stat-sub-color: #7c8ea0;
+    --table-header-bg: #f8fafc;
+    --table-header-color: #1e3a5f;
+    --table-border: #e2edf7;
+    --table-row-border: #f0f4f9;
+    --table-row-hover: #fafdff;
+    --badge-bg: #eef3ff;
+    --badge-color: #1e4a8a;
+    --delete-btn-bg: #fee2e2;
+    --delete-btn-color: #dc2626;
+    --delete-btn-hover-bg: #dc2626;
+    --delete-btn-hover-color: white;
+    --empty-state-color: #8ba0bc;
+    --logout-btn-bg: #dc2626;
+    --logout-btn-hover: #b91c1c;
+    --lang-switch-bg: #f1f5f9;
+    --lang-btn-color: #4a627a;
+    --lang-btn-active-bg: #1e4a8a;
+    --lang-btn-active-color: white;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.02);
+    --shadow-md: 0 25px 45px -12px rgba(0,0,0,0.25);
+    --shadow-hover: 0 12px 24px -12px rgba(0,0,0,0.1);
+  }
+  
+  /* Dark mode */
+  body.dark {
+    --bg-gradient-start: #121826;
+    --bg-gradient-end: #0f141f;
+    --card-bg: #1e2434;
+    --card-header-bg: #1e2434;
+    --text-primary: #eef2ff;
+    --text-secondary: #cbd5e6;
+    --text-muted: #8ba0bc;
+    --border-light: #2a3346;
+    --border-card: #2a3346;
+    --stat-card-bg: linear-gradient(135deg,#252e42,#1a1f2e);
+    --stat-title-color: #8ba0bc;
+    --stat-value-color: #60a5fa;
+    --stat-sub-color: #7c8ea0;
+    --table-header-bg: #1a1f2e;
+    --table-header-color: #cbd5e6;
+    --table-border: #2d3748;
+    --table-row-border: #2a3346;
+    --table-row-hover: #252e42;
+    --badge-bg: #1e2a47;
+    --badge-color: #60a5fa;
+    --delete-btn-bg: #3b1e1e;
+    --delete-btn-color: #f87171;
+    --delete-btn-hover-bg: #dc2626;
+    --delete-btn-hover-color: white;
+    --empty-state-color: #6b7c9e;
+    --logout-btn-bg: #b91c1c;
+    --logout-btn-hover: #dc2626;
+    --lang-switch-bg: #2d3748;
+    --lang-btn-color: #a0b4c8;
+    --lang-btn-active-bg: #3b82f6;
+    --lang-btn-active-color: white;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+    --shadow-md: 0 25px 45px -12px rgba(0,0,0,0.5);
+    --shadow-hover: 0 12px 24px -12px rgba(0,0,0,0.3);
+  }
+  
+  body { 
+    background: linear-gradient(145deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%); 
+    font-family: 'Cairo', sans-serif; 
+    padding: 32px 20px; 
+    min-height: 100vh;
+    transition: background 0.3s ease;
+  }
+  .dashboard-card { 
+    max-width: 1400px; 
+    margin: 0 auto; 
+    background: var(--card-bg); 
+    border-radius: 36px; 
+    box-shadow: var(--shadow-md), var(--shadow-sm); 
+    overflow: hidden;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card-header { 
+    padding: 28px 32px 20px 32px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    flex-wrap: wrap; 
+    gap: 16px; 
+    border-bottom: 1px solid var(--border-light); 
+    background: var(--card-header-bg); 
+  }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .brand-logo { width: 52px; height: 52px; object-fit: cover; border-radius: 18px; box-shadow: 0 6px 12px -8px rgba(0,0,0,0.2); }
+  .brand h1 { font-size: 1.7rem; font-weight: 800; background: linear-gradient(135deg, #103a6e, #1e4a8a); background-clip: text; -webkit-background-clip: text; color: transparent; }
+  body.dark .brand h1 { background: linear-gradient(135deg, #60a5fa, #3b82f6); background-clip: text; -webkit-background-clip: text; color: transparent; }
+  
+  .header-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  
+  /* Theme switch buttons */
+  .theme-switch { display: flex; gap: 8px; background: var(--lang-switch-bg); padding: 6px; border-radius: 60px; }
+  .theme-btn { padding: 8px 20px; border-radius: 40px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s; background: transparent; border: none; font-family: 'Cairo', sans-serif; color: var(--lang-btn-color); display: inline-flex; align-items: center; gap: 6px; }
+  .theme-btn.active { background: var(--lang-btn-active-bg); color: var(--lang-btn-active-color); box-shadow: 0 2px 8px rgba(30,74,138,0.2); }
+  .theme-btn:hover:not(.active) { background: var(--border-card); }
+  
+  .lang-switch { display: flex; gap: 8px; background: var(--lang-switch-bg); padding: 6px; border-radius: 60px; }
+  .lang-btn { padding: 8px 20px; border-radius: 40px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s; background: transparent; border: none; font-family: 'Cairo', sans-serif; color: var(--lang-btn-color); }
+  .lang-btn.active { background: var(--lang-btn-active-bg); color: var(--lang-btn-active-color); box-shadow: 0 2px 8px rgba(30,74,138,0.2); }
+  .lang-btn:hover:not(.active) { background: var(--border-card); }
+  
+  .logout-btn { background: var(--logout-btn-bg); color: white; border: none; padding: 10px 24px; border-radius: 40px; font-size: 0.9rem; font-weight: 600; font-family: 'Cairo', sans-serif; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
+  .logout-btn:hover { background: var(--logout-btn-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(220,38,38,0.3); }
+  
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 28px 32px 0 32px; }
+  .stat-card { background: var(--stat-card-bg); border-radius: 28px; padding: 22px 24px; border: 1px solid var(--border-card); box-shadow: var(--shadow-sm); transition: all 0.2s; }
+  .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+  .stat-title { font-size: 0.85rem; font-weight: 600; color: var(--stat-title-color); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .stat-value { font-size: 2.2rem; font-weight: 800; color: var(--stat-value-color); }
+  .stat-sub { font-size: 0.7rem; color: var(--stat-sub-color); margin-top: 8px; }
+  
+  .table-section { padding: 24px 32px 32px 32px; }
+  .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+  .section-header h2 { font-size: 1.25rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+  .transfer-count { background: var(--badge-bg); padding: 4px 12px; border-radius: 40px; font-size: 0.75rem; font-weight: 600; color: var(--badge-color); }
+  .table-wrapper { overflow-x: auto; border-radius: 24px; border: 1px solid var(--border-light); background: var(--card-bg); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th { background: var(--table-header-bg); color: var(--table-header-color); padding: 16px 12px; font-weight: 700; border-bottom: 2px solid var(--table-border); text-align: center; }
+  td { padding: 14px 12px; text-align: center; border-bottom: 1px solid var(--table-row-border); vertical-align: middle; color: var(--text-secondary); }
+  tr:hover { background: var(--table-row-hover); }
+  .screenshot-img { width: 48px; height: 48px; object-fit: cover; border-radius: 12px; cursor: pointer; transition: 0.2s; border: 1px solid var(--border-light); }
+  .screenshot-img:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+  .delete-btn { background: var(--delete-btn-bg); border: none; color: var(--delete-btn-color); padding: 8px 14px; border-radius: 30px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; font-family: 'Cairo', sans-serif; }
+  .delete-btn:hover { background: var(--delete-btn-hover-bg); color: var(--delete-btn-hover-color); transform: scale(0.98); }
+  .empty-state { text-align: center; padding: 48px; color: var(--empty-state-color); }
+  .empty-state i { font-size: 3rem; margin-bottom: 12px; opacity: 0.5; }
+  .badge { background: var(--badge-bg); padding: 4px 10px; border-radius: 30px; font-size: 0.7rem; font-weight: 600; display: inline-block; color: var(--badge-color); }
+  
+  @media (max-width:768px) { body{padding:16px;} .card-header,.stats-grid,.table-section{padding-left:20px;padding-right:20px;} th,td{padding:10px 8px;font-size:0.75rem;} .stat-value{font-size:1.6rem;} .theme-btn, .lang-btn { padding: 6px 14px; font-size: 0.8rem; } }
 </style>
 </head>
 <body>
@@ -54,6 +168,11 @@
       <h1 id="brandTitle">PayWay Dashboard</h1>
     </div>
     <div class="header-actions">
+      <!-- Dark Mode Toggle Buttons -->
+      <div class="theme-switch" id="themeSwitch">
+        <button class="theme-btn active" id="lightModeBtn"><i class="fas fa-sun"></i> <span id="lightText">فاتح</span></button>
+        <button class="theme-btn" id="darkModeBtn"><i class="fas fa-moon"></i> <span id="darkText">داكن</span></button>
+      </div>
       <div class="lang-switch">
         <button class="lang-btn active" id="btnAr" data-lang="ar">العربية</button>
         <button class="lang-btn" id="btnEn" data-lang="en">English</button>
@@ -106,7 +225,7 @@
         </thead>
         <tbody id="transfersBody">
           <tr class="empty-state">
-            <td colspan="8"><i class="fas fa-inbox"></i><br><span id="emptyMessage">لا توجد تحويلات حتى الآن</span></td>
+            <td colspan="10"><i class="fas fa-inbox"></i><br><span id="emptyMessage">لا توجد تحويلات حتى الآن</span></td>
           </tr>
         </tbody>
       </table>
@@ -119,25 +238,65 @@ const translations = {
   ar: {
     brand: "PayWay Dashboard", logout: "تسجيل الخروج", totalProfitTitle: "إجمالي الأرباح", profitSub: "من جميع التحويلات",
     totalTransfersTitle: "إجمالي التحويلات", transfersSub: "عملية مكتملة", avgTitle: "متوسط التحويل", avgSub: "شامل العمولة",
-    transfersListTitle: "التحويلات الأخيرة", lastUpdate: "آخر تحديث: الآن", thFrom: "من", thTo: "إلى", thFromName: "اسم المحول" , thToName: "اسم المستلم" ,thAmount: "المبلغ",
+    transfersListTitle: "التحويلات الأخيرة", lastUpdate: "آخر تحديث: الآن", thFrom: "من", thTo: "إلى", thFromName: "اسم المحول", thToName: "اسم المستلم", thAmount: "المبلغ",
     thProfit: "العمولة", thTotal: "الإجمالي", thDate: "التاريخ", thScreenshot: "الصورة", thActions: "إجراءات",
     emptyMessage: "لا توجد تحويلات حتى الآن", deleteConfirm: "هل أنت متأكد من حذف هذا التحويل؟",
-    deleteSuccess: "تم حذف التحويل بنجاح", errorLoad: "حدث خطأ في تحميل البيانات", errorAuth: "جلسة غير صالحة، جاري التوجيه لتسجيل الدخول"
+    deleteSuccess: "تم حذف التحويل بنجاح", errorLoad: "حدث خطأ في تحميل البيانات", errorAuth: "جلسة غير صالحة، جاري التوجيه لتسجيل الدخول",
+    lightMode: "فاتح", darkMode: "داكن"
   },
   en: {
     brand: "PayWay Dashboard", logout: "Logout", totalProfitTitle: "Total Profit", profitSub: "From all transfers",
     totalTransfersTitle: "Total Transfers", transfersSub: "Completed operations", avgTitle: "Average Transfer", avgSub: "Including fees",
-    transfersListTitle: "Recent Transfers", lastUpdate: "Last update: now", thFrom: "From", thTo: "To" , thFromName: "Converter name" , thToName: "Recipient's name" , thAmount: "Amount",
+    transfersListTitle: "Recent Transfers", lastUpdate: "Last update: now", thFrom: "From", thTo: "To", thFromName: "Converter name", thToName: "Recipient's name", thAmount: "Amount",
     thProfit: "Fee", thTotal: "Total", thDate: "Date", thScreenshot: "Screenshot", thActions: "Actions",
     emptyMessage: "No transfers yet", deleteConfirm: "Are you sure you want to delete this transfer?",
-    deleteSuccess: "Transfer deleted successfully", errorLoad: "Error loading data", errorAuth: "Invalid session, redirecting to login"
+    deleteSuccess: "Transfer deleted successfully", errorLoad: "Error loading data", errorAuth: "Invalid session, redirecting to login",
+    lightMode: "Light", darkMode: "Dark"
   }
 };
 
 let currentLang = 'ar';
 let transfersData = [];
-let totalProfitValue = 0;
 
+// ==================== DARK MODE FUNCTIONALITY ====================
+function setTheme(theme) {
+  if (theme === 'dark') {
+    document.body.classList.add('dark');
+    localStorage.setItem('paywayDashboardTheme', 'dark');
+    document.getElementById('darkModeBtn').classList.add('active');
+    document.getElementById('lightModeBtn').classList.remove('active');
+  } else {
+    document.body.classList.remove('dark');
+    localStorage.setItem('paywayDashboardTheme', 'light');
+    document.getElementById('lightModeBtn').classList.add('active');
+    document.getElementById('darkModeBtn').classList.remove('active');
+  }
+}
+
+// Load saved theme
+const savedTheme = localStorage.getItem('paywayDashboardTheme');
+if (savedTheme === 'dark') {
+  setTheme('dark');
+} else {
+  setTheme('light');
+}
+
+document.getElementById('lightModeBtn').addEventListener('click', () => setTheme('light'));
+document.getElementById('darkModeBtn').addEventListener('click', () => setTheme('dark'));
+
+function updateThemeButtonTexts(lang) {
+  const lightSpan = document.getElementById('lightText');
+  const darkSpan = document.getElementById('darkText');
+  if (lang === 'ar') {
+    lightSpan.innerText = 'فاتح';
+    darkSpan.innerText = 'داكن';
+  } else {
+    lightSpan.innerText = 'Light';
+    darkSpan.innerText = 'Dark';
+  }
+}
+
+// ==================== LANGUAGE FUNCTIONALITY ====================
 function updateUILanguage() {
   const t = translations[currentLang];
   document.getElementById('brandTitle').innerText = t.brand;
@@ -161,6 +320,7 @@ function updateUILanguage() {
   document.getElementById('thScreenshot').innerText = t.thScreenshot;
   document.getElementById('thActions').innerText = t.thActions;
   document.getElementById('emptyMessage').innerText = t.emptyMessage;
+  updateThemeButtonTexts(currentLang);
   renderTable();
 }
 
@@ -173,45 +333,43 @@ function renderTable() {
   const tbody = document.getElementById('transfersBody');
   const t = translations[currentLang];
   if(!transfersData || transfersData.length===0){
-    tbody.innerHTML = `<tr class="empty-state"><td colspan="8"><i class="fas fa-inbox"></i><br>${t.emptyMessage}</td></tr>`;
+    tbody.innerHTML = `<tr class="empty-state"><td colspan="10"><i class="fas fa-inbox"></i><br>${t.emptyMessage}</td></tr>`;
     return;
   }
   tbody.innerHTML = '';
-  transfersData.forEach(transfer=>{
-    const row=document.createElement('tr');
-    const fromText=`${transfer.from.type} (${transfer.from.number})`;
-    const toText=`${transfer.to.type} (${transfer.to.number})`;
-    const amount=transfer.amount||0;
-    const profit=transfer.profit||(amount*0.02);
-    const totalAmount=transfer.totalAmount||(amount+parseFloat(profit));
-    const dateObj = transfer.date
-    ? (transfer.date.toDate ? transfer.date.toDate() : new Date(transfer.date))
-    : new Date();
-    const dateStr = isNaN(dateObj) ? '—' : dateObj.toLocaleString(currentLang==='ar'?'ar-EG':'en-US');
-    const screenshotHtml=transfer.from.screenshot
+  transfersData.forEach(transfer => {
+    const row = document.createElement('tr');
+    const fromText = `${transfer.from?.type || '?'} (${transfer.from?.number || '?'})`;
+    const toText = `${transfer.to?.type || '?'} (${transfer.to?.number || '?'})`;
+    const amount = transfer.amount || 0;
+    const profit = transfer.profit || (amount * 0.02);
+    const totalAmount = transfer.totalAmount || (amount + parseFloat(profit));
+    const dateObj = transfer.date ? (transfer.date.toDate ? transfer.date.toDate() : new Date(transfer.date)) : new Date();
+    const dateStr = isNaN(dateObj) ? '—' : dateObj.toLocaleString(currentLang === 'ar' ? 'ar-EG' : 'en-US');
+    const screenshotHtml = transfer.from?.screenshot 
       ? `<a href="${transfer.from.screenshot}" target="_blank"><img class="screenshot-img" src="${transfer.from.screenshot}" alt="screenshot" onerror="this.src='https://placehold.co/48x48?text=Error'"></a>` 
       : '<span style="opacity:0.5;">—</span>';
-    row.innerHTML=`
-  <td style="font-weight:500;">${escapeHtml(fromText)}</td>
-  <td style="font-weight:500;">${escapeHtml(toText)}</td>
-  <td style="font-weight:500;">${escapeHtml(transfer.from.name || '—')}</td>
- <td style="font-weight:500;">${escapeHtml(transfer.to.name || '—')}</td>
- <td>${parseFloat(amount).toFixed(2)} EGP</td>
-  <td>${parseFloat(profit).toFixed(2)} EGP</td>
-  <td><strong>${parseFloat(totalAmount).toFixed(2)} EGP</strong></td>
-  <td style="font-size:0.75rem;">${dateStr}</td>
-  <td>${screenshotHtml}</td>
-  <td><button class="delete-btn" onclick="deleteTransfer('${transfer.id}')"><i class="fas fa-trash-alt"></i> ${currentLang==='ar'?'حذف':'Delete'}</button></td>
-`;
+    row.innerHTML = `
+      <td style="font-weight:500;">${escapeHtml(fromText)}</td>
+      <td style="font-weight:500;">${escapeHtml(toText)}</td>
+      <td style="font-weight:500;">${escapeHtml(transfer.from?.name || '—')}</td>
+      <td style="font-weight:500;">${escapeHtml(transfer.to?.name || '—')}</td>
+      <td>${parseFloat(amount).toFixed(2)} EGP</td>
+      <td>${parseFloat(profit).toFixed(2)} EGP</td>
+      <td><strong>${parseFloat(totalAmount).toFixed(2)} EGP</strong></td>
+      <td style="font-size:0.75rem;">${dateStr}</td>
+      <td>${screenshotHtml}</td>
+      <td><button class="delete-btn" onclick="deleteTransfer('${transfer.id}')"><i class="fas fa-trash-alt"></i> ${currentLang === 'ar' ? 'حذف' : 'Delete'}</button></td>
+    `;
     tbody.appendChild(row);
   });
 }
 
 function updateStats() {
   const totalTransfers = transfersData.length;
-  const totalProfit = transfersData.reduce((sum,t)=>sum+(t.profit||(t.amount*0.02)),0);
-  const totalAmountSum = transfersData.reduce((sum,t)=>sum+(t.amount||0),0);
-  const avgTransfer = totalTransfers>0?totalAmountSum/totalTransfers:0;
+  const totalProfit = transfersData.reduce((sum, t) => sum + (t.profit || (t.amount * 0.02)), 0);
+  const totalAmountSum = transfersData.reduce((sum, t) => sum + (t.amount || 0), 0);
+  const avgTransfer = totalTransfers > 0 ? totalAmountSum / totalTransfers : 0;
   document.getElementById('totalProfit').innerText = totalProfit.toFixed(2);
   document.getElementById('totalTransfersCount').innerText = totalTransfers;
   document.getElementById('avgTransferAmount').innerText = avgTransfer.toFixed(2);
@@ -219,57 +377,73 @@ function updateStats() {
 }
 
 async function loadDashboard() {
-  const token=localStorage.getItem('token');
-  if(!token){ window.location.href='/login'; return; }
+  const token = localStorage.getItem('token');
+  if(!token){ window.location.href = '/login'; return; }
   try{
-    const res=await fetch('/api/dashboard',{ headers:{'Authorization':'Bearer '+token} });
-    if(res.status!==200){ alert(translations[currentLang].errorAuth); window.location.href='/login'; return; }
-    const data=await res.json();
-    transfersData=data.transfers||[];
-    transfersData=transfersData.map(t=>({ ...t, profit:t.profit||(t.amount*0.02), totalAmount:t.totalAmount||(t.amount+(t.profit||(t.amount*0.02))) }));
+    const res = await fetch('/api/dashboard', { headers: { 'Authorization': 'Bearer ' + token } });
+    if(res.status !== 200){ alert(translations[currentLang].errorAuth); window.location.href = '/login'; return; }
+    const data = await res.json();
+    transfersData = data.transfers || [];
+    transfersData = transfersData.map(t => ({ 
+      ...t, 
+      profit: t.profit || (t.amount * 0.02), 
+      totalAmount: t.totalAmount || (t.amount + (t.profit || (t.amount * 0.02))) 
+    }));
     updateStats();
     renderTable();
-  }catch(err){ console.error(err); alert(translations[currentLang].errorLoad); }
+  } catch(err){ 
+    console.error(err); 
+    alert(translations[currentLang].errorLoad); 
+  }
 }
 
 async function deleteTransfer(id) {
-  const t=translations[currentLang];
+  const t = translations[currentLang];
   if(!confirm(t.deleteConfirm)) return;
-  const token=localStorage.getItem('token');
-  if(!token){ window.location.href='/login'; return; }
+  const token = localStorage.getItem('token');
+  if(!token){ window.location.href = '/login'; return; }
   try{
-    const res=await fetch('/api/transfer/'+id,{ method:'DELETE', headers:{'Authorization':'Bearer '+token} });
-    if(res.status===200||res.status===204){ transfersData=transfersData.filter(t=>t.id!==id); updateStats(); renderTable(); }
-    else await loadDashboard();
-  }catch(err){ console.error('Delete error:',err); await loadDashboard(); }
+    const res = await fetch('/api/transfer/' + id, { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } });
+    if(res.status === 200 || res.status === 204){ 
+      transfersData = transfersData.filter(t => t.id !== id); 
+      updateStats(); 
+      renderTable(); 
+    } else { await loadDashboard(); }
+  } catch(err){ 
+    console.error('Delete error:', err); 
+    await loadDashboard(); 
+  }
 }
 
 function logout(){
   localStorage.removeItem('token');
   localStorage.removeItem('user');
-  window.location.href='/login';
+  window.location.href = '/login';
 }
 
-document.getElementById('btnAr').addEventListener('click',()=>{
+// Language event listeners
+document.getElementById('btnAr').addEventListener('click', () => {
   document.getElementById('btnAr').classList.add('active');
   document.getElementById('btnEn').classList.remove('active');
-  currentLang='ar';
-  document.body.style.direction='rtl';
-  document.querySelector('.dashboard-card').style.direction='rtl';
+  currentLang = 'ar';
+  document.body.style.direction = 'rtl';
+  document.querySelector('.dashboard-card').style.direction = 'rtl';
   updateUILanguage();
 });
 
-document.getElementById('btnEn').addEventListener('click',()=>{
+document.getElementById('btnEn').addEventListener('click', () => {
   document.getElementById('btnEn').classList.add('active');
   document.getElementById('btnAr').classList.remove('active');
-  currentLang='en';
-  document.body.style.direction='ltr';
-  document.querySelector('.dashboard-card').style.direction='ltr';
+  currentLang = 'en';
+  document.body.style.direction = 'ltr';
+  document.querySelector('.dashboard-card').style.direction = 'ltr';
   updateUILanguage();
 });
 
 updateUILanguage();
- 
+loadDashboard();
+
+// Auto-refresh every 5 seconds
 setInterval(() => {
   loadDashboard();
 }, 5000);
