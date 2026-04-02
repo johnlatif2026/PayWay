@@ -60,18 +60,6 @@ app.post('/api/login', (req, res) => {
 });
 
 // Transfer
-app.post('/api/transfer', upload.single('screenshot'), async (req, res) => {
-  try {
-    const {
-      fromServiceType,
-      toServiceType,
-      fromNumber,
-      fromName,
-      toNumber,
-      toName,
-      amount
-    } = req.body;
-
 const FormData = require('form-data');
 
 app.post('/api/transfer', upload.single('screenshot'), async (req,res)=>{
