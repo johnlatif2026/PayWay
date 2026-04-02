@@ -6,22 +6,26 @@
 <title>PayWay</title>
 <link rel="icon" href="https://i.postimg.cc/NfPBr7hs/Picsart-26-04-02-02-54-03-157.jpg" type="image/png">
 <style>
-body { font-family: Cairo, sans-serif; background:#f5f5f5; margin:0; padding:0;}
-.container { max-width:500px; margin:50px auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);}
-h2 { text-align:center; color:#1a3e8c; }
-input, select { width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:4px; }
-button { background:#1a3e8c; color:white; padding:12px; border:none; border-radius:4px; cursor:pointer; width:100%; }
+body { font-family:Cairo,sans-serif; background:#f5f5f5; margin:0; padding:0;}
+.container { max-width:500px; margin:50px auto; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.15);}
+h2 { text-align:center; color:#1a3e8c; margin-bottom:15px;}
+input, select { width:100%; padding:12px; margin:8px 0; border:1px solid #ccc; border-radius:6px; font-size:16px;}
+button { background:#1a3e8c; color:white; padding:14px; border:none; border-radius:8px; cursor:pointer; width:100%; font-size:16px; transition:0.2s;}
 button:hover { background:#1550a0; }
-.logo { display:block; margin:0 auto 15px auto; width:120px; height:auto; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.1);}
-.footer { text-align:center; margin-top:30px; font-size:14px; color:#555; }
-.footer a { color:#1a3e8c; text-decoration:none; }
+.logo { display:block; margin:0 auto 20px auto; width:120px; height:auto; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+.terms-container { background:#eef3ff; border:1px solid #1a3e8c; padding:12px; border-radius:6px; margin:12px 0; font-size:14px; color:#1a3e8c; max-height:150px; overflow-y:auto;}
+.checkbox-container { display:flex; align-items:center; margin-bottom:12px; }
+.checkbox-container input { width:18px; height:18px; margin-right:8px; accent-color:#1a3e8c; cursor:pointer;}
+.total-display { font-weight:bold; margin:10px 0; font-size:16px; text-align:center; color:#1a3e8c;}
+.footer { text-align:center; margin-top:30px; font-size:14px; color:#555;}
+.footer a { color:#1a3e8c; text-decoration:none; font-weight:bold;}
 </style>
 </head>
 <body>
 <div class="container">
 <img src="https://i.postimg.cc/NfPBr7hs/Picsart-26-04-02-02-54-03-157.jpg" class="logo" alt="PayWay Logo">
 <h2>PayWay</h2>
-<p>حول على الرقم التالي: <strong>01274445091(محفظة)</strong></p>
+<p style="text-align:center;">حول على الرقم التالي: <strong>01274445091(محفظة)</strong></p>
 
 <form id="transferForm">
   <label>من:</label>
@@ -36,7 +40,7 @@ button:hover { background:#1550a0; }
   </select>
   <input type="text" id="fromNumber" placeholder="رقم الحساب">
   <input type="text" id="fromName" placeholder="اسم صاحب الحساب">
-  <input type="file" id="fromScreenshot">
+  <input type="file" id="fromScreenshot" accept="image/*">
 
   <label>إلى:</label>
   <select id="toType">
@@ -52,20 +56,25 @@ button:hover { background:#1550a0; }
   <input type="text" id="toName" placeholder="اسم المستلم">
 
   <input type="number" id="amount" placeholder="المبلغ">
-  <p>المبلغ الكلي مع العمولة: <strong id="totalAmountDisplay">0</strong> جنيه</p>
+  <p class="total-display">المبلغ الكلي مع العمولة: <span id="totalAmountDisplay">0</span> جنيه</p>
 
-  <div>
+  <div class="terms-container">
+    <strong>الشروط والسياسات:</strong><br>
+    1. أي تحويل لرقم خاطئ يتحمل المستخدم المسؤولية الكاملة.<br>
+    2. PayWay غير مسؤول عن الأموال المسروقة أو أي خسائر.<br>
+    3. يجب الموافقة على هذه الشروط قبل إرسال التحويل.
+  </div>
+
+  <div class="checkbox-container">
     <input type="checkbox" id="agreeTerms">
-    <label for="agreeTerms">أوافق على الشروط والسياسات: <br>
-      - أي تحويل لرقم خاطئ أو أموال مسروقة غير مسؤولية PayWay.<br>
-      - يتحمل المستخدم كامل المسؤولية عن التحويلات.
-    </label>
+    <label for="agreeTerms">أوافق على الشروط والأحكام</label>
   </div>
 
   <button type="button" onclick="submitTransfer()">إرسال التحويل</button>
 </form>
+
 <div class="footer">
-  &copy; 2026 PayWay - <a href="https://wa.me/01012345678" target="_blank">للتواصل عبر واتساب</a>
+  &copy; 2026 PayWay - <a href="https://wa.me/01274445091" target="_blank">John Latif</a>
 </div>
 
 <script>
@@ -84,8 +93,8 @@ async function submitTransfer(){
     return;
   }
 
-  const from = document.getElementById('fromType').value;
-  const to = document.getElementById('toType').value;
+  const fromType = document.getElementById('fromType').value;
+  const toType = document.getElementById('toType').value;
   const fromNumber = document.getElementById('fromNumber').value;
   const fromName = document.getElementById('fromName').value;
   const toNumber = document.getElementById('toNumber').value;
@@ -96,33 +105,29 @@ async function submitTransfer(){
     return;
   }
 
-  const fromScreenshotFile = document.getElementById('fromScreenshot').files[0];
-  let screenshotData = null;
-  if(fromScreenshotFile){
-    const reader = new FileReader();
-    reader.onloadend = async function(){
-      screenshotData = reader.result;
-      await sendTransfer(screenshotData);
-    }
-    reader.readAsDataURL(fromScreenshotFile);
-  } else {
-    await sendTransfer(null);
-  }
+  const formData = new FormData();
+  formData.append('fromType', fromType);
+  formData.append('toType', toType);
+  formData.append('fromNumber', fromNumber);
+  formData.append('fromName', fromName);
+  formData.append('toNumber', toNumber);
+  formData.append('toName', toName);
+  formData.append('amount', amount);
+  const screenshotFile = document.getElementById('fromScreenshot').files[0];
+  if(screenshotFile) formData.append('screenshot', screenshotFile);
 
-  async function sendTransfer(screenshot){
+  try{
     const res = await fetch('/api/transfer', {
       method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        from:{type:from,number:fromNumber,name:fromName,screenshot:screenshot},
-        to:{type:to,number:toNumber,name:toName},
-        amount
-      })
+      body: formData
     });
     const data = await res.json();
     alert(`تم تسجيل التحويل - المبلغ الكلي: ${data.totalAmount} جنيه`);
     document.getElementById('transferForm').reset();
     totalAmountDisplay.innerText = 0;
+  }catch(err){
+    console.error(err);
+    alert('حدث خطأ أثناء إرسال التحويل');
   }
 }
 </script>
