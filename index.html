@@ -770,6 +770,8 @@
     }
     
     // Get values
+    const fromType = document.getElementById('fromType').value.trim();
+    const toType = document.getElementById('toType').value.trim();
     const fromNumber = document.getElementById('fromNumber').value.trim();
     const toNumber = document.getElementById('toNumber').value.trim();
     const fromName = document.getElementById('fromName').value.trim();
@@ -807,12 +809,17 @@
       alert(currentLang === 'ar' ? 'صورة التحويل مطلوبة' : 'Screenshot required'); 
       return; 
     }
-    
+    if (!amount) { 
+      alert(currentLang === 'ar' ? 'المبلغ مطلوب' : 'amount required'); 
+      return; 
+    }
     const fee = amount * 0.01;
     const total = amount + fee;
     
     // Prepare FormData
     const formData = new FormData();
+    formData.append('fromType', fromType);
+    formData.append('toType',toType);
     formData.append('fromNumber', fromNumber);
     formData.append('fromName', fromName);
     formData.append('fromMethod', fromMethod);
