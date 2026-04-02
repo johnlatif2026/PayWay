@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>PayWay | InstaTransfer</title>
+<title>PayWay</title>
 <link rel="icon" href="https://i.postimg.cc/NfPBr7hs/Picsart-26-04-02-02-54-03-157.jpg" type="image/png">
 <!-- Google Fonts + Cairo -->
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -349,7 +349,7 @@
   <div class="card-header">
     <div class="brand">
       <img class="brand-logo" src="https://i.postimg.cc/NfPBr7hs/Picsart-26-04-02-02-54-03-157.jpg" alt="PayWay">
-      <h1 id="brandTitle">InstaTransfer</h1>
+      <h1 id="brandTitle">PayWay</h1>
     </div>
     <div class="lang-switch">
       <button class="lang-btn active" id="btnAr" data-lang="ar">العربية</button>
@@ -421,10 +421,13 @@
           <div class="method-grid" id="toServiceGrid">
             <div data-service="InstaPay" class="method-chip active"><i class="fas fa-bolt"></i> <span class="chip-text">InstaPay</span></div>
             <div data-service="Wallet" class="method-chip"><i class="fas fa-wallet"></i> <span class="chip-text">Wallet</span></div>
-            <div data-service="VodafoneCash" class="method-chip"><i class="fas fa-mobile-alt"></i> <span class="chip-text">Vodafone Cash</span></div>
-            <div data-service="OrangeCash" class="method-chip"><i class="fas fa-sim-card"></i> <span class="chip-text">Orange Cash</span></div>
-            <div data-service="EtisalatCash" class="method-chip"><i class="fas fa-signal"></i> <span class="chip-text">Etisalat Cash</span></div>
-            <div data-service="WePay" class="method-chip"><i class="fas fa-building-columns"></i> <span class="chip-text">WE Pay</span></div>
+             <div id="fromWalletOptions">
+            <div class="method-grid" id="fromWalletSubGrid">
+              <div data-sub="VodafoneCash" class="method-chip active"><i class="fas fa-mobile-alt"></i> <span class="chip-text">Vodafone Cash</span></div>
+              <div data-sub="OrangeCash" class="method-chip"><i class="fas fa-sim-card"></i> <span class="chip-text">Orange Cash</span></div>
+              <div data-sub="EtisalatCash" class="method-chip"><i class="fas fa-signal"></i> <span class="chip-text">Etisalat Cash</span></div>
+              <div data-sub="WePay" class="method-chip"><i class="fas fa-building-columns"></i> <span class="chip-text">WE Pay</span></div>
+            </div>
             <div data-service="Fawry" class="method-chip"><i class="fas fa-receipt"></i> <span class="chip-text">Fawry</span></div>
             <div data-service="Telda" class="method-chip"><i class="fas fa-credit-card"></i> <span class="chip-text">Telda</span></div>
           </div>
@@ -487,7 +490,7 @@
   // ==================== BILINGUAL TEXT DICTIONARY ====================
   const translations = {
     ar: {
-      brand: "InstaTransfer",
+      brand: "PayWay",
       statusTitle: "✓ تم استلام طلبك وهو قيد المراجعة",
       statusDesc: "سيتم تأكيد التحويل خلال دقائق — تتبع الطلب عبر الواتساب",
       section1: "تحويل من",
@@ -509,7 +512,7 @@
       footer: "© 2026 PayWay — "
     },
     en: {
-      brand: "InstaTransfer",
+      brand: "PayWay",
       statusTitle: "✓ Your request has been received and is being reviewed.",
       statusDesc: "Transfer will be confirmed within minutes — track via WhatsApp",
       section1: "Transfer From",
@@ -733,6 +736,8 @@
       alert(currentLang === 'ar' ? 'يجب الموافقة على الشروط والأحكام قبل إرسال التحويل' : 'You must agree to the terms before sending');
       return;
     }
+    const fromType = document.getElmentById('fromType').value.trim();
+    const toType = document.getElmentById('toType').value.trim();
     const fromNumber = document.getElementById('fromNumber').value.trim();
     const toNumber = document.getElementById('toNumber').value.trim();
     const fromName = document.getElementById('fromName').value.trim();
@@ -746,11 +751,12 @@
     if (!fromName) { alert(currentLang === 'ar' ? 'اسم صاحب الحساب مطلوب' : 'Account holder name required'); return; }
     if (!toName) { alert(currentLang === 'ar' ? 'اسم المستلم مطلوب' : 'Recipient name required'); return; }
     if (!screenshotFile) { alert(currentLang === 'ar' ? 'صورة التحويل مطلوبة' : 'Screenshot required'); return; }
-
+    if (!amount) { alert(currentLang === 'ar' ? 'المبلغ مطلوب' : 'amount required'); return; }
     let fromMethod = fromServiceHidden.value === 'Wallet' ? fromWalletHidden.value : fromServiceHidden.value;
     let toMethod = toServiceHidden.value;
     const formData = new FormData();
-    formData.append('fromNumber', fromNumber); formData.append('fromName', fromName); formData.append('fromMethod', fromMethod);
+    formData.append('fromType', fromType); formData.append('fromType', fromType); formData.append('fromMethod', fromMethod);
+    formData.append('toType', toType); formData.append('toType', toType); formData.append('fromMethod', fromMethod);
     formData.append('toNumber', toNumber); formData.append('toName', toName); formData.append('toMethod', toMethod);
     formData.append('amount', amount); formData.append('screenshot', screenshotFile);
     formData.append('fee', (amount * 0.01).toFixed(2));
