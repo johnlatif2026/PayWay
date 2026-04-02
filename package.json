@@ -1,7 +1,7 @@
 {
   "name": "PayWay",
   "version": "1.0.0",
-  "description": "نموذج موقع تحويل الأموال PayWay",
+  "description": "موقع تحويل الأموال PayWay",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -12,7 +12,8 @@
     "body-parser": "^1.20.2",
     "jsonwebtoken": "^9.0.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.3.1",
+    "axios": "^1.6.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
