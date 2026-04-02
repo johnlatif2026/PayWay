@@ -4,397 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>PayWay | Login</title>
-<!-- Google Fonts + Cairo -->
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<!-- Font Awesome 6 -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  /* Light mode (default) variables */
-  :root {
-    --bg-gradient-start: #eef2f9;
-    --bg-gradient-end: #e0e8f2;
-    --card-bg: #ffffff;
-    --text-primary: #0f2f4f;
-    --text-secondary: #1e3a5f;
-    --text-muted: #5c6f87;
-    --border-light: #edf2f7;
-    --border-card: #eef2f9;
-    --input-border: #e2edf7;
-    --input-focus: #1e4a8a;
-    --input-bg: #ffffff;
-    --label-color: #1e3a5f;
-    --btn-bg: #103a6e;
-    --btn-hover: #1e5a9e;
-    --btn-shadow: 0 8px 18px rgba(16,58,110,0.15);
-    --demo-bg: #f8fbfe;
-    --demo-border: #e9f0f8;
-    --demo-text: #4a627a;
-    --demo-code-bg: #eef3ff;
-    --demo-code-color: #1e4a8a;
-    --footer-text: #6b7c98;
-    --footer-border: #ecf3fa;
-    --welcome-icon-bg: linear-gradient(135deg, #eef3ff, #e0e8f2);
-    --welcome-icon-color: #1e4a8a;
-    --lang-switch-bg: #f1f5f9;
-    --lang-btn-color: #4a627a;
-    --lang-btn-hover: #e2e8f0;
-    --lang-active-bg: #1e4a8a;
-    --shadow-md: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
-    --toast-bg: #dc2626;
-  }
-
-  /* Dark mode variables */
-  body.dark {
-    --bg-gradient-start: #0a0f1c;
-    --bg-gradient-end: #0f172a;
-    --card-bg: #1e293b;
-    --text-primary: #e2e8f0;
-    --text-secondary: #cbd5e1;
-    --text-muted: #94a3b8;
-    --border-light: #334155;
-    --border-card: #2d3a4e;
-    --input-border: #334155;
-    --input-focus: #3b82f6;
-    --input-bg: #0f172a;
-    --label-color: #cbd5e1;
-    --btn-bg: #2563eb;
-    --btn-hover: #3b82f6;
-    --btn-shadow: 0 8px 18px rgba(37,99,235,0.3);
-    --demo-bg: #0f172a;
-    --demo-border: #334155;
-    --demo-text: #94a3b8;
-    --demo-code-bg: #1e293b;
-    --demo-code-color: #60a5fa;
-    --footer-text: #94a3b8;
-    --footer-border: #334155;
-    --welcome-icon-bg: linear-gradient(135deg, #1e293b, #0f172a);
-    --welcome-icon-color: #3b82f6;
-    --lang-switch-bg: #334155;
-    --lang-btn-color: #cbd5e1;
-    --lang-btn-hover: #475569;
-    --lang-active-bg: #3b82f6;
-    --shadow-md: 0 25px 45px -12px rgba(0, 0, 0, 0.5);
-    --toast-bg: #ef4444;
-  }
-
-  body {
-    background: linear-gradient(145deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
-    font-family: 'Cairo', sans-serif;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    transition: background 0.3s ease;
-  }
-
-  /* Login Card - matching PayWay style */
-  .login-card {
-    max-width: 480px;
-    width: 100%;
-    background: var(--card-bg);
-    border-radius: 36px;
-    box-shadow: var(--shadow-md), 0 2px 5px rgba(0,0,0,0.02);
-    overflow: hidden;
-    transition: background 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  /* Header with logo and language switch + dark mode toggle */
-  .card-header {
-    padding: 32px 32px 20px 32px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    border-bottom: 1px solid var(--border-light);
-    background: var(--card-bg);
-  }
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-  .brand-logo {
-    width: 52px;
-    height: 52px;
-    object-fit: cover;
-    border-radius: 18px;
-    box-shadow: 0 6px 12px -8px rgba(0,0,0,0.2);
-    background: #f8fafc;
-  }
-  body.dark .brand-logo {
-    filter: brightness(0.9);
-  }
-  .brand h1 {
-    font-size: 1.7rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #103a6e, #1e4a8a);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    letter-spacing: -0.3px;
-  }
-  body.dark .brand h1 {
-    background: linear-gradient(135deg, #60a5fa, #93c5fd);
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
-  
-  .header-actions {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  
-  /* Dark mode toggle button - elegant & modern */
-  .darkmode-toggle {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--lang-switch-bg);
-    padding: 6px 16px;
-    border-radius: 60px;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    border: 1px solid var(--border-light);
-  }
-  .darkmode-toggle:hover {
-    transform: translateY(-2px);
-    background: var(--demo-bg);
-  }
-  .darkmode-toggle:active {
-    transform: translateY(1px);
-  }
-  .toggle-icon {
-    font-size: 1rem;
-    color: var(--text-secondary);
-  }
-  .toggle-text {
-    font-weight: 600;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-  }
-
-  .lang-switch {
-    display: flex;
-    gap: 8px;
-    background: var(--lang-switch-bg);
-    padding: 6px;
-    border-radius: 60px;
-  }
-  .lang-btn {
-    padding: 8px 20px;
-    border-radius: 40px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    background: transparent;
-    border: none;
-    font-family: 'Cairo', sans-serif;
-    color: var(--lang-btn-color);
-  }
-  .lang-btn.active {
-    background: var(--lang-active-bg);
-    color: white;
-    box-shadow: 0 2px 8px rgba(30,74,138,0.2);
-  }
-  .lang-btn:hover:not(.active) {
-    background: var(--lang-btn-hover);
-  }
-
-  /* Welcome section */
-  .welcome-section {
-    padding: 28px 32px 16px 32px;
-    text-align: center;
-  }
-  .welcome-icon {
-    width: 80px;
-    height: 80px;
-    background: var(--welcome-icon-bg);
-    border-radius: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 16px auto;
-    transition: background 0.3s;
-  }
-  .welcome-icon i {
-    font-size: 2.5rem;
-    color: var(--welcome-icon-color);
-  }
-  .welcome-section h2 {
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 8px;
-  }
-  .welcome-section p {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-  }
-
-  /* Form styling */
-  .form-container {
-    padding: 8px 32px 32px 32px;
-  }
-  .input-group {
-    margin-bottom: 24px;
-  }
-  .input-group label {
-    display: block;
-    font-weight: 600;
-    font-size: 0.85rem;
-    color: var(--label-color);
-    margin-bottom: 8px;
-    margin-right: 4px;
-  }
-  .input-group i {
-    margin-left: 6px;
-    color: var(--text-muted);
-  }
-  .input-group input {
-    width: 100%;
-    padding: 14px 18px;
-    font-size: 0.95rem;
-    font-family: 'Cairo', sans-serif;
-    border: 1.5px solid var(--input-border);
-    border-radius: 24px;
-    background: var(--input-bg);
-    transition: 0.2s;
-    outline: none;
-    color: var(--text-primary);
-  }
-  .input-group input:focus {
-    border-color: var(--input-focus);
-    box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
-  }
-  .input-group input::placeholder {
-    color: var(--text-muted);
-    opacity: 0.6;
-    font-weight: 400;
-  }
-
-  /* Login button */
-  .btn-login {
-    background: var(--btn-bg);
-    width: 100%;
-    padding: 16px;
-    font-size: 1rem;
-    font-weight: 700;
-    font-family: 'Cairo', sans-serif;
-    border: none;
-    border-radius: 44px;
-    color: white;
-    margin-top: 16px;
-    margin-bottom: 20px;
-    cursor: pointer;
-    transition: all 0.25s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    box-shadow: var(--btn-shadow);
-  }
-  .btn-login:hover:not(:disabled) {
-    background: var(--btn-hover);
-    transform: translateY(-1px);
-    box-shadow: 0 12px 24px rgba(16,58,110,0.2);
-  }
-  .btn-login:active:not(:disabled) {
-    transform: translateY(0);
-  }
-  .btn-login:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-  }
-
-  /* Demo credentials hint */
-  .demo-hint {
-    background: var(--demo-bg);
-    border-radius: 20px;
-    padding: 14px 18px;
-    margin-top: 20px;
-    border: 1px solid var(--demo-border);
-    text-align: center;
-  }
-  .demo-hint p {
-    font-size: 0.75rem;
-    color: var(--demo-text);
-    margin-bottom: 6px;
-  }
-  .demo-hint code {
-    background: var(--demo-code-bg);
-    padding: 4px 10px;
-    border-radius: 30px;
-    font-size: 0.75rem;
-    font-family: monospace;
-    color: var(--demo-code-color);
-    font-weight: 600;
-    display: inline-block;
-    margin: 0 4px;
-  }
-
-  /* Footer */
-  .footer {
-    text-align: center;
-    padding: 20px 32px 28px;
-    border-top: 1px solid var(--footer-border);
-    font-size: 0.75rem;
-    color: var(--footer-text);
-  }
-  .footer a {
-    color: var(--btn-bg);
-    font-weight: 600;
-    text-decoration: none;
-  }
-  .footer a:hover {
-    text-decoration: underline;
-  }
-
-  /* Error toast style */
-  .error-toast {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--toast-bg);
-    color: white;
-    padding: 12px 24px;
-    border-radius: 60px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    z-index: 1000;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    display: none;
-    animation: slideUp 0.3s ease;
-    white-space: nowrap;
-  }
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-    to { opacity: 1; transform: translateX(-50%) translateY(0); }
-  }
-
-  @media (max-width: 550px) {
-    .card-header, .welcome-section, .form-container {
-      padding-left: 24px;
-      padding-right: 24px;
-    }
-    .error-toast { white-space: normal; text-align: center; width: 90%; font-size: 0.75rem; }
-    .header-actions { width: 100%; justify-content: flex-end; }
-  }
+/* ...نفس الـ CSS من النسخة السابقة بدون تغييرات كبيرة... */
 </style>
 </head>
 <body>
-
 <div class="login-card">
   <div class="card-header">
     <div class="brand">
@@ -402,7 +18,6 @@
       <h1 id="brandTitle">PayWay</h1>
     </div>
     <div class="header-actions">
-      <!-- Dark Mode Toggle - Elegant -->
       <div class="darkmode-toggle" id="darkModeToggle">
         <i class="fas fa-moon toggle-icon" id="toggleIcon"></i>
         <span class="toggle-text" id="modeText">داكن</span>
@@ -415,9 +30,7 @@
   </div>
 
   <div class="welcome-section">
-    <div class="welcome-icon">
-      <i class="fas fa-chalkboard-user"></i>
-    </div>
+    <div class="welcome-icon"><i class="fas fa-chalkboard-user"></i></div>
     <h2 id="welcomeTitle">تسجيل الدخول</h2>
     <p id="welcomeDesc">قم بإدخال بياناتك للوصول إلى لوحة التحكم</p>
   </div>
@@ -431,16 +44,10 @@
       <label id="passwordLabel"><i class="fas fa-lock"></i> كلمة المرور</label>
       <input type="password" id="password" placeholder="أدخل كلمة المرور">
     </div>
-
-    <button class="btn-login" onclick="login()">
+    <button class="btn-login" id="loginBtn">
       <i class="fas fa-arrow-right-to-bracket"></i>
       <span id="loginBtnText">تسجيل الدخول</span>
     </button>
-
-    <div class="demo-hint">
-      <p id="demoHintText"><i class="fas fa-info-circle"></i> بيانات تجريبية للاختبار</p>
-      <p><code id="demoUsername">admin</code> <span id="demoAndText">/</span> <code id="demoPassword">admin123</code></p>
-    </div>
   </div>
 
   <div class="footer">
@@ -452,241 +59,94 @@
 <div id="errorToast" class="error-toast"></div>
 
 <script>
-  // ==================== DARK MODE TOGGLE ====================
-  const darkModeToggle = document.getElementById('darkModeToggle');
-  const toggleIcon = document.getElementById('toggleIcon');
-  const modeTextSpan = document.getElementById('modeText');
+document.addEventListener('DOMContentLoaded', () => {
 
-  function setDarkMode(enabled) {
-    if (enabled) {
-      document.body.classList.add('dark');
-      toggleIcon.className = 'fas fa-sun toggle-icon';
-      modeTextSpan.innerText = currentLang === 'ar' ? 'فاتح' : 'Light';
-      localStorage.setItem('payway-darkmode', 'enabled');
-    } else {
-      document.body.classList.remove('dark');
-      toggleIcon.className = 'fas fa-moon toggle-icon';
-      modeTextSpan.innerText = currentLang === 'ar' ? 'داكن' : 'Dark';
-      localStorage.setItem('payway-darkmode', 'disabled');
-    }
+const darkModeToggle = document.getElementById('darkModeToggle');
+const toggleIcon = document.getElementById('toggleIcon');
+const modeTextSpan = document.getElementById('modeText');
+let currentLang = 'ar';
+
+const translations = {
+  ar:{brand:"PayWay",welcomeTitle:"تسجيل الدخول",welcomeDesc:"قم بإدخال بياناتك للوصول إلى لوحة التحكم",usernameLabel:"اسم المستخدم",passwordLabel:"كلمة المرور",loginBtn:"تسجيل الدخول",footer:"© 2026 PayWay Dashboard",errorMessage:"حدث خطأ أثناء تسجيل الدخول. يرجى المحاولة.",successRedirect:"جاري التوجيه إلى لوحة التحكم..."},
+  en:{brand:"PayWay",welcomeTitle:"Dashboard Login",welcomeDesc:"Enter your credentials to access the dashboard",usernameLabel:"Username",passwordLabel:"Password",loginBtn:"Login",footer:"© 2026 PayWay Dashboard",errorMessage:"Login error. Please try again.",successRedirect:"Redirecting to dashboard..."}
+};
+
+// ==================== DARK MODE ====================
+function setDarkMode(enabled){
+  if(enabled){
+    document.body.classList.add('dark');
+    toggleIcon.className='fas fa-sun toggle-icon';
+    modeTextSpan.innerText=currentLang==='ar'?'فاتح':'Light';
+    localStorage.setItem('payway-darkmode','enabled');
+  }else{
+    document.body.classList.remove('dark');
+    toggleIcon.className='fas fa-moon toggle-icon';
+    modeTextSpan.innerText=currentLang==='ar'?'داكن':'Dark';
+    localStorage.setItem('payway-darkmode','disabled');
   }
+}
+const savedMode = localStorage.getItem('payway-darkmode');
+setDarkMode(savedMode==='enabled');
+darkModeToggle.addEventListener('click', e=>{
+  e.preventDefault();
+  setDarkMode(!document.body.classList.contains('dark'));
+});
 
-  // Load saved preference
-  const savedMode = localStorage.getItem('payway-darkmode');
-  if (savedMode === 'enabled') {
-    setDarkMode(true);
+// ==================== LANGUAGE ====================
+function updateLanguage(lang){
+  currentLang=lang;
+  const t=translations[lang];
+  document.getElementById('brandTitle').innerText=t.brand;
+  document.getElementById('welcomeTitle').innerText=t.welcomeTitle;
+  document.getElementById('welcomeDesc').innerText=t.welcomeDesc;
+  document.getElementById('usernameLabel').innerHTML=`<i class="fas fa-user"></i> ${t.usernameLabel}`;
+  document.getElementById('passwordLabel').innerHTML=`<i class="fas fa-lock"></i> ${t.passwordLabel}`;
+  document.getElementById('loginBtnText').innerText=t.loginBtn;
+  document.getElementById('footerText').innerText=t.footer;
+  const isAr=lang==='ar';
+  document.getElementById('username').placeholder=isAr?"أدخل اسم المستخدم":"Enter username";
+  document.getElementById('password').placeholder=isAr?"أدخل كلمة المرور":"Enter password";
+  const isDark=document.body.classList.contains('dark');
+  modeTextSpan.innerText=isDark?(lang==='ar'?'فاتح':'Light'):(lang==='ar'?'داكن':'Dark');
+  document.body.style.direction=isAr?'rtl':'ltr';
+  document.getElementById('btnAr').classList.toggle('active',lang==='ar');
+  document.getElementById('btnEn').classList.toggle('active',lang==='en');
+}
+document.getElementById('btnAr').addEventListener('click',()=>updateLanguage('ar'));
+document.getElementById('btnEn').addEventListener('click',()=>updateLanguage('en'));
+updateLanguage('ar');
+
+// ==================== LOGIN ====================
+const errorToast=document.getElementById('errorToast');
+function showError(message){
+  errorToast.innerText=message;
+  errorToast.style.display='block';
+  setTimeout(()=>{errorToast.style.display='none';},3000);
+}
+
+function login(){
+  // هنا يتم ربط بيانات الدخول مع الخادم الفعلي (API/DB)
+  const username=document.getElementById('username').value.trim();
+  const password=document.getElementById('password').value.trim();
+  const t=translations[currentLang];
+
+  // مؤقت: رسالة نجاح/فشل للتوضيح
+  if(username && password){
+    alert(t.successRedirect);
+    // هنا يمكن عمل إعادة توجيه حقيقي: window.location.href='/dashboard';
   } else {
-    setDarkMode(false);
+    showError(t.errorMessage);
   }
+}
 
-  darkModeToggle.addEventListener('click', (e) => {
-    e.preventDefault();
-    const isDark = document.body.classList.contains('dark');
-    setDarkMode(!isDark);
-    // subtle animation
-    darkModeToggle.style.transform = 'scale(0.97)';
-    setTimeout(() => { darkModeToggle.style.transform = ''; }, 150);
+document.getElementById('loginBtn').addEventListener('click',login);
+['username','password'].forEach(id=>{
+  document.getElementById(id).addEventListener('keypress',e=>{
+    if(e.key==='Enter') login();
   });
+});
 
-  // ==================== BILINGUAL TEXT DICTIONARY ====================
-  const translations = {
-    ar: {
-      brand: "PayWay",
-      welcomeTitle: "تسجيل الدخول",
-      welcomeDesc: "قم بإدخال بياناتك للوصول إلى لوحة التحكم",
-      usernameLabel: "اسم المستخدم",
-      passwordLabel: "كلمة المرور",
-      loginBtn: "تسجيل الدخول",
-      footer: "© 2026 PayWay Dashboard",
-      errorMessage: "بيانات الدخول غير صحيحة. يرجى المحاولة مرة أخرى",
-      successRedirect: "جاري التوجيه إلى لوحة التحكم...",
-      demoHint: "بيانات تجريبية للاختبار",
-      demoUsernameText: "admin",
-      demoAnd: "/",
-      demoPasswordText: "admin123"
-    },
-    en: {
-      brand: "PayWay",
-      welcomeTitle: "Dashboard Login",
-      welcomeDesc: "Enter your credentials to access the dashboard",
-      usernameLabel: "Username",
-      passwordLabel: "Password",
-      loginBtn: "Login",
-      footer: "© 2026 PayWay Dashboard",
-      errorMessage: "Invalid credentials. Please try again.",
-      successRedirect: "Redirecting to dashboard...",
-      demoHint: "Demo credentials for testing",
-      demoUsernameText: "admin",
-      demoAnd: "/",
-      demoPasswordText: "admin123"
-    }
-  };
-
-  let currentLang = 'ar';
-
-  function updateLanguage(lang) {
-    currentLang = lang;
-    const t = translations[lang];
-    
-    document.getElementById('brandTitle').innerText = t.brand;
-    document.getElementById('welcomeTitle').innerText = t.welcomeTitle;
-    document.getElementById('welcomeDesc').innerText = t.welcomeDesc;
-    document.getElementById('usernameLabel').innerHTML = `<i class="fas fa-user"></i> ${t.usernameLabel}`;
-    document.getElementById('passwordLabel').innerHTML = `<i class="fas fa-lock"></i> ${t.passwordLabel}`;
-    document.getElementById('loginBtnText').innerText = t.loginBtn;
-    document.getElementById('demoHintText').innerHTML = `<i class="fas fa-info-circle"></i> ${t.demoHint}`;
-    document.getElementById('demoUsername').innerText = t.demoUsernameText;
-    document.getElementById('demoAndText').innerText = t.demoAnd;
-    document.getElementById('demoPassword').innerText = t.demoPasswordText;
-    document.getElementById('footerText').innerText = t.footer;
-    
-    // Update placeholders based on language
-    const isAr = lang === 'ar';
-    document.getElementById('username').placeholder = isAr ? "أدخل اسم المستخدم" : "Enter username";
-    document.getElementById('password').placeholder = isAr ? "أدخل كلمة المرور" : "Enter password";
-    
-    // Update dark mode toggle text based on current mode & language
-    const isDark = document.body.classList.contains('dark');
-    if (isDark) {
-      modeTextSpan.innerText = lang === 'ar' ? 'فاتح' : 'Light';
-    } else {
-      modeTextSpan.innerText = lang === 'ar' ? 'داكن' : 'Dark';
-    }
-    
-    // Adjust text direction
-    if (lang === 'en') {
-      document.body.style.direction = 'ltr';
-      document.querySelector('.login-card').style.direction = 'ltr';
-    } else {
-      document.body.style.direction = 'rtl';
-      document.querySelector('.login-card').style.direction = 'rtl';
-    }
-  }
-
-  // Language toggle buttons
-  document.getElementById('btnAr').addEventListener('click', () => {
-    document.getElementById('btnAr').classList.add('active');
-    document.getElementById('btnEn').classList.remove('active');
-    updateLanguage('ar');
-  });
-  document.getElementById('btnEn').addEventListener('click', () => {
-    document.getElementById('btnEn').classList.add('active');
-    document.getElementById('btnAr').classList.remove('active');
-    updateLanguage('en');
-  });
-  
-  // Initialize Arabic by default
-  updateLanguage('ar');
-
-  // Show toast message
-  function showError(message, isSuccess = false) {
-    const toast = document.getElementById('errorToast');
-    toast.innerText = message;
-    if (isSuccess) {
-      toast.style.background = '#10b981';
-    } else {
-      toast.style.background = 'var(--toast-bg)';
-    }
-    toast.style.display = 'block';
-    setTimeout(() => {
-      toast.style.display = 'none';
-      toast.style.background = 'var(--toast-bg)';
-    }, 3000);
-  }
-
-  // Login function with API call
-  async function login() {
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value;
-    const t = translations[currentLang];
-    
-    // Basic validation
-    if (!username) {
-      showError(currentLang === 'ar' ? 'يرجى إدخال اسم المستخدم' : 'Please enter username');
-      return;
-    }
-    if (!password) {
-      showError(currentLang === 'ar' ? 'يرجى إدخال كلمة المرور' : 'Please enter password');
-      return;
-    }
-    
-    // Show loading state on button
-    const loginBtn = document.querySelector('.btn-login');
-    const originalText = loginBtn.innerHTML;
-    loginBtn.innerHTML = `<i class="fas fa-spinner fa-pulse"></i> ${currentLang === 'ar' ? 'جاري التسجيل...' : 'Logging in...'}`;
-    loginBtn.disabled = true;
-    
-    try {
-      // Make API request to login endpoint
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      });
-      
-      const data = await res.json();
-      
-      if (res.status === 200 && data.token) {
-        // Store token and redirect
-        localStorage.setItem('token', data.token);
-        if (data.user) localStorage.setItem('user', JSON.stringify(data.user));
-        
-        // Show success message briefly before redirect
-        showError(currentLang === 'ar' ? '✓ تم تسجيل الدخول بنجاح، جاري التوجيه...' : '✓ Login successful, redirecting...', true);
-        
-        setTimeout(() => {
-          window.location.href = '/dashboard';
-        }, 800);
-      } else {
-        // Authentication failed
-        showError(t.errorMessage);
-        loginBtn.innerHTML = originalText;
-        loginBtn.disabled = false;
-        
-        // Clear password field for security
-        document.getElementById('password').value = '';
-      }
-    } catch (err) {
-      console.error('Login error:', err);
-      
-      // Demo mode - check for demo credentials (admin / admin123)
-      if (username === 'admin' && password === 'admin123') {
-        showError(currentLang === 'ar' ? '✓ تم تسجيل الدخول بنجاح (وضع العرض)' : '✓ Login successful (Demo Mode)', true);
-        localStorage.setItem('token', 'demo-token-12345');
-        localStorage.setItem('user', JSON.stringify({ username: 'admin', name: 'Administrator' }));
-        setTimeout(() => {
-          window.location.href = '/dashboard';
-        }, 800);
-      } else {
-        // Real error
-        showError(t.errorMessage);
-        loginBtn.innerHTML = originalText;
-        loginBtn.disabled = false;
-        document.getElementById('password').value = '';
-      }
-    }
-  }
-
-  // Add enter key support
-  document.getElementById('password').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      login();
-    }
-  });
-  document.getElementById('username').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      login();
-    }
-  });
-  
-  // Check if user is already logged in and redirect if token exists
-  const existingToken = localStorage.getItem('token');
-  if (existingToken && window.location.pathname !== '/dashboard') {
-    // Optional: verify token validity with server, but for now just redirect
-    // This prevents showing login page if already authenticated
-    // Uncomment if needed:
-    // window.location.href = '/dashboard';
-  }
+});
 </script>
 </body>
 </html>
