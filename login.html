@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>PayWay | Dashboard Login</title>
+<title>PayWay | Login</title>
 <!-- Google Fonts + Cairo -->
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <!-- Font Awesome 6 -->
@@ -15,25 +15,100 @@
     box-sizing: border-box;
   }
 
+  /* Light mode (default) */
+  :root {
+    --bg-gradient-start: #eef2f9;
+    --bg-gradient-end: #e0e8f2;
+    --card-bg: #ffffff;
+    --card-header-bg: #ffffff;
+    --text-primary: #0f2f4f;
+    --text-secondary: #1e3a5f;
+    --text-muted: #5c6f87;
+    --text-light: #4a627a;
+    --border-light: #edf2f7;
+    --border-card: #e9f0f8;
+    --input-border: #e2edf7;
+    --input-focus: #1e4a8a;
+    --input-bg: #ffffff;
+    --input-placeholder: #b9c8e0;
+    --welcome-icon-bg: linear-gradient(135deg, #eef3ff, #e0e8f2);
+    --welcome-icon-color: #1e4a8a;
+    --demo-hint-bg: #f8fbfe;
+    --demo-hint-border: #e9f0f8;
+    --demo-code-bg: #eef3ff;
+    --demo-code-color: #1e4a8a;
+    --btn-login-bg: #103a6e;
+    --btn-login-hover: #1e5a9e;
+    --btn-login-shadow: rgba(16,58,110,0.15);
+    --btn-login-shadow-hover: rgba(16,58,110,0.2);
+    --footer-border: #ecf3fa;
+    --footer-text: #6b7c98;
+    --footer-link: #1e4a8a;
+    --lang-switch-bg: #f1f5f9;
+    --lang-btn-color: #4a627a;
+    --lang-btn-active-bg: #1e4a8a;
+    --lang-btn-active-color: white;
+    --shadow-sm: 0 2px 5px rgba(0,0,0,0.02);
+    --shadow-md: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
+  }
+
+  /* Dark mode */
+  body.dark {
+    --bg-gradient-start: #121826;
+    --bg-gradient-end: #0f141f;
+    --card-bg: #1e2434;
+    --card-header-bg: #1e2434;
+    --text-primary: #eef2ff;
+    --text-secondary: #cbd5e6;
+    --text-muted: #8ba0bc;
+    --text-light: #a0b4c8;
+    --border-light: #2a3346;
+    --border-card: #2a3346;
+    --input-border: #2d3748;
+    --input-focus: #3b82f6;
+    --input-bg: #1a1f2e;
+    --input-placeholder: #4a5568;
+    --welcome-icon-bg: linear-gradient(135deg, #1e2a47, #1a1f2e);
+    --welcome-icon-color: #60a5fa;
+    --demo-hint-bg: #252e42;
+    --demo-hint-border: #2d3748;
+    --demo-code-bg: #1e2a47;
+    --demo-code-color: #60a5fa;
+    --btn-login-bg: #1e40af;
+    --btn-login-hover: #2563eb;
+    --btn-login-shadow: rgba(37,99,235,0.2);
+    --btn-login-shadow-hover: rgba(37,99,235,0.3);
+    --footer-border: #2a3346;
+    --footer-text: #7c8ea0;
+    --footer-link: #60a5fa;
+    --lang-switch-bg: #2d3748;
+    --lang-btn-color: #a0b4c8;
+    --lang-btn-active-bg: #3b82f6;
+    --lang-btn-active-color: white;
+    --shadow-sm: 0 2px 5px rgba(0,0,0,0.2);
+    --shadow-md: 0 25px 45px -12px rgba(0, 0, 0, 0.5);
+  }
+
   body {
-    background: linear-gradient(145deg, #eef2f9 0%, #e0e8f2 100%);
+    background: linear-gradient(145deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
     font-family: 'Cairo', sans-serif;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 20px;
+    transition: background 0.3s ease;
   }
 
   /* Login Card - matching PayWay style */
   .login-card {
     max-width: 480px;
     width: 100%;
-    background: #ffffff;
+    background: var(--card-bg);
     border-radius: 36px;
-    box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25), 0 2px 5px rgba(0,0,0,0.02);
+    box-shadow: var(--shadow-md), var(--shadow-sm);
     overflow: hidden;
-    transition: all 0.2s ease;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
   }
 
   /* Header with logo and language switch */
@@ -43,8 +118,8 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    border-bottom: 1px solid #edf2f7;
-    background: #fff;
+    border-bottom: 1px solid var(--border-light);
+    background: var(--card-header-bg);
   }
   .brand {
     display: flex;
@@ -68,10 +143,56 @@
     color: transparent;
     letter-spacing: -0.3px;
   }
+  body.dark .brand h1 {
+    background: linear-gradient(135deg, #60a5fa, #3b82f6);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  
+  .header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  /* Theme switch buttons */
+  .theme-switch {
+    display: flex;
+    gap: 8px;
+    background: var(--lang-switch-bg);
+    padding: 6px;
+    border-radius: 60px;
+  }
+  .theme-btn {
+    padding: 8px 20px;
+    border-radius: 40px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    border: none;
+    font-family: 'Cairo', sans-serif;
+    color: var(--lang-btn-color);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .theme-btn.active {
+    background: var(--lang-btn-active-bg);
+    color: var(--lang-btn-active-color);
+    box-shadow: 0 2px 8px rgba(30,74,138,0.2);
+  }
+  .theme-btn:hover:not(.active) {
+    background: var(--border-card);
+  }
+  
   .lang-switch {
     display: flex;
     gap: 8px;
-    background: #f1f5f9;
+    background: var(--lang-switch-bg);
     padding: 6px;
     border-radius: 60px;
   }
@@ -85,15 +206,15 @@
     background: transparent;
     border: none;
     font-family: 'Cairo', sans-serif;
-    color: #4a627a;
+    color: var(--lang-btn-color);
   }
   .lang-btn.active {
-    background: #1e4a8a;
-    color: white;
+    background: var(--lang-btn-active-bg);
+    color: var(--lang-btn-active-color);
     box-shadow: 0 2px 8px rgba(30,74,138,0.2);
   }
   .lang-btn:hover:not(.active) {
-    background: #e2e8f0;
+    background: var(--border-card);
   }
 
   /* Welcome section */
@@ -104,7 +225,7 @@
   .welcome-icon {
     width: 80px;
     height: 80px;
-    background: linear-gradient(135deg, #eef3ff, #e0e8f2);
+    background: var(--welcome-icon-bg);
     border-radius: 60px;
     display: flex;
     align-items: center;
@@ -113,16 +234,16 @@
   }
   .welcome-icon i {
     font-size: 2.5rem;
-    color: #1e4a8a;
+    color: var(--welcome-icon-color);
   }
   .welcome-section h2 {
     font-size: 1.6rem;
     font-weight: 700;
-    color: #0f2f4f;
+    color: var(--text-primary);
     margin-bottom: 8px;
   }
   .welcome-section p {
-    color: #5c6f87;
+    color: var(--text-muted);
     font-size: 0.9rem;
   }
 
@@ -137,37 +258,38 @@
     display: block;
     font-weight: 600;
     font-size: 0.85rem;
-    color: #1e3a5f;
+    color: var(--text-secondary);
     margin-bottom: 8px;
     margin-right: 4px;
   }
   .input-group i {
     margin-left: 6px;
-    color: #527a9b;
+    color: var(--text-muted);
   }
   .input-group input {
     width: 100%;
     padding: 14px 18px;
     font-size: 0.95rem;
     font-family: 'Cairo', sans-serif;
-    border: 1.5px solid #e2edf7;
+    border: 1.5px solid var(--input-border);
     border-radius: 24px;
-    background: #ffffff;
+    background: var(--input-bg);
     transition: 0.2s;
     outline: none;
+    color: var(--text-primary);
   }
   .input-group input:focus {
-    border-color: #1e4a8a;
-    box-shadow: 0 0 0 3px rgba(30,74,138,0.1);
+    border-color: var(--input-focus);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
   }
   .input-group input::placeholder {
-    color: #b9c8e0;
+    color: var(--input-placeholder);
     font-weight: 400;
   }
 
   /* Login button */
   .btn-login {
-    background: #103a6e;
+    background: var(--btn-login-bg);
     width: 100%;
     padding: 16px;
     font-size: 1rem;
@@ -184,38 +306,42 @@
     align-items: center;
     justify-content: center;
     gap: 12px;
-    box-shadow: 0 8px 18px rgba(16,58,110,0.15);
+    box-shadow: 0 8px 18px var(--btn-login-shadow);
   }
-  .btn-login:hover {
-    background: #1e5a9e;
+  .btn-login:hover:not(:disabled) {
+    background: var(--btn-login-hover);
     transform: translateY(-1px);
-    box-shadow: 0 12px 24px rgba(16,58,110,0.2);
+    box-shadow: 0 12px 24px var(--btn-login-shadow-hover);
   }
-  .btn-login:active {
+  .btn-login:active:not(:disabled) {
     transform: translateY(0);
+  }
+  .btn-login:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
   }
 
   /* Demo credentials hint */
   .demo-hint {
-    background: #f8fbfe;
+    background: var(--demo-hint-bg);
     border-radius: 20px;
     padding: 14px 18px;
     margin-top: 20px;
-    border: 1px solid #e9f0f8;
+    border: 1px solid var(--demo-hint-border);
     text-align: center;
   }
   .demo-hint p {
     font-size: 0.75rem;
-    color: #4a627a;
+    color: var(--text-muted);
     margin-bottom: 6px;
   }
   .demo-hint code {
-    background: #eef3ff;
+    background: var(--demo-code-bg);
     padding: 4px 10px;
     border-radius: 30px;
     font-size: 0.75rem;
     font-family: monospace;
-    color: #1e4a8a;
+    color: var(--demo-code-color);
     font-weight: 600;
     display: inline-block;
     margin: 0 4px;
@@ -225,12 +351,12 @@
   .footer {
     text-align: center;
     padding: 20px 32px 28px;
-    border-top: 1px solid #ecf3fa;
+    border-top: 1px solid var(--footer-border);
     font-size: 0.75rem;
-    color: #6b7c98;
+    color: var(--footer-text);
   }
   .footer a {
-    color: #1e4a8a;
+    color: var(--footer-link);
     font-weight: 600;
     text-decoration: none;
   }
@@ -267,6 +393,7 @@
       padding-right: 24px;
     }
     .error-toast { white-space: normal; text-align: center; width: 90%; font-size: 0.75rem; }
+    .theme-btn, .lang-btn { padding: 6px 14px; font-size: 0.8rem; }
   }
 </style>
 </head>
@@ -278,9 +405,16 @@
       <img class="brand-logo" src="https://i.postimg.cc/NfPBr7hs/Picsart-26-04-02-02-54-03-157.jpg" alt="PayWay">
       <h1 id="brandTitle">PayWay</h1>
     </div>
-    <div class="lang-switch">
-      <button class="lang-btn active" id="btnAr" data-lang="ar">العربية</button>
-      <button class="lang-btn" id="btnEn" data-lang="en">English</button>
+    <div class="header-actions">
+      <!-- Dark Mode Toggle Buttons -->
+      <div class="theme-switch" id="themeSwitch">
+        <button class="theme-btn active" id="lightModeBtn"><i class="fas fa-sun"></i> <span id="lightText">فاتح</span></button>
+        <button class="theme-btn" id="darkModeBtn"><i class="fas fa-moon"></i> <span id="darkText">داكن</span></button>
+      </div>
+      <div class="lang-switch">
+        <button class="lang-btn active" id="btnAr" data-lang="ar">العربية</button>
+        <button class="lang-btn" id="btnEn" data-lang="en">English</button>
+      </div>
     </div>
   </div>
 
@@ -326,6 +460,44 @@
 <div id="errorToast" class="error-toast"></div>
 
 <script>
+  // ==================== DARK MODE FUNCTIONALITY ====================
+  function setTheme(theme) {
+    if (theme === 'dark') {
+      document.body.classList.add('dark');
+      localStorage.setItem('paywayLoginTheme', 'dark');
+      document.getElementById('darkModeBtn').classList.add('active');
+      document.getElementById('lightModeBtn').classList.remove('active');
+    } else {
+      document.body.classList.remove('dark');
+      localStorage.setItem('paywayLoginTheme', 'light');
+      document.getElementById('lightModeBtn').classList.add('active');
+      document.getElementById('darkModeBtn').classList.remove('active');
+    }
+  }
+  
+  // Load saved theme
+  const savedTheme = localStorage.getItem('paywayLoginTheme');
+  if (savedTheme === 'dark') {
+    setTheme('dark');
+  } else {
+    setTheme('light');
+  }
+  
+  document.getElementById('lightModeBtn').addEventListener('click', () => setTheme('light'));
+  document.getElementById('darkModeBtn').addEventListener('click', () => setTheme('dark'));
+  
+  function updateThemeButtonTexts(lang) {
+    const lightSpan = document.getElementById('lightText');
+    const darkSpan = document.getElementById('darkText');
+    if (lang === 'ar') {
+      lightSpan.innerText = 'فاتح';
+      darkSpan.innerText = 'داكن';
+    } else {
+      lightSpan.innerText = 'Light';
+      darkSpan.innerText = 'Dark';
+    }
+  }
+
   // ==================== BILINGUAL TEXT DICTIONARY ====================
   const translations = {
     ar: {
@@ -382,6 +554,9 @@
     const isAr = lang === 'ar';
     document.getElementById('username').placeholder = isAr ? "أدخل اسم المستخدم" : "Enter username";
     document.getElementById('password').placeholder = isAr ? "أدخل كلمة المرور" : "Enter password";
+    
+    // Update theme button texts
+    updateThemeButtonTexts(lang);
     
     // Adjust text direction
     if (lang === 'en') {
