@@ -38,7 +38,19 @@ app.post('/api/login', express.json(), (req,res)=>{
 // Transfer
 app.post('/api/transfer', upload.single('screenshot'), async (req,res)=>{
   try{
-    const {fromType,toType,fromNumber,fromName,toNumber,toName,amount} = req.body;
+    const {
+  fromServiceType,
+  toServiceType,
+  fromNumber,
+  fromName,
+  toNumber,
+  toName,
+  amount
+} = req.body;
+
+// نحولهم للأسماء القديمة
+const fromType = fromServiceType;
+const toType = toServiceType;
     const profit = 15;
     const totalAmount = parseFloat(amount) + profit;
 
