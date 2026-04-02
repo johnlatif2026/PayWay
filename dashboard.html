@@ -442,7 +442,8 @@
       const amount = transfer.amount || 0;
       const profit = transfer.profit || (amount * 0.01).toFixed(2);
       const totalAmount = transfer.totalAmount || (amount + parseFloat(profit)).toFixed(2);
-      const dateStr = transfer.date ? new Date(transfer.date).toLocaleString(currentLang === 'ar' ? 'ar-EG' : 'en-US') : '-';
+      const dateObj = transfer.date?.toDate ? transfer.date.toDate() : new Date(transfer.date);
+      const dateStr = dateObj.toLocaleString(currentLang === 'ar' ? 'ar-EG' : 'en-US');
       const screenshotHtml = transfer.from.screenshot 
         ? `<a href="${transfer.from.screenshot}" target="_blank"><img class="screenshot-img" src="${transfer.from.screenshot}" alt="screenshot" onerror="this.src='https://placehold.co/48x48?text=Error'"></a>` 
         : '<span style="opacity:0.5;">—</span>';
@@ -524,10 +525,7 @@
   }
 
   async function deleteTransfer(index) {
-    const t = translations[currentLang];
-    if (!confirm(t.deleteConfirm)) return;
-    
-    async function deleteTransfer(id) {
+async function deleteTransfer(id) {
   const t = translations[currentLang];
   if (!confirm(t.deleteConfirm)) return;
 
@@ -555,7 +553,7 @@
     console.error('Delete error:', err);
     await loadDashboard();
   }
- }
+}
 
   function logout() {
     localStorage.removeItem('token');
