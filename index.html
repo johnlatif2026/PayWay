@@ -38,7 +38,7 @@ button:hover { background:#1550a0; }
     <option value="Fawry">فوري</option>
     <option value="Telda">تيلدا</option>
   </select>
-  <input type="text" id="fromNumber" placeholder="رقم الهاتف المحول منه" required pattern="\d{10,11}" title="يجب أن يكون الرقم من 10 أو 11 أرقام">
+  <input type="number" id="fromNumber" placeholder="رقم الهاتف المحول منه" required>
   <input type="text" id="fromName" placeholder="اسم صاحب الحساب" required>
   <input type="file" id="fromScreenshot" accept="image/*" required>
 
@@ -52,7 +52,7 @@ button:hover { background:#1550a0; }
     <option value="Fawry">فوري</option>
     <option value="Telda">تيلدا</option>
   </select>
-  <input type="text" id="toNumber" placeholder="رقم المستلم" required pattern="\d{10,11}" title="يجب أن يكون الرقم من 10 أو 11 أرقام">
+  <input type="number" id="toNumber" placeholder="رقم المستلم" required>
   <input type="text" id="toName" placeholder="اسم المستلم" required>
 
   <input type="number" id="amount" placeholder="المبلغ" required min="5" max="5000">
@@ -93,15 +93,14 @@ async function submitTransfer(){
     return;
   }
 
-  const fromType = document.getElementById('fromType').value;
-  const toType = document.getElementById('toType').value;
   const fromNumber = document.getElementById('fromNumber').value;
-  const fromName = document.getElementById('fromName').value;
   const toNumber = document.getElementById('toNumber').value;
+  const fromName = document.getElementById('fromName').value;
   const toName = document.getElementById('toName').value;
   const amount = parseFloat(amountInput.value);
+  const screenshotFile = document.getElementById('fromScreenshot').files[0];
 
-  // التحقق من طول أرقام الهاتف
+  // التحقق من طول أرقام الهاتف (10 أو 11 رقم)
   const phoneRegex = /^(\d{10}|\d{11})$/;
   if(!phoneRegex.test(fromNumber)){
     alert("رقم الهاتف المحول منه يجب أن يكون 10 أو 11 أرقام فقط");
@@ -118,28 +117,34 @@ async function submitTransfer(){
     return;
   }
 
-  if(!fromName || !toName){
-    alert('الرجاء تعبئة كل الحقول');
+  // التحقق من الاسم والصورة
+  if(!fromName){
+    alert("اسم صاحب الحساب مطلوب");
+    return;
+  }
+  if(!toName){
+    alert("اسم المستلم مطلوب");
+    return;
+  }
+  if(!screenshotFile){
+    alert("صورة التحويل مطلوبة");
     return;
   }
 
   const formData = new FormData();
-  formData.append('fromType', fromType);
-  formData.append('toType', toType);
   formData.append('fromNumber', fromNumber);
   formData.append('fromName', fromName);
   formData.append('toNumber', toNumber);
   formData.append('toName', toName);
   formData.append('amount', amount);
-  const screenshotFile = document.getElementById('fromScreenshot').files[0];
-  if(screenshotFile) formData.append('screenshot', screenshotFile);
+  formData.append('screenshot', screenshotFile);
 
   try{
     const res = await fetch('/api/transfer', {
       method:'POST',
       body: formData
     });
-    const data = await res.json();
+    await res.json();
     alert(`تم الارسال`);
     document.getElementById('transferForm').reset();
     totalAmountDisplay.innerText = 0;
