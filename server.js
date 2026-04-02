@@ -39,18 +39,17 @@ app.post('/api/login', express.json(), (req,res)=>{
 app.post('/api/transfer', upload.single('screenshot'), async (req,res)=>{
   try{
     const {
-  fromServiceType,
-  toServiceType,
-  fromNumber,
-  fromName,
-  toNumber,
-  toName,
-  amount
-} = req.body;
+      fromServiceType,
+      toServiceType,
+      fromNumber,
+      fromName,
+      toNumber,
+      toName,
+      amount
+    } = req.body;
 
-// نحولهم للأسماء القديمة
-const fromType = fromServiceType;
-const toType = toServiceType;
+    const fromType = fromServiceType;
+    const toType = toServiceType;
     const profit = 15;
     const totalAmount = parseFloat(amount) + profit;
 
@@ -72,13 +71,26 @@ const toType = toServiceType;
 
     // إرسال على Telegram
     let textMsg = `طلب تحويل جديد:\nمن: ${fromType} (${fromNumber})\nإلى: ${toType} (${toNumber})\nالمبلغ: ${amount}\nالعمولة: ${profit}\nالإجمالي: ${totalAmount}`;
+
     if(screenshotBase64){
-      await axios.post(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendPhoto`, {
+      // نحذف prefix Base64
+      const base64Data = screenshotBase64.replace(/^data:image\/\w+;base64,/, "");
+
+      // رفع على Imgur
+      const imgurRes = await axios.post(
+        "https://api.imgur.com/3/image",
+        { image: base64Data, type: "base64" },
+        { headers: { Authorization: `Client-ID ${process.env.IMGUR_CLIENT_ID}` } }
+      );
+
+      const imageUrl = imgurRes.data.data.link;
+
+      // إرسال اللينك على Telegram
+      await axios.post(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`, {
         chat_id: process.env.TELEGRAM_CHAT_ID,
-        photo: screenshotBase64,
-        caption: textMsg
+        text: textMsg + "\n\nصورة التحويل:\n" + imageUrl
       });
-    }else{
+    } else {
       await axios.post(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`, {
         chat_id: process.env.TELEGRAM_CHAT_ID,
         text: textMsg
@@ -86,7 +98,7 @@ const toType = toServiceType;
     }
 
     res.json({message:'تم تسجيل التحويل', totalAmount});
-  }catch(err){
+  } catch(err){
     console.error(err);
     res.status(500).json({message:'حدث خطأ أثناء تسجيل التحويل'});
   }
