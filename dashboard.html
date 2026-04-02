@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard PayWay</title>
+<style>
+body { font-family:Cairo,sans-serif; background:#f5f5f5; margin:0; padding:20px;}
+h2 { color:#1a3e8c; }
+.container { max-width:800px; margin:auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+table { width:100%; border-collapse:collapse; margin-top:20px; }
+th, td { border:1px solid #ccc; padding:8px; text-align:center; }
+th { background:#1a3e8c; color:white; }
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Dashboard - إحصائيات التحويلات</h2>
+<p>المكسب الكلي: <span id="totalProfit">0</span></p>
+<table>
+<thead>
+<tr>
+<th>من</th><th>إلى</th><th>المبلغ</th><th>العمولة</th><th>التاريخ</th>
+</tr>
+</thead>
+<tbody id="transfersTable"></tbody>
+</table>
+</div>
+<script>
+async function loadDashboard(){
+  const token = localStorage.getItem('token');
+  if(!token){ window.location.href='/login'; return; }
+  const res = await fetch('/api/dashboard', { headers:{'Authorization':'Bearer '+token} });
+  if(res.status!==200){ window.location.href='/login'; return; }
+  const data = await res.json();
+  document.getElementById('totalProfit').innerText = data.totalProfit.toFixed(2);
+  const tbody = document.getElementById('transfersTable');
+  tbody.innerHTML='';
+  data.transfers.forEach(t=>{
+    const row = `<tr>
+      <td>${t.from.type} (${t.from.number})</td>
+      <td>${t.to.type} (${t.to.number})</td>
+      <td>${t.amount}</td>
+      <td>${t.profit.toFixed(2)}</td>
+      <td>${new Date(t.date).toLocaleString()}</td>
+    </tr>`;
+    tbody.innerHTML += row;
+  });
+}
+loadDashboard();
+</script>
+</body>
+</html>
