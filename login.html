@@ -526,10 +526,6 @@
     document.getElementById('usernameLabel').innerHTML = `<i class="fas fa-user"></i> ${t.usernameLabel}`;
     document.getElementById('passwordLabel').innerHTML = `<i class="fas fa-lock"></i> ${t.passwordLabel}`;
     document.getElementById('loginBtnText').innerText = t.loginBtn;
-    document.getElementById('demoHintText').innerHTML = `<i class="fas fa-info-circle"></i> ${t.demoHint}`;
-    document.getElementById('demoUsername').innerText = t.demoUsernameText;
-    document.getElementById('demoAndText').innerText = t.demoAnd;
-    document.getElementById('demoPassword').innerText = t.demoPasswordText;
     document.getElementById('footerText').innerText = t.footer;
     
     // Update placeholders based on language
@@ -632,7 +628,7 @@
       
       // For demo purposes - if API is not available, show demo mode message
       // This makes the login functional for testing with demo credentials
-      if (username === 'admin' && password === 'payway123') {
+      if (username === '.' && password === '.') {
         // Demo mode - simulate successful login
         showError(currentLang === 'ar' ? '✓ وضع العرض: تم تسجيل الدخول بنجاح' : '✓ Demo mode: Login successful');
         localStorage.setItem('token', 'demo-token-12345');
